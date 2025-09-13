@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kriegspolitik - Игра</title>
+    <link rel="icon" href="../Icons.jpg" type="image/jpeg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background-color: #000;
+            color: #ccc;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            min-width: 320px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        /* Левая панель - информация об игроке */
+        .player-info {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .player-info h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .player-nickname {
+            text-align: center;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .info-label {
+            color: #999;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .info-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .info-value {
+            color: #fff;
+            font-size: 0.85rem;
+            text-align: right;
+        }
+        
+        .currency-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+        
+        .currency-label {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .currency-value {
+            color: #ffd700;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .money-value {
+            color: #32cd32;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        /* Центральная панель - карта мира */
+        .world-map {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            overflow-y: auto;
+        }
+        
+        .world-map h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 15px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .region-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .region-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background-color: #111;
+            border-radius: 2px;
+            border-left: 3px solid #2a2a2a;
+        }
+        
+        .region-name {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .region-country {
+            color: #999;
+            font-size: 0.8rem;
+        }
+        
+        /* Правая панель - навигация */
+        .navigation {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .navigation h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .nav-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 3px;
+            color: #ccc;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            gap: 12px;
+        }
+        
+        .nav-button:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+        
+        .nav-text {
+            font-size: 0.95rem;
+            flex: 1;
+        }
+        
+        /* Адаптация для телефонов (горизонтальная ориентация) */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .container {
+                gap: 8px;
+                padding: 10px;
+            }
+            
+            .player-info, .world-map, .navigation {
+                padding: 10px;
+            }
+            
+            .player-info h2, .world-map h2, .navigation h2 {
+                font-size: 0.9rem;
+                padding-bottom: 6px;
+                margin-bottom: 8px;
+            }
+            
+            .player-nickname {
+                font-size: 1rem;
+                padding: 6px 0;
+            }
+            
+            .info-item {
+                padding: 6px 0;
+            }
+            
+            .info-label, .info-value {
+                font-size: 0.8rem;
+            }
+            
+            .info-icon {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .currency-item {
+                padding: 5px 0;
+            }
+            
+            .currency-label, .currency-value, .money-value {
+                font-size: 0.8rem;
+            }
+            
+            .region-item {
+                padding: 6px;
+            }
+            
+            .region-name {
+                font-size: 0.85rem;
+            }
+            
+            .region-country {
+                font-size: 0.75rem;
+            }
+            
+            .nav-button {
+                padding: 10px;
+                gap: 10px;
+            }
+            
+            .nav-icon {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .nav-text {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Полное отключение масштабирования */
+        @media (pointer: coarse) {
+            input, textarea, [contenteditable] {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Улучшение скролла */
+        .player-info, .world-map, .navigation {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        
+        .player-info::-webkit-scrollbar,
+        .world-map::-webkit-scrollbar,
+        .navigation::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .player-info::-webkit-scrollbar-thumb,
+        .world-map::-webkit-scrollbar-thumb,
+        .navigation::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Левая панель - информация об игроке -->
+        <div class="player-info">
+            <h2>Информация об игроке</h2>
+            <div class="player-nickname" id="player-nickname">Новый Игрок</div>
+            
+            <div class="info-item">
+                <span class="info-label">
+                    <img src="../Img/Electricity.png" alt="Энергия" class="info-icon">
+                    Энергия:
+                </span>
+                <span class="info-value" id="player-energy">100/100</span>
+            </div>
+            
+            <div class="currency-item">
+                <span class="currency-label">Валюта:</span>
+                <span class="money-value" id="player-money">0</span>
+            </div>
+            
+            <div class="currency-item">
+                <span class="currency-label">Золото:</span>
+                <span class="currency-value" id="player-gold">0</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Страна:</span>
+                <span class="info-value" id="player-country">Загрузка...</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Регион:</span>
+                <span class="info-value" id="player-region">Загрузка...</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Партия:</span>
+                <span class="info-value" id="player-party">Загрузка...</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Армия:</span>
+                <span class="info-value" id="player-army">Загрузка...</span>
+            </div>
+        </div>
+        
+        <!-- Центральная панель - карта мира -->
+        <div class="world-map">
+            <h2>Карта мира</h2>
+            <div class="region-list" id="region-list">
+                <!-- Регионы будут загружены через JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Правая панель - навигация -->
+        <div class="navigation">
+            <h2>Навигация</h2>
+            <div class="nav-buttons-container">
+                <a href="../UI/MainGame.html" class="nav-button">
+                    <img src="../Img/Main/Capitol.png" alt="Обзор" class="nav-icon">
+                    <span class="nav-text">Обзор</span>
+                </a>
+                <a href="../UI/Work.html" class="nav-button">
+                    <img src="../Img/Main/Laborer.png" alt="Работа" class="nav-icon">
+                    <span class="nav-text">Работа</span>
+                </a>
+                <a href="../UI/Market.html" class="nav-button">
+                    <img src="../Img/Main/Global_Trade.png" alt="Рынок" class="nav-icon">
+                    <span class="nav-text">Рынок</span>
+                </a>
+                <a href="../UI/News.html" class="nav-button">
+                    <img src="../Img/Main/news.png" alt="Новости" class="nav-icon">
+                    <span class="nav-text">Новости</span>
+                </a>
+                <a href="../UI/Map.html" class="nav-button">
+                    <img src="../Img/Main/Map_with_Arrow.png" alt="Карта" class="nav-icon">
+                    <span class="nav-text">Карта</span>
+                </a>
+                <a href="../UI/Politics.html" class="nav-button">
+                    <img src="../Img/Main/Volunteer.png" alt="Политика" class="nav-icon">
+                    <span class="nav-text">Политика</span>
+                </a>
+                <a href="../UI/Government.html" class="nav-button">
+                    <img src="../Img/Main/Palace_Generic.png" alt="Правительство" class="nav-icon">
+                    <span class="nav-text">Правительство</span>
+                </a>
+                <a href="../UI/Profile.html" class="nav-button">
+                    <img src="../Img/Main/Worker.png" alt="Профиль" class="nav-icon">
+                    <span class="nav-text">Профиль</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../Scripts/Regions.js"></script>
+    <script>
+        // Загрузка данных игрока через LocalScript (заглушка)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Заглушка данных игрока
+            setTimeout(() => {
+                document.getElementById('player-country').textContent = 'Российская Республика';
+                document.getElementById('player-region').textContent = 'Москва';
+                document.getElementById('player-party').textContent = 'Не состоит';
+                document.getElementById('player-army').textContent = 'Не служит';
+                document.getElementById('player-energy').textContent = '100/100';
+                document.getElementById('player-money').textContent = '1000';
+                document.getElementById('player-gold').textContent = '50';
+            }, 500);
+            
+            // Блокировка масштабирования
+            document.addEventListener('wheel', function(e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.key === '='))) {
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
+            
+            // Предотвращаем прокрутку страницы при достижении границ блоков
+            const playerInfo = document.querySelector('.player-info');
+            const worldMap = document.querySelector('.world-map');
+            const navigation = document.querySelector('.navigation');
+            
+            function preventPageScroll(element) {
+                element.addEventListener('wheel', function(e) {
+                    // Если достигнута верхняя граница и прокрутка вверх
+                    if (this.scrollTop === 0 && e.deltaY < 0) {
+                        e.preventDefault();
+                    }
+                    
+                    // Если достигнута нижняя граница и прокрутка вниз
+                    if (this.scrollTop + this.clientHeight >= this.scrollHeight && e.deltaY > 0) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
+            
+            preventPageScroll(playerInfo);
+            preventPageScroll(worldMap);
+            preventPageScroll(navigation);
+        });
+    </script>
+</body>
+</html>

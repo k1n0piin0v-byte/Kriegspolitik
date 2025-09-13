@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kriegspolitik - Профиль</title>
+    <link rel="icon" href="../Icons.jpg" type="image/jpeg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background-color: #000;
+            color: #ccc;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 15px;
+            padding: 15px;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        /* Левая панель - быстрая навигация */
+        .quick-navigation {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            gap: 10px;
+        }
+        
+        .quick-navigation h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .quick-nav-button {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 3px;
+            color: #ccc;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            gap: 10px;
+        }
+        
+        .quick-nav-button:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .quick-nav-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+        
+        .quick-nav-text {
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        
+        /* Центральная панель - профиль */
+        .profile-content {
+            background-color: #0a0a0a;
+            padding: 20px;
+            border: 1px solid #1a1a1a;
+            overflow-y: auto;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .profile-nickname {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background-color: #111;
+            padding: 15px;
+            border-radius: 3px;
+            border-left: 4px solid #2a2a2a;
+        }
+        
+        .stat-label {
+            color: #999;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .money-value {
+            color: #32cd32;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .gold-value {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .reputation-neutral {
+            color: #ccc;
+        }
+        
+        .profile-info {
+            background-color: #111;
+            padding: 20px;
+            border-radius: 3px;
+            border: 1px solid #1a1a1a;
+        }
+        
+        .info-section {
+            margin-bottom: 20px;
+        }
+        
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-section h3 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            color: #fff;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+        
+        /* Адаптация для телефонов */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .quick-navigation {
+                order: 1;
+                padding: 10px;
+                max-height: 80px;
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+            
+            .quick-navigation h2 {
+                display: none;
+            }
+            
+            .quick-nav-button {
+                flex-direction: column;
+                padding: 8px;
+                min-width: 60px;
+                text-align: center;
+            }
+            
+            .quick-nav-icon {
+                width: 20px;
+                height: 20px;
+                margin-bottom: 4px;
+            }
+            
+            .quick-nav-text {
+                font-size: 0.7rem;
+                text-align: center;
+            }
+            
+            .profile-content {
+                order: 2;
+                padding: 15px;
+            }
+            
+            .profile-nickname {
+                font-size: 1.5rem;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 12px;
+            }
+            
+            .stat-value, .money-value, .gold-value {
+                font-size: 1.1rem;
+            }
+            
+            .profile-info {
+                padding: 15px;
+            }
+        }
+        
+        /* Улучшение скролла */
+        .quick-navigation, .profile-content {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        
+        .quick-navigation::-webkit-scrollbar,
+        .profile-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .quick-navigation::-webkit-scrollbar-thumb,
+        .profile-content::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Левая панель - быстрая навигация -->
+        <div class="quick-navigation">
+            <h2>Быстрая навигация</h2>
+            <a href="MainGame.html" class="quick-nav-button">
+                <img src="../Img/Main/Capitol.png" alt="Обзор" class="quick-nav-icon">
+                <span class="quick-nav-text">Обзор</span>
+            </a>
+            <a href="Work.html" class="quick-nav-button">
+                <img src="../Img/Main/Laborer.png" alt="Работа" class="quick-nav-icon">
+                <span class="quick-nav-text">Работа</span>
+            </a>
+            <a href="Market.html" class="quick-nav-button">
+                <img src="../Img/Main/Global_Trade.png" alt="Рынок" class="quick-nav-icon">
+                <span class="quick-nav-text">Рынок</span>
+            </a>
+            <a href="News.html" class="quick-nav-button">
+                <img src="../Img/Main/news.png" alt="Новости" class="quick-nav-icon">
+                <span class="quick-nav-text">Новости</span>
+            </a>
+            <a href="Politics.html" class="quick-nav-button">
+                <img src="../Img/Main/Volunteer.png" alt="Политика" class="quick-nav-icon">
+                <span class="quick-nav-text">Политика</span>
+            </a>
+        </div>
+        
+        <!-- Центральная панель - профиль -->
+        <div class="profile-content">
+            <div class="profile-header">
+                <h1 class="profile-nickname" id="profile-nickname">Новый Игрок</h1>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Репутация</div>
+                    <div class="stat-value reputation-neutral" id="profile-reputation">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Валюта</div>
+                    <div class="money-value">1,000</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Золото</div>
+                    <div class="gold-value">50</div>
+                </div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-section">
+                    <h3>Основная информация</h3>
+                    <div class="info-item">
+                        <span class="info-label">Дата регистрации:</span>
+                        <span class="info-value" id="info-regdate">Загрузка...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Последний вход:</span>
+                        <span class="info-value" id="info-lastlogin">Загрузка...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Статус:</span>
+                        <span class="info-value">Онлайн</span>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h3>Игровая информация</h3>
+                    <div class="info-item">
+                        <span class="info-label">Страна:</span>
+                        <span class="info-value" id="info-country">Российская Федерация</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Регион:</span>
+                        <span class="info-value" id="info-region">Москва</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Политическая партия:</span>
+                        <span class="info-value" id="info-party">Не состоит</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Военная служба:</span>
+                        <span class="info-value" id="info-army">Не служит</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Должность:</span>
+                        <span class="info-value" id="info-position">Гражданин</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загрузка данных профиля
+            setTimeout(() => {
+                // Основная информация
+                document.getElementById('profile-nickname').textContent = 'Новый Игрок';
+                
+                // Даты
+                const now = new Date();
+                const regDate = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000); // 2 дня назад
+                
+                document.getElementById('info-regdate').textContent = regDate.toLocaleDateString('ru-RU');
+                document.getElementById('info-lastlogin').textContent = now.toLocaleString('ru-RU');
+                
+                // Игровая информация
+                document.getElementById('info-country').textContent = 'Российская Республика';
+                document.getElementById('info-region').textContent = 'Москва';
+                document.getElementById('info-party').textContent = 'Не состоит';
+                document.getElementById('info-army').textContent = 'Не служит';
+                
+                // Репутация
+                document.getElementById('profile-reputation').textContent = '0';
+                document.getElementById('profile-reputation').className = 'stat-value reputation-neutral';
+                
+            }, 500);
+            
+            // Блокировка масштабирования
+            document.addEventListener('wheel', function(e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.key === '='))) {
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
