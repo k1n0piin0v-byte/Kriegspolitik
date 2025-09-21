@@ -242,6 +242,51 @@
             flex: 1;
         }
         
+        /* Мобильная навигация (внизу экрана) */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            padding: 8px 5px;
+            z-index: 100;
+        }
+        
+        .mobile-nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .mobile-nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            padding: 5px;
+            min-width: 50px;
+        }
+        
+        .mobile-nav-icon {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 4px;
+            object-fit: contain;
+        }
+        
+        .mobile-nav-text {
+            font-size: 0.65rem;
+            color: #ccc;
+            text-align: center;
+        }
+        
+        .mobile-nav-button.disabled .mobile-nav-text {
+            color: #666;
+        }
+        
         /* Модальное окно региона */
         .region-modal {
             display: none;
@@ -313,14 +358,16 @@
         }
         
         /* Стили для неактивных кнопок */
-        .nav-button.disabled {
+        .nav-button.disabled,
+        .mobile-nav-button.disabled {
             opacity: 0.6;
             cursor: not-allowed;
             position: relative;
         }
         
-        .nav-button.disabled:hover {
-            background-color: #111;
+        .nav-button.disabled:hover,
+        .mobile-nav-button.disabled:hover {
+            background-color: transparent;
         }
         
         .nav-button.disabled::after {
@@ -336,100 +383,83 @@
             color: #666;
         }
         
-        /* Кнопка для показа информации игрока на мобильных */
-        .mobile-player-toggle {
+        /* Мобильная панель информации о игроке (плавающая) */
+        .mobile-player-info {
             display: none;
             position: fixed;
-            bottom: 70px;
+            top: 10px;
+            left: 10px;
             right: 10px;
-            width: 40px;
-            height: 40px;
-            background-color: #1a4c7a;
-            border-radius: 50%;
-            z-index: 500;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            background-color: rgba(10, 10, 10, 0.9);
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 90;
+            backdrop-filter: blur(5px);
         }
         
-        .mobile-player-toggle img {
-            width: 24px;
-            height: 24px;
-            filter: invert(1);
-        }
-        
-        /* Мобильная навигация */
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
-            z-index: 100;
-            padding: 5px;
-        }
-        
-        .mobile-nav-container {
+        .mobile-player-header {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
         }
         
-        .mobile-nav-button {
+        .mobile-player-nickname {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .mobile-player-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+        
+        .mobile-stat {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 5px;
-            text-decoration: none;
-            color: #ccc;
-            font-size: 0.7rem;
             flex: 1;
         }
         
-        .mobile-nav-icon {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 3px;
-            object-fit: contain;
+        .mobile-stat-value {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 2px;
         }
         
-        .mobile-nav-button.disabled {
-            opacity: 0.5;
+        .mobile-stat-label {
+            color: #999;
+            font-size: 0.7rem;
         }
         
-        /* Адаптация для телефонов */
-        @media (max-width: 768px) {
+        /* Адаптация для телефонов (вертикальная ориентация) */
+        @media (max-width: 768px) and (orientation: portrait) {
             .container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr;
-                gap: 10px;
-                padding: 10px 10px 60px 10px;
+                grid-template-rows: 1fr auto;
+                gap: 0;
+                padding: 0;
             }
             
             .player-info {
                 display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 90%;
-                max-width: 320px;
-                max-height: 80vh;
-                z-index: 1000;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-            }
-            
-            .player-info.active {
-                display: flex;
             }
             
             .world-map {
-                grid-column: 1;
-                grid-row: 1 / span 2;
+                grid-row: 1;
+                border: none;
                 padding: 10px;
-                margin-bottom: 50px;
+                padding-bottom: 60px; /* Для мобильной навигации */
+            }
+            
+            .world-map h2 {
+                position: static;
+                margin-bottom: 10px;
             }
             
             .navigation {
@@ -440,92 +470,133 @@
                 display: block;
             }
             
-            .mobile-player-toggle {
-                display: flex;
+            .mobile-player-info {
+                display: block;
+            }
+            
+            .region-modal {
+                width: 90%;
+                max-width: 300px;
+                padding: 15px;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .modal-button {
+                width: 100%;
+            }
+        }
+        
+        /* Адаптация для телефонов (горизонтальная ориентация) */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .container {
+                grid-template-columns: 1fr auto;
+                gap: 8px;
+                padding: 10px;
+                padding-bottom: 0;
+            }
+            
+            .player-info {
+                display: none;
+            }
+            
+            .world-map {
+                padding: 10px;
             }
             
             .world-map h2 {
                 font-size: 0.9rem;
                 padding-bottom: 6px;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
             }
             
-            .region-item {
-                padding: 10px;
+            .navigation {
+                padding: 8px;
+                width: 60px; /* Уменьшаем ширину навигации */
+            }
+            
+            .navigation h2 {
+                display: none;
+            }
+            
+            .nav-buttons-container {
+                gap: 8px;
+            }
+            
+            .nav-button {
+                padding: 8px;
+                justify-content: center;
+            }
+            
+            .nav-text {
+                display: none; /* Скрываем текст в навигации */
+            }
+            
+            .nav-icon {
+                width: 24px;
+                height: 24px;
+                margin: 0;
+            }
+            
+            .nav-button.disabled::after {
+                display: none; /* Скрываем замок на заблокированных кнопках */
+            }
+            
+            .mobile-nav {
+                display: none; /* Скрываем мобильную навигацию внизу */
+            }
+            
+            .mobile-player-info {
+                display: block;
+                left: 10px;
+                right: auto;
+                width: auto;
+                min-width: 200px;
+            }
+            
+            .region-modal {
+                width: 80%;
+                max-width: 280px;
+                padding: 15px;
+            }
+        }
+        
+        /* Адаптация для очень маленьких экранов */
+        @media (max-width: 360px) and (orientation: portrait) {
+            .mobile-nav-icon {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .mobile-nav-text {
+                font-size: 0.6rem;
+            }
+            
+            .mobile-player-info {
+                padding: 8px;
+            }
+            
+            .mobile-player-nickname {
+                font-size: 0.8rem;
+            }
+            
+            .mobile-stat-value {
+                font-size: 0.75rem;
+            }
+            
+            .mobile-stat-label {
+                font-size: 0.65rem;
             }
             
             .region-name {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             
             .region-country {
                 font-size: 0.75rem;
-            }
-            
-            .region-modal {
-                width: 90%;
-                max-width: 280px;
-                padding: 15px;
-            }
-            
-            .modal-button {
-                padding: 8px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        /* Горизонтальная ориентация на мобильных */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .container {
-                grid-template-columns: 1fr auto;
-                grid-template-rows: 1fr;
-                padding: 10px 70px 10px 10px;
-            }
-            
-            .world-map {
-                grid-column: 1;
-                grid-row: 1;
-                margin-bottom: 0;
-            }
-            
-            .navigation {
-                display: none;
-            }
-            
-            .mobile-nav {
-                display: flex;
-                top: 0;
-                bottom: auto;
-                left: auto;
-                right: 0;
-                width: 60px;
-                height: 100%;
-                border-top: none;
-                border-left: 1px solid #1a1a1a;
-                padding: 10px 5px;
-            }
-            
-            .mobile-nav-container {
-                flex-direction: column;
-                height: 100%;
-                justify-content: flex-start;
-                gap: 15px;
-            }
-            
-            .mobile-nav-button {
-                padding: 8px 5px;
-                font-size: 0.6rem;
-            }
-            
-            .mobile-nav-icon {
-                width: 28px;
-                height: 28px;
-                margin-bottom: 2px;
-            }
-            
-            .mobile-player-toggle {
-                bottom: 10px;
-                right: 10px;
             }
         }
         
@@ -647,47 +718,63 @@
         </div>
     </div>
 
-    <!-- Мобильная навигация -->
+    <!-- Мобильная панель информации о игроке -->
+    <div class="mobile-player-info">
+        <div class="mobile-player-header">
+            <div class="mobile-player-nickname" id="mobile-player-nickname">Новый Игрок</div>
+        </div>
+        <div class="mobile-player-stats">
+            <div class="mobile-stat">
+                <span class="mobile-stat-value" id="mobile-player-energy">100/100</span>
+                <span class="mobile-stat-label">Энергия</span>
+            </div>
+            <div class="mobile-stat">
+                <span class="mobile-stat-value money-value" id="mobile-player-money">0</span>
+                <span class="mobile-stat-label">Валюта</span>
+            </div>
+            <div class="mobile-stat">
+                <span class="mobile-stat-value currency-value" id="mobile-player-gold">0</span>
+                <span class="mobile-stat-label">Золото</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Мобильная навигация (внизу экрана) -->
     <div class="mobile-nav">
         <div class="mobile-nav-container">
             <a href="../UI/MainGame.html" class="mobile-nav-button">
                 <img src="../Img/Main/Capitol.png" alt="Обзор" class="mobile-nav-icon">
-                <span>Обзор</span>
+                <span class="mobile-nav-text">Обзор</span>
             </a>
             <a href="../UI/Work.html" class="mobile-nav-button">
                 <img src="../Img/Main/Laborer.png" alt="Работа" class="mobile-nav-icon">
-                <span>Работа</span>
+                <span class="mobile-nav-text">Работа</span>
             </a>
             <a href="../UI/Market.html" class="mobile-nav-button disabled">
                 <img src="../Img/Main/Global_Trade.png" alt="Рынок" class="mobile-nav-icon">
-                <span>Рынок</span>
+                <span class="mobile-nav-text">Рынок</span>
             </a>
             <a href="../UI/News.html" class="mobile-nav-button disabled">
                 <img src="../Img/Main/news.png" alt="Новости" class="mobile-nav-icon">
-                <span>Новости</span>
+                <span class="mobile-nav-text">Новости</span>
             </a>
             <a href="../UI/Map.html" class="mobile-nav-button disabled">
                 <img src="../Img/Main/Map_with_Arrow.png" alt="Карта" class="mobile-nav-icon">
-                <span>Карта</span>
+                <span class="mobile-nav-text">Карта</span>
             </a>
             <a href="../UI/Politics.html" class="mobile-nav-button">
                 <img src="../Img/Main/Volunteer.png" alt="Политика" class="mobile-nav-icon">
-                <span>Политика</span>
+                <span class="mobile-nav-text">Политика</span>
             </a>
             <a href="../UI/Government.html" class="mobile-nav-button">
                 <img src="../Img/Main/Palace_Generic.png" alt="Правительство" class="mobile-nav-icon">
-                <span>Правительство</span>
+                <span class="mobile-nav-text">Правит.</span>
             </a>
             <a href="../UI/Profile.html" class="mobile-nav-button">
                 <img src="../Img/Main/Worker.png" alt="Профиль" class="mobile-nav-icon">
-                <span>Профиль</span>
+                <span class="mobile-nav-text">Профиль</span>
             </a>
         </div>
-    </div>
-
-    <!-- Кнопка показа информации игрока на мобильных -->
-    <div class="mobile-player-toggle" id="player-toggle">
-        <img src="../Img/Main/Worker.png" alt="Информация">
     </div>
 
     <!-- Модальное окно региона -->
@@ -745,11 +832,11 @@
             { name: 'Кутаиси', country: 'Грузия' },
             { name: 'Батуми', country: 'Грузия' },
             { name: 'Ереван', country: 'Армения' },
-            { name: 'Гюмри', country: 'Армения' },
+            { name: 'Гюмri', country: 'Армения' },
             { name: 'Баку', country: 'Азербайджан' },
             { name: 'Гянджа', country: 'Азербайджан' },
             
-            // ===== РЕСПУБЛИКА УКРАИна =====
+            // ===== РЕСПУБЛИКА УКРАИНА =====
             { name: 'Киев', country: 'Республика Украина' },
             { name: 'Харьков', country: 'Республика Украина' },
             { name: 'Одесса', country: 'Республика Украина' },
@@ -866,11 +953,11 @@
             { name: 'Республика Бурятия', country: 'Иркутская Социалистическая Хунта' },
             
             // ===== РЕСПУБЛИКА ТЫВА =====
-            { name: 'Кызыл', country: 'Республика Тыва' },
-            { name: 'Ак-Довурак', country: 'Республика Тыва' },
-            { name: 'Туран', country: 'Республика Тыва' },
-            { name: 'Шагонар', country: 'Республика Тыва' },
-            { name: 'Чадан', country: 'Республика Тыва' }
+            { name: 'Кызыл', country: 'Республика Тыva' },
+            { name: 'Ак-Довурак', country: 'Республика Тыva' },
+            { name: 'Туран', country: 'Республика Тыva' },
+            { name: 'Шагонар', country: 'Республика Тыva' },
+            { name: 'Чадан', country: 'Республика Тыva' }
         ];
 
         // Текущий выбранный регион
@@ -907,6 +994,12 @@
                 document.getElementById('player-region').textContent = playerData.region;
                 document.getElementById('player-party').textContent = playerData.party;
                 document.getElementById('player-army').textContent = playerData.army;
+                
+                // Обновляем мобильную панель
+                document.getElementById('mobile-player-nickname').textContent = playerData.nickname;
+                document.getElementById('mobile-player-energy').textContent = playerData.energy;
+                document.getElementById('mobile-player-money').textContent = playerData.money;
+                document.getElementById('mobile-player-gold').textContent = playerData.gold;
                 
                 return true;
             }
@@ -957,6 +1050,12 @@
                 document.getElementById('player-energy').textContent = '100/100';
                 document.getElementById('player-money').textContent = '1000';
                 document.getElementById('player-gold').textContent = '50';
+                
+                // Обновляем мобильную панель
+                document.getElementById('mobile-player-nickname').textContent = 'Новый Игрок';
+                document.getElementById('mobile-player-energy').textContent = '100/100';
+                document.getElementById('mobile-player-money').textContent = '1000';
+                document.getElementById('mobile-player-gold').textContent = '50';
                 
                 // Сохраняем данные по умолчанию
                 savePlayerData();
@@ -1054,20 +1153,10 @@
             preventPageScroll(worldMap);
             preventPageScroll(navigation);
             
-            // Обработчик для кнопки показа информации игрока на мобильных
-            document.getElementById('player-toggle').addEventListener('click', function() {
-                const playerInfo = document.querySelector('.player-info');
-                playerInfo.classList.toggle('active');
-                
-                if (playerInfo.classList.contains('active')) {
-                    document.getElementById('region-overlay').style.display = 'block';
-                    document.getElementById('region-overlay').addEventListener('click', function() {
-                        playerInfo.classList.remove('active');
-                        this.style.display = 'none';
-                    });
-                } else {
-                    document.getElementById('region-overlay').style.display = 'none';
-                }
+            // Обновление данных при изменении ориентации экрана
+            window.addEventListener('resize', function() {
+                // Перезагружаем данные для обновления мобильной панели
+                loadPlayerData();
             });
         });
     </script>
