@@ -58,8 +58,8 @@
         }
         
         .energy-icon {
-            width: 32px; /* Увеличено в 2 раза */
-            height: 32px; /* Увеличено в 2 раза */
+            width: 32px;
+            height: 32px;
         }
         
         /* Компактная навигация */
@@ -94,8 +94,8 @@
         }
         
         .tab-icon {
-            width: 32px; /* Увеличено в 2 раза */
-            height: 32px; /* Увеличено в 2 раза */
+            width: 32px;
+            height: 32px;
             object-fit: contain;
         }
         
@@ -287,8 +287,8 @@
         }
         
         .item-icon {
-            width: 48px; /* Увеличено в 2 раза */
-            height: 48px; /* Увеличено в 2 раза */
+            width: 48px;
+            height: 48px;
             object-fit: contain;
         }
         
@@ -317,13 +317,13 @@
             }
             
             .tab-icon {
-                width: 24px; /* Увеличено для мобильных */
-                height: 24px; /* Увеличено для мобильных */
+                width: 24px;
+                height: 24px;
             }
             
             .energy-icon {
-                width: 24px; /* Увеличено для мобильных */
-                height: 24px; /* Увеличено для мобильных */
+                width: 24px;
+                height: 24px;
             }
             
             .content {
@@ -350,12 +350,143 @@
             }
             
             .item-icon {
-                width: 36px; /* Увеличено для мобильных */
-                height: 36px; /* Увеличено для мобильных */
+                width: 36px;
+                height: 36px;
             }
         }
         
-        /* Улучшение сколла */
+        /* Улучшение для вертикальной ориентации на мобильных */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .work-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .work-table th,
+            .work-table td {
+                padding: 4px;
+                font-size: 0.7rem;
+            }
+            
+            .action-title {
+                font-size: 0.75rem;
+            }
+            
+            .action-desc {
+                font-size: 0.65rem;
+            }
+            
+            .slider-container {
+                flex-direction: column;
+                gap: 5px;
+                align-items: stretch;
+            }
+            
+            .action-count {
+                text-align: center;
+                min-width: auto;
+            }
+            
+            .action-controls {
+                gap: 5px;
+            }
+            
+            .total-cost-reward {
+                font-size: 0.65rem;
+            }
+            
+            .tab {
+                padding: 6px 8px;
+                font-size: 0.65rem;
+            }
+            
+            .tab-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        
+        /* Улучшение для горизонтальной ориентации на мобильных */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .work-table th,
+            .work-table td {
+                padding: 4px;
+                font-size: 0.7rem;
+            }
+            
+            .action-title {
+                font-size: 0.75rem;
+            }
+            
+            .action-desc {
+                font-size: 0.65rem;
+            }
+            
+            .slider-container {
+                gap: 5px;
+            }
+            
+            .action-count {
+                min-width: 40px;
+                font-size: 0.65rem;
+            }
+            
+            .total-cost-reward {
+                font-size: 0.65rem;
+            }
+            
+            .tab {
+                padding: 6px 8px;
+                font-size: 0.65rem;
+            }
+            
+            .tab-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        
+        /* Улучшение для очень маленьких экранов */
+        @media (max-width: 360px) {
+            .header-title {
+                font-size: 0.9rem;
+            }
+            
+            .energy-display {
+                font-size: 0.8rem;
+            }
+            
+            .tab {
+                padding: 4px 6px;
+                font-size: 0.6rem;
+            }
+            
+            .tab-icon {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .work-table th,
+            .work-table td {
+                padding: 3px;
+                font-size: 0.65rem;
+            }
+            
+            .action-title {
+                font-size: 0.7rem;
+            }
+            
+            .action-desc {
+                display: none;
+            }
+            
+            .action-button {
+                padding: 3px 6px;
+                font-size: 0.65rem;
+            }
+        }
+        
+        /* Улучшение скролла */
         .content {
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
@@ -983,9 +1114,6 @@
                                 <button class="action-button" data-action="produce_apc">Произвести</button>
                             </div>
                         </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
         
         <!-- Склад -->
@@ -1137,6 +1265,15 @@
             
             // Обновляем максимальные значения ползунков
             updateSlidersMax();
+            
+            // Обновляем отображение ползунков
+            updateAllSlidersDisplay();
+        }
+        
+        // Обновление отображения всех ползунков
+        function updateAllSlidersDisplay() {
+            const sliders = document.querySelectorAll('.action-slider');
+            sliders.forEach(slider => updateSliderDisplay(slider));
         }
         
         // Обновление максимальных значений ползунков
@@ -1166,11 +1303,7 @@
                 // Если текущее значение больше нового максимума, устанавливаем его в максимум
                 if (parseInt(slider.value) > parseInt(slider.max)) {
                     slider.value = slider.max;
-                    updateSliderDisplay(slider);
                 }
-                
-                // Обновляем отображение ползунка
-                updateSliderDisplay(slider);
             });
         }
         
@@ -1188,7 +1321,8 @@
             const totalCostRewardElement = container.querySelector('.total-cost-reward');
             
             // Обновляем отображение количества
-            countElement.textContent = `${count} раз`;
+            const timesText = count === 1 ? 'раз' : 'раза';
+            countElement.textContent = `${count} ${timesText}`;
             
             // Рассчитываем общие затраты и награду
             const totalEnergy = workDef.energy * count;
