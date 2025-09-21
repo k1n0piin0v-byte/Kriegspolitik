@@ -156,6 +156,12 @@
             display: flex;
             margin-bottom: 15px;
             border-bottom: 1px solid #1a1a1a;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
         
         .tab {
@@ -167,6 +173,8 @@
             color: #ccc;
             font-size: 0.9rem;
             transition: background-color 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .tab.active {
@@ -322,44 +330,57 @@
         /* Адаптация для телефонов (горизонтальная ориентация) */
         @media (max-width: 768px) and (orientation: landscape) {
             .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr auto;
                 gap: 8px;
                 padding: 10px;
             }
             
-            .player-info, .politics-content, .navigation {
-                padding: 10px;
+            .player-info {
+                display: none;
             }
             
-            .player-info h2, .politics-content h2, .navigation h2 {
+            .navigation {
+                grid-row: 2;
+                padding: 8px;
+                border-top: 2px solid #1a1a1a;
+            }
+            
+            .navigation h2 {
+                display: none;
+            }
+            
+            .nav-buttons-container {
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 5px;
+            }
+            
+            .nav-button {
+                flex-direction: column;
+                padding: 8px 5px;
+                gap: 5px;
+                flex: 1;
+            }
+            
+            .nav-text {
+                display: none;
+            }
+            
+            .nav-icon {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .politics-content {
+                padding: 10px;
+                grid-row: 1;
+            }
+            
+            .politics-content h2 {
                 font-size: 0.9rem;
                 padding-bottom: 6px;
                 margin-bottom: 8px;
-            }
-            
-            .player-nickname {
-                font-size: 1rem;
-                padding: 6px 0;
-            }
-            
-            .info-item {
-                padding: 6px 0;
-            }
-            
-            .info-label, .info-value {
-                font-size: 0.8rem;
-            }
-            
-            .info-icon {
-                width: 14px;
-                height: 14px;
-            }
-            
-            .currency-item {
-                padding: 5px 0;
-            }
-            
-            .currency-label, .currency-value, .money-value {
-                font-size: 0.8rem;
             }
             
             .tab {
@@ -383,10 +404,47 @@
                 padding: 5px 10px;
                 font-size: 0.8rem;
             }
+        }
+        
+        /* Адаптация для телефонов (вертикальная ориентация) */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr auto;
+                gap: 0;
+                padding: 0;
+            }
+            
+            .player-info {
+                display: none;
+            }
+            
+            .navigation {
+                grid-row: 2;
+                padding: 10px 5px;
+                border-top: 2px solid #1a1a1a;
+            }
+            
+            .navigation h2 {
+                display: none;
+            }
+            
+            .nav-buttons-container {
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 5px;
+                overflow-x: auto;
+            }
             
             .nav-button {
-                padding: 10px;
-                gap: 10px;
+                flex-direction: column;
+                padding: 8px 5px;
+                gap: 5px;
+                min-width: 60px;
+            }
+            
+            .nav-text {
+                display: none;
             }
             
             .nav-icon {
@@ -394,8 +452,51 @@
                 height: 28px;
             }
             
-            .nav-text {
+            .politics-content {
+                padding: 15px 10px;
+                grid-row: 1;
+                border: none;
+                border-bottom: 1px solid #1a1a1a;
+            }
+            
+            .politics-content h2 {
+                font-size: 1rem;
+                position: static;
+            }
+            
+            .tabs {
+                margin-bottom: 12px;
+            }
+            
+            .tab {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .party-item, .military-item {
+                padding: 10px;
+            }
+            
+            .party-name, .military-name {
                 font-size: 0.9rem;
+            }
+            
+            .party-ideology, .military-type {
+                font-size: 0.8rem;
+            }
+            
+            .join-button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Общие стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .nav-button.disabled::after {
+                right: auto;
+                top: 5px;
+                transform: none;
             }
         }
         
@@ -630,7 +731,7 @@
             alert(`Вы вступили в партию: ${partyName}`);
         }
         
-        // Функция для обновления кнопок в списке партий
+        // Функция для обновления кнопки вступления в партию
         function updatePartyButtons(currentParty) {
             const partyItems = document.querySelectorAll('.party-item');
             
