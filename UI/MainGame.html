@@ -137,6 +137,7 @@
             padding: 15px;
             border: 1px solid #1a1a1a;
             overflow-y: auto;
+            position: relative;
         }
         
         .world-map h2 {
@@ -165,6 +166,12 @@
             background-color: #111;
             border-radius: 2px;
             border-left: 3px solid #2a2a2a;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .region-item:hover {
+            background-color: #1a1a1a;
         }
         
         .region-name {
@@ -235,6 +242,100 @@
             flex: 1;
         }
         
+        /* Модальное окно региона */
+        .region-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            padding: 20px;
+            z-index: 1000;
+            width: 300px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        
+        .region-modal h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 10px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .modal-button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .info-button {
+            background-color: #2a2a2a;
+            color: #fff;
+        }
+        
+        .info-button:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .move-button {
+            background-color: #1a4c7a;
+            color: #fff;
+        }
+        
+        .move-button:hover {
+            background-color: #2a5c8a;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+        
+        /* Стили для неактивных кнопок */
+        .nav-button.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .nav-button.disabled:hover {
+            background-color: #111;
+        }
+        
+        .nav-button.disabled::after {
+            content: "🔒";
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        
+        .nav-button.disabled .nav-text {
+            color: #666;
+        }
+        
         /* Адаптация для телефонов (горизонтальная ориентация) */
         @media (max-width: 768px) and (orientation: landscape) {
             .container {
@@ -302,6 +403,11 @@
             
             .nav-text {
                 font-size: 0.9rem;
+            }
+            
+            .region-modal {
+                width: 250px;
+                padding: 15px;
             }
         }
         
@@ -395,15 +501,15 @@
                     <img src="../Img/Main/Laborer.png" alt="Работа" class="nav-icon">
                     <span class="nav-text">Работа</span>
                 </a>
-                <a href="../UI/Market.html" class="nav-button">
+                <a href="../UI/Market.html" class="nav-button disabled">
                     <img src="../Img/Main/Global_Trade.png" alt="Рынок" class="nav-icon">
                     <span class="nav-text">Рынок</span>
                 </a>
-                <a href="../UI/News.html" class="nav-button">
+                <a href="../UI/News.html" class="nav-button disabled">
                     <img src="../Img/Main/news.png" alt="Новости" class="nav-icon">
                     <span class="nav-text">Новости</span>
                 </a>
-                <a href="../UI/Map.html" class="nav-button">
+                <a href="../UI/Map.html" class="nav-button disabled">
                     <img src="../Img/Main/Map_with_Arrow.png" alt="Карта" class="nav-icon">
                     <span class="nav-text">Карта</span>
                 </a>
@@ -423,12 +529,266 @@
         </div>
     </div>
 
-    <script src="../Scripts/Regions.js"></script>
+    <!-- Модальное окно региона -->
+    <div class="overlay" id="region-overlay"></div>
+    <div class="region-modal" id="region-modal">
+        <h3 id="modal-region-name">Название региона</h3>
+        <div class="modal-buttons">
+            <button class="modal-button info-button" id="info-button">Информация</button>
+            <button class="modal-button move-button" id="move-button">Переехать</button>
+        </div>
+    </div>
+
     <script>
-        // Загрузка данных игрока через LocalScript (заглушка)
+        // Данные о регионах (вместо внешнего файла)
+        const regions = [
+            // ===== РОССИЙСКАЯ РЕСПУБЛИка =====
+            { name: 'Москва', country: 'Российская Республика' },
+            { name: 'Санкт-Петербург', country: 'Российская Республика' },
+            { name: 'Московская область', country: 'Российская Республика' },
+            { name: 'Ленинградская область', country: 'Российская Республика' },
+            { name: 'Нижегородская область', country: 'Российская Республика' },
+            { name: 'Ростовская область', country: 'Российская Республика' },
+            { name: 'Воронежская область', country: 'Российская Республика' },
+            { name: 'Татарстан', country: 'Российская Республика' },
+            { name: 'Башкортостан', country: 'Российская Республика' },
+            { name: 'Самарская область', country: 'Российская Республика' },
+            { name: 'Свердловская область', country: 'Российская Республика' },
+            { name: 'Челябинская область', country: 'Российская Республика' },
+            { name: 'Республика Крым', country: 'Российская Республика' },
+            { name: 'Севастополь', country: 'Российская Республика' },
+            
+            // ===== КУБАНСКАЯ РЕСПУБЛИКА =====
+            { name: 'Краснодарский край', country: 'Кубанская Республика' },
+            { name: 'Адыгея', country: 'Кубанская Республика' },
+            
+            // ===== СЕВЕРО-КАВКАЗСКАЯ СОЦИАЛИСТИЧЕСКАЯ РЕСПУБЛИКА =====
+            { name: 'Ставропольский край', country: 'Северо-Кавказская Социалистическая Республика' },
+            { name: 'Калмыкия', country: 'Северо-Кавказская Социалистическая Республика' },
+            { name: 'Астраханская область', country: 'Северо-Кавказская Социалистическая Республика' },
+            
+            // ===== КАВКАЗСКИЙ ХАЛИФАТ =====
+            { name: 'Чеченская Республика', country: 'Кавказский Халифат' },
+            { name: 'Дагестан', country: 'Кавказский Халифат' },
+            { name: 'Ингушетия', country: 'Кавказский Халифат' },
+            
+            // ===== МЕЛКИЕ ГОСУДАРСТВА НА КАВКАЗЕ =====
+            { name: 'Кабардино-Балкария', country: 'Горская Конфедерация' },
+            { name: 'Карачаево-Черкесия', country: 'Горская Конфедерация' },
+            { name: 'Северная Осетия', country: 'Осетинское Княжество' },
+            { name: 'Абхазия', country: 'Абхазское Царство' },
+            { name: 'Южная Осетия', country: 'Южно-Осетинское Княжество' },
+            
+            // ===== НЕЗАВИСИМЫЕ ГОСУДАРСТВА ЗАКАВКАЗЬЯ =====
+            { name: 'Тбилиси', country: 'Грузия' },
+            { name: 'Кутаиси', country: 'Грузия' },
+            { name: 'Батуми', country: 'Грузия' },
+            { name: 'Ереван', country: 'Армения' },
+            { name: 'Гюмри', country: 'Армения' },
+            { name: 'Баку', country: 'Азербайджан' },
+            { name: 'Гянджа', country: 'Азербайджан' },
+            
+            // ===== РЕСПУБЛИКА УКРАИНА =====
+            { name: 'Киев', country: 'Республика Украина' },
+            { name: 'Харьков', country: 'Республика Украина' },
+            { name: 'Одесса', country: 'Республика Украина' },
+            { name: 'Днепр', country: 'Республика Украина' },
+            { name: 'Донецк', country: 'Республика Украина' },
+            { name: 'Луганск', country: 'Республика Украина' },
+            { name: 'Чернигов', country: 'Республика Украина' },
+            { name: 'Сумы', country: 'Республика Украина' },
+            { name: 'Полтава', country: 'Республика Украина' },
+            { name: 'Черкассы', country: 'Республика Украина' },
+            { name: 'Кировоград', country: 'Республика Украина' },
+            { name: 'Николаев', country: 'Республика Украина' },
+            { name: 'Херсон', country: 'Республика Украина' },
+            { name: 'Курская область', country: 'Республика Украина' },
+            { name: 'Белгородская область', country: 'Республика Украина' },
+            
+            // ===== АЗОВСКАЯ ЗОНА ОККУПАЦИИ =====
+            { name: 'Запорожье', country: 'Азовская Зона Оккупации' },
+            { name: 'Мариуполь', country: 'Азовская Зона Оккупации' },
+            { name: 'Бердянск', country: 'Азовская Зона Оккупации' },
+            { name: 'Мелитополь', country: 'Азовская Зона Оккупации' },
+            
+            // ===== ВОЛЬНАя ГАЛИЦИЯ =====
+            { name: 'Львов', country: 'Вольная Галиция' },
+            { name: 'Ивано-Франковск', country: 'Вольная Галиция' },
+            { name: 'Тернополь', country: 'Вольная Галиция' },
+            { name: 'Черновцы', country: 'Вольная Галиция' },
+            { name: 'Ужгород', country: 'Вольная Галиция' },
+            { name: 'Луцк', country: 'Вольная Галиция' },
+            { name: 'Ровно', country: 'Вольная Галиция' },
+            { name: 'Хмельницкий', country: 'Вольная Галиция' },
+            { name: 'Винница', country: 'Вольная Галиция' },
+            { name: 'Житомир', country: 'Вольная Галиция' },
+            
+            // ===== БЕЛАРУСЬ =====
+            { name: 'Минск', country: 'Беларусь' },
+            { name: 'Гомель', country: 'Беларусь' },
+            { name: 'Могилев', country: 'Беларусь' },
+            { name: 'Витебск', country: 'Беларусь' },
+            { name: 'Гродно', country: 'Беларусь' },
+            { name: 'Брест', country: 'Беларусь' },
+            { name: 'Бобруйск', country: 'Беларусь' },
+            { name: 'Барановичи', country: 'Беларусь' },
+            
+            // ===== ЛИТВА =====
+            { name: 'Вильнюс', country: 'Литва' },
+            { name: 'Каунас', country: 'Литва' },
+            { name: 'Клайпеда', country: 'Литва' },
+            { name: 'Шяуляй', country: 'Литва' },
+            { name: 'Паневежис', country: 'Литва' },
+            { name: 'Алитус', country: 'Литва' },
+            
+            // ===== КУРЛЯНДИЯ =====
+            { name: 'Рига', country: 'Курляндия' },
+            { name: 'Юрмала', country: 'Курляnдия' },
+            { name: 'Вентспилс', country: 'Курляндия' },
+            { name: 'Лиепая', country: 'Курляндия' },
+            { name: 'Елгава', country: 'Курляндия' },
+            { name: 'Тукумс', country: 'Курляндия' },
+            { name: 'Кулдига', country: 'Курляндия' },
+            
+            // ===== ЛАТГАЛИЯ =====
+            { name: 'Даугавпилс', country: 'Латгалия' },
+            { name: 'Резекне', country: 'Латгалия' },
+            { name: 'Прейли', country: 'Латгалия' },
+            { name: 'Лудза', country: 'Латгалия' },
+            { name: 'Краслава', country: 'Латгалия' },
+            { name: 'Балви', country: 'Латгалия' },
+            
+            // ===== ЭСТОНИЯ =====
+            { name: 'Таллин', country: 'Эстония' },
+            { name: 'Тарту', country: 'Эстония' },
+            { name: 'Нарва', country: 'Эстония' },
+            { name: 'Пярну', country: 'Эстония' },
+            { name: 'Кохтла-Ярве', country: 'Эстония' },
+            { name: 'Вильянди', country: 'Эстония' },
+            { name: 'Раквере', country: 'Эстония' },
+
+            // ===== СИБИРСКАЯ ФЕДЕРАЦИЯ =====
+            { name: 'Новосибирск', country: 'Сибирская Федерация' },
+            { name: 'Омск', country: 'Сибирская Федерация' },
+            { name: 'Томск', country: 'Сибирская Федерация' },
+            { name: 'Кемерово', country: 'Сибирская Федерация' },
+            { name: 'Новокузнецк', country: 'Сибирская Федерация' },
+            { name: 'Барнаул', country: 'Сибирская Федерация' },
+            { name: 'Красноярск', country: 'Сибирская Федерация' },
+            { name: 'Тюмень', country: 'Сибирская Федерация' },
+            { name: 'Сургут', country: 'Сибирская Федерация' },
+            { name: 'Нижневартовск', country: 'Сибирская Федерация' },
+            { name: 'Ханты-Мансийск', country: 'Сибирская Федерация' },
+            { name: 'Ямало-Ненецкий автономный округ', country: 'Сибирская Федерация' },
+            
+            // ===== ХАБАРОВСКАЯ СОЦИАЛИСТИЧЕСКАЯ ХУНТА =====
+            { name: 'Хабаровск', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Владивосток', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Находка', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Уссурийск', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Артем', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Комсомольск-на-Амуре', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Биробиджан', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Амурская область', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Еврейская автономная область', country: 'Хабаровская Социалистическая Хунта' },
+            { name: 'Приморский край', country: 'Хабаровская Социалистическая Хунта' },
+            
+            // ===== ИРКУТСКАЯ СОЦИАЛИСТИЧЕСКАя ХУНТА =====
+            { name: 'Иркутск', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Улан-Удэ', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Чита', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Ангарск', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Братск', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Усолье-Сибирское', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Красноярск (восточная часть)', country: 'Иркутская Социалистическая Хунта' },
+            { name: 'Забайкальский край', country: 'Иркутская Социалистическая Хунta' },
+            { name: 'Республика Бурятия', country: 'Иркутская Социалистическая Хунта' },
+            
+            // ===== РЕСПУБЛИКА ТЫВА =====
+            { name: 'Кызыл', country: 'Республика Тыва' },
+            { name: 'Ак-Довурак', country: 'Республика Тыва' },
+            { name: 'Туран', country: 'Республика Тыва' },
+            { name: 'Шагонар', country: 'Республика Тыва' },
+            { name: 'Чадан', country: 'Республика Тыва' }
+        ];
+
+        // Текущий выбранный регион
+        let selectedRegion = null;
+        
+        // Функция для сохранения данных игрока в localStorage
+        function savePlayerData() {
+            const playerData = {
+                nickname: document.getElementById('player-nickname').textContent,
+                energy: document.getElementById('player-energy').textContent,
+                money: document.getElementById('player-money').textContent,
+                gold: document.getElementById('player-gold').textContent,
+                country: document.getElementById('player-country').textContent,
+                region: document.getElementById('player-region').textContent,
+                party: document.getElementById('player-party').textContent,
+                army: document.getElementById('player-army').textContent
+            };
+            
+            localStorage.setItem('playerData', JSON.stringify(playerData));
+        }
+        
+        // Функция для загрузки данных игрока из localStorage
+        function loadPlayerData() {
+            const savedData = localStorage.getItem('playerData');
+            
+            if (savedData) {
+                const playerData = JSON.parse(savedData);
+                
+                document.getElementById('player-nickname').textContent = playerData.nickname;
+                document.getElementById('player-energy').textContent = playerData.energy;
+                document.getElementById('player-money').textContent = playerData.money;
+                document.getElementById('player-gold').textContent = playerData.gold;
+                document.getElementById('player-country').textContent = playerData.country;
+                document.getElementById('player-region').textContent = playerData.region;
+                document.getElementById('player-party').textContent = playerData.party;
+                document.getElementById('player-army').textContent = playerData.army;
+                
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Функция для переезда в новый регион
+        function moveToRegion(regionName, countryName) {
+            // Обновляем информацию о местоположении игрока
+            document.getElementById('player-region').textContent = regionName;
+            document.getElementById('player-country').textContent = countryName;
+            
+            // Сохраняем изменения
+            savePlayerData();
+            
+            // Закрываем модальное окно
+            document.getElementById('region-modal').style.display = 'none';
+            document.getElementById('region-overlay').style.display = 'none';
+            
+            // Сообщение об успешном переезде
+            alert(`Вы переехали в регион: ${regionName}`);
+        }
+        
+        // Функция для блокировки неактивных кнопок
+        function disableInactiveButtons() {
+            const disabledButtons = document.querySelectorAll('.nav-button.disabled');
+            
+            disabledButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Этот раздел еще в разработке!');
+                });
+            });
+        }
+        
+        // Загрузка данных игрока через LocalScript
         document.addEventListener('DOMContentLoaded', function() {
-            // Заглушка данных игрока
-            setTimeout(() => {
+            // Пытаемся загрузить сохраненные данные
+            const hasSavedData = loadPlayerData();
+            
+            // Если сохраненных данных нет, используем значения по умолчанию
+            if (!hasSavedData) {
                 document.getElementById('player-country').textContent = 'Российская Республика';
                 document.getElementById('player-region').textContent = 'Москва';
                 document.getElementById('player-party').textContent = 'Не состоит';
@@ -436,7 +796,60 @@
                 document.getElementById('player-energy').textContent = '100/100';
                 document.getElementById('player-money').textContent = '1000';
                 document.getElementById('player-gold').textContent = '50';
-            }, 500);
+                
+                // Сохраняем данные по умолчанию
+                savePlayerData();
+            }
+            
+            // Заполняем список регионов
+            const regionList = document.getElementById('region-list');
+            
+            regions.forEach(region => {
+                const regionItem = document.createElement('div');
+                regionItem.className = 'region-item';
+                regionItem.dataset.region = region.name;
+                regionItem.dataset.country = region.country;
+                
+                regionItem.innerHTML = `
+                    <span class="region-name">${region.name}</span>
+                    <span class="region-country">${region.country}</span>
+                `;
+                
+                // Добавляем обработчик клика на регион
+                regionItem.addEventListener('click', function() {
+                    selectedRegion = {
+                        name: this.dataset.region,
+                        country: this.dataset.country
+                    };
+                    
+                    // Показываем модальное окно
+                    document.getElementById('modal-region-name').textContent = selectedRegion.name;
+                    document.getElementById('region-modal').style.display = 'block';
+                    document.getElementById('region-overlay').style.display = 'block';
+                });
+                
+                regionList.appendChild(regionItem);
+            });
+            
+            // Обработчики для кнопок модального окна
+            document.getElementById('info-button').addEventListener('click', function() {
+                // Здесь будет функционал для кнопки "Информация"
+                alert(`Информация о регионе: ${selectedRegion.name}\nСтрана: ${selectedRegion.country}`);
+            });
+            
+            document.getElementById('move-button').addEventListener('click', function() {
+                // Переезжаем в выбранный регион
+                moveToRegion(selectedRegion.name, selectedRegion.country);
+            });
+            
+            // Закрытие модального окна при клике на overlay
+            document.getElementById('region-overlay').addEventListener('click', function() {
+                document.getElementById('region-modal').style.display = 'none';
+                this.style.display = 'none';
+            });
+            
+            // Блокировка неактивных кнопок
+            disableInactiveButtons();
             
             // Блокировка масштабирования
             document.addEventListener('wheel', function(e) {

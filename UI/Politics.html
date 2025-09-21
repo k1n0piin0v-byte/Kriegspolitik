@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kriegspolitik - Политика</title>
+    <link rel="icon" href="../Icons.jpg" type="image/jpeg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background-color: #000;
+            color: #ccc;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            min-width: 320px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        /* Левая панель - информация об игроке */
+        .player-info {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .player-info h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .player-nickname {
+            text-align: center;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .info-label {
+            color: #999;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .info-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .info-value {
+            color: #fff;
+            font-size: 0.85rem;
+            text-align: right;
+        }
+        
+        .currency-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+        
+        .currency-label {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .currency-value {
+            color: #ffd700;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .money-value {
+            color: #32cd32;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        /* Центральная панель - политические партии */
+        .politics-content {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            overflow-y: auto;
+        }
+        
+        .politics-content h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 15px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            border-bottom: none;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .tab.active {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .party-list, .military-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .party-item, .military-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: #111;
+            border-radius: 3px;
+            border-left: 4px solid;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .party-item:hover, .military-item:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .party-name, .military-name {
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        
+        .party-ideology, .military-type {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .join-button {
+            padding: 6px 12px;
+            background-color: #1a4c7a;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+        }
+        
+        .join-button:hover {
+            background-color: #2a5c8a;
+        }
+        
+        .join-button.joined {
+            background-color: #2a8a2a;
+        }
+        
+        .join-button.joined:hover {
+            background-color: #3a9a3a;
+        }
+        
+        /* Правая панель - навигация */
+        .navigation {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .navigation h2 {
+            font-size: 1rem;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            background-color: #0a0a0a;
+            z-index: 10;
+        }
+        
+        .nav-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 3px;
+            color: #ccc;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            gap: 12px;
+        }
+        
+        .nav-button:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+        
+        .nav-text {
+            font-size: 0.95rem;
+            flex: 1;
+        }
+        
+        /* Стили для неактивных кнопок */
+        .nav-button.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .nav-button.disabled:hover {
+            background-color: #111;
+        }
+        
+        .nav-button.disabled::after {
+            content: "🔒";
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        
+        .nav-button.disabled .nav-text {
+            color: #666;
+        }
+        
+        /* Адаптация для телефонов (горизонтальная ориентация) */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .container {
+                gap: 8px;
+                padding: 10px;
+            }
+            
+            .player-info, .politics-content, .navigation {
+                padding: 10px;
+            }
+            
+            .player-info h2, .politics-content h2, .navigation h2 {
+                font-size: 0.9rem;
+                padding-bottom: 6px;
+                margin-bottom: 8px;
+            }
+            
+            .player-nickname {
+                font-size: 1rem;
+                padding: 6px 0;
+            }
+            
+            .info-item {
+                padding: 6px 0;
+            }
+            
+            .info-label, .info-value {
+                font-size: 0.8rem;
+            }
+            
+            .info-icon {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .currency-item {
+                padding: 5px 0;
+            }
+            
+            .currency-label, .currency-value, .money-value {
+                font-size: 0.8rem;
+            }
+            
+            .tab {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .party-item, .military-item {
+                padding: 10px;
+            }
+            
+            .party-name, .military-name {
+                font-size: 0.9rem;
+            }
+            
+            .party-ideology, .military-type {
+                font-size: 0.8rem;
+            }
+            
+            .join-button {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .nav-button {
+                padding: 10px;
+                gap: 10px;
+            }
+            
+            .nav-icon {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .nav-text {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Полное отключение масштабирования */
+        @media (pointer: coarse) {
+            input, textarea, [contenteditable] {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Улучшение скролла */
+        .player-info, .politics-content, .navigation {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        
+        .player-info::-webkit-scrollbar,
+        .politics-content::-webkit-scrollbar,
+        .navigation::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .player-info::-webkit-scrollbar-thumb,
+        .politics-content::-webkit-scrollbar-thumb,
+        .navigation::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Левая панель - информация об игроке -->
+        <div class="player-info">
+            <h2>Информация об игроке</h2>
+            <div class="player-nickname" id="player-nickname">Новый Игрок</div>
+            
+            <div class="info-item">
+                <span class="info-label">
+                    <img src="../Img/Electricity.png" alt="Энергия" class="info-icon">
+                    Энергия:
+                </span>
+                <span class="info-value" id="player-energy">100/100</span>
+            </div>
+            
+            <div class="currency-item">
+                <span class="currency-label">Валюта:</span>
+                <span class="money-value" id="player-money">0</span>
+            </div>
+            
+            <div class="currency-item">
+                <span class="currency-label">Золото:</span>
+                <span class="currency-value" id="player-gold">0</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-label">Страна:</span>
+                <span class="info-value" id="player-country">Загрузка...</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Регион:</span>
+                <span class="info-value" id="player-region">Загрузка...</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Партия:</span>
+                <span class="info-value" id="player-party">Загрузка...</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Армия:</span>
+                <span class="info-value" id="player-army">Загрузка...</span>
+            </div>
+        </div>
+        
+        <!-- Центральная панель - политика -->
+        <div class="politics-content">
+            <h2>Политические партии</h2>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="parties">Политические партии</div>
+                <div class="tab" data-tab="military">Военные формирования</div>
+            </div>
+            
+            <div class="tab-content active" id="parties-tab">
+                <div class="party-list" id="party-list">
+                    <!-- Партии будут загружены через JavaScript -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="military-tab">
+                <div class="military-list" id="military-list">
+                    <!-- Военные формирования будут загружены через JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Правая панель - навигация -->
+        <div class="navigation">
+            <h2>Навигация</h2>
+            <div class="nav-buttons-container">
+                <a href="../UI/MainGame.html" class="nav-button">
+                    <img src="../Img/Main/Capitol.png" alt="Обзор" class="nav-icon">
+                    <span class="nav-text">Обзор</span>
+                </a>
+                <a href="../UI/Work.html" class="nav-button">
+                    <img src="../Img/Main/Laborer.png" alt="Работа" class="nav-icon">
+                    <span class="nav-text">Работа</span>
+                </a>
+                <a href="../UI/Market.html" class="nav-button disabled">
+                    <img src="../Img/Main/Global_Trade.png" alt="Рынок" class="nav-icon">
+                    <span class="nav-text">Рынок</span>
+                </a>
+                <a href="../UI/News.html" class="nav-button disabled">
+                    <img src="../Img/Main/news.png" alt="Новости" class="nav-icon">
+                    <span class="nav-text">Новости</span>
+                </a>
+                <a href="../UI/Map.html" class="nav-button disabled">
+                    <img src="../Img/Main/Map_with_Arrow.png" alt="Карта" class="nav-icon">
+                    <span class="nav-text">Карта</span>
+                </a>
+                <a href="../UI/Politics.html" class="nav-button">
+                    <img src="../Img/Main/Volunteer.png" alt="Политика" class="nav-icon">
+                    <span class="nav-text">Политика</span>
+                </a>
+                <a href="../UI/Government.html" class="nav-button">
+                    <img src="../Img/Main/Palace_Generic.png" alt="Правительство" class="nav-icon">
+                    <span class="nav-text">Правительство</span>
+                </a>
+                <a href="../UI/Profile.html" class="nav-button">
+                    <img src="../Img/Main/Worker.png" alt="Профиль" class="nav-icon">
+                    <span class="nav-text">Профиль</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Цвета идеологий
+        const ideologyColors = {
+            "Национал-социализм": "#8b0000",
+            "Реваншизм": "#9c0000",
+            "Милитаризм": "#8b4513",
+            "Фалангизм": "#800020",
+            "Сталинизм": "#cc0000",
+            "Троцкизм": "#ff4500",
+            "Ленинизм": "#ff0000",
+            "Марксизм": "#dc143c",
+            "Либерализм": "#007fff",
+            "Консерватизм": "#000080",
+            "Прямая Демократия": "#228b22",
+            "Социал-Демократия": "#ff69b4",
+            "Монархизм": "#9370db",
+            "Авторитаризм": "#2f4f4f",
+            "Патернализм": "#2e8b57",
+            "Нейтралитет": "#708090"
+        };
+        
+        // Список партий (без описаний, только идеологии)
+        const parties = [
+            { name: "Народный Фронт", ideology: "Национал-социализм" },
+            { name: "Союз Возрождения", ideology: "Реваншизм" },
+            { name: "Военная Лига", ideology: "Милитаризм" },
+            { name: "Национальный Синдикат", ideology: "Фалангизм" },
+            { name: "Сталинский Блок", ideology: "Сталинизм" },
+            { name: "Революционный Авангард", ideology: "Троцкизм" },
+            { name: "Большевистская Партия", ideology: "Ленинизм" },
+            { name: "Рабочий Союз", ideology: "Марксизм" },
+            { name: "Демократический Альянс", ideology: "Либерализм" },
+            { name: "Консервативная Коалиция", ideology: "Консерватизм" },
+            { name: "Народное Собрание", ideology: "Прямая Демократия" },
+            { name: "Социал-Реформаторы", ideology: "Социал-Демократия" },
+            { name: "Монархическое Движение", ideology: "Монархизм" },
+            { name: "Сильная Власть", ideology: "Авторитаризм" },
+            { name: "Отечество", ideology: "Патернализм" },
+            { name: "Центристский Союз", ideology: "Нейтралитет" }
+        ];
+        
+        // Военные формирования (пока пустые)
+        const militaryFormations = [
+            // Будут добавлены позже
+        ];
+        
+        // Функция для сохранения данных игрока в localStorage
+        function savePlayerData() {
+            const playerData = {
+                nickname: document.getElementById('player-nickname').textContent,
+                energy: document.getElementById('player-energy').textContent,
+                money: document.getElementById('player-money').textContent,
+                gold: document.getElementById('player-gold').textContent,
+                country: document.getElementById('player-country').textContent,
+                region: document.getElementById('player-region').textContent,
+                party: document.getElementById('player-party').textContent,
+                army: document.getElementById('player-army').textContent
+            };
+            
+            localStorage.setItem('playerData', JSON.stringify(playerData));
+        }
+        
+        // Функция для загрузки данных игрока из localStorage
+        function loadPlayerData() {
+            const savedData = localStorage.getItem('playerData');
+            
+            if (savedData) {
+                const playerData = JSON.parse(savedData);
+                
+                document.getElementById('player-nickname').textContent = playerData.nickname;
+                document.getElementById('player-energy').textContent = playerData.energy;
+                document.getElementById('player-money').textContent = playerData.money;
+                document.getElementById('player-gold').textContent = playerData.gold;
+                document.getElementById('player-country').textContent = playerData.country;
+                document.getElementById('player-region').textContent = playerData.region;
+                document.getElementById('player-party').textContent = playerData.party;
+                document.getElementById('player-army').textContent = playerData.army;
+                
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Функция для вступления в партию
+        function joinParty(partyName, ideology) {
+            // Обновляем информацию о партии игрока
+            document.getElementById('player-party').textContent = partyName;
+            
+            // Сохраняем изменения
+            savePlayerData();
+            
+            // Обновляем кнопки в списке партий
+            updatePartyButtons(partyName);
+            
+            // Сообщение об успешном вступлении
+            alert(`Вы вступили в партию: ${partyName}`);
+        }
+        
+        // Функция для обновления кнопок в списке партий
+        function updatePartyButtons(currentParty) {
+            const partyItems = document.querySelectorAll('.party-item');
+            
+            partyItems.forEach(item => {
+                const button = item.querySelector('.join-button');
+                const partyName = item.querySelector('.party-name').textContent;
+                
+                if (partyName === currentParty) {
+                    button.textContent = 'Вы состоите';
+                    button.classList.add('joined');
+                } else {
+                    button.textContent = 'Вступить';
+                    button.classList.remove('joined');
+                }
+            });
+        }
+        
+        // Функция для блокировки неактивных кнопок
+        function disableInactiveButtons() {
+            const disabledButtons = document.querySelectorAll('.nav-button.disabled');
+            
+            disabledButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Этот раздел еще в разработке!');
+                });
+            });
+        }
+        
+        // Загрузка данных игрока
+        document.addEventListener('DOMContentLoaded', function() {
+            // Пытаемся загрузить сохраненные данные
+            const hasSavedData = loadPlayerData();
+            
+            // Если сохраненных данных нет, используем значения по умолчанию
+            if (!hasSavedData) {
+                document.getElementById('player-country').textContent = 'Российская Республика';
+                document.getElementById('player-region').textContent = 'Москва';
+                document.getElementById('player-party').textContent = 'Не состоит';
+                document.getElementById('player-army').textContent = 'Не служит';
+                document.getElementById('player-energy').textContent = '100/100';
+                document.getElementById('player-money').textContent = '1000';
+                document.getElementById('player-gold').textContent = '50';
+                
+                // Сохраняем данные по умолчанию
+                savePlayerData();
+            }
+            
+            // Заполняем список партий
+            const partyList = document.getElementById('party-list');
+            const currentParty = document.getElementById('player-party').textContent;
+            
+            parties.forEach(party => {
+                const partyItem = document.createElement('div');
+                partyItem.className = 'party-item';
+                partyItem.style.borderLeftColor = ideologyColors[party.ideology];
+                
+                const isCurrentParty = currentParty === party.name;
+                
+                partyItem.innerHTML = `
+                    <div>
+                        <div class="party-name">${party.name}</div>
+                        <div class="party-ideology">${party.ideology}</div>
+                    </div>
+                    <button class="join-button ${isCurrentParty ? 'joined' : ''}">
+                        ${isCurrentParty ? 'Вы состоите' : 'Вступить'}
+                    </button>
+                `;
+                
+                // Добавляем обработчик клика на кнопку вступления
+                const joinButton = partyItem.querySelector('.join-button');
+                if (!isCurrentParty) {
+                    joinButton.addEventListener('click', function() {
+                        joinParty(party.name, party.ideology);
+                    });
+                }
+                
+                partyList.appendChild(partyItem);
+            });
+            
+            // Заполняем список военных формирований (пока пустой)
+            const militaryList = document.getElementById('military-list');
+            
+            if (militaryFormations.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'military-item';
+                emptyMessage.style.borderLeftColor = '#708090';
+                emptyMessage.innerHTML = `
+                    <div>
+                        <div class="military-name">Военные формирования</div>
+                        <div class="military-type">Раздел в разработке</div>
+                    </div>
+                `;
+                militaryList.appendChild(emptyMessage);
+            }
+            
+            // Обработчики для вкладок
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Убираем активный класс у всех вкладок
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    // Добавляем активный класс к текущей вкладке
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Блокировка неактивных кнопок
+            disableInactiveButtons();
+            
+            // Блокировка масштабирования
+            document.addEventListener('wheel', function(e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.key === '='))) {
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
+            
+            // Предотвращаем прокрутку страницы при достижении границ блоков
+            const playerInfo = document.querySelector('.player-info');
+            const politicsContent = document.querySelector('.politics-content');
+            const navigation = document.querySelector('.navigation');
+            
+            function preventPageScroll(element) {
+                element.addEventListener('wheel', function(e) {
+                    // Если достигнута верхняя граница и прокрутка вверх
+                    if (this.scrollTop === 0 && e.deltaY < 0) {
+                        e.preventDefault();
+                    }
+                    
+                    // Если достигнута нижняя граница и прокрутка вниз
+                    if (this.scrollTop + this.clientHeight >= this.scrollHeight && e.deltaY > 0) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
+            
+            preventPageScroll(playerInfo);
+            preventPageScroll(politicsContent);
+            preventPageScroll(navigation);
+        });
+    </script>
+</body>
+</html>

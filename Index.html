@@ -254,6 +254,93 @@
             font-size: 0.75rem;
         }
         
+        /* Стили для панели разработчиков */
+        .developers-panel {
+            display: none;
+            background-color: #0a0a0a;
+            padding: 12px;
+            border: 1px solid #1a1a1a;
+            height: fit-content;
+            min-height: 200px;
+        }
+        
+        .developers-panel h2 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #fff;
+            padding-bottom: 6px;
+            text-align: center;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .developer-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #111;
+            border-radius: 2px;
+            text-decoration: none;
+            color: #ccc;
+            transition: background-color 0.2s;
+            border-left: 2px solid #2a2a2a;
+        }
+        
+        .developer-item:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .developer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            object-fit: cover;
+            border: 2px solid #2a2a2a;
+        }
+        
+        .developer-info {
+            flex: 1;
+        }
+        
+        .developer-name {
+            font-size: 0.9rem;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .developer-role {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 3px;
+        }
+        
+        .developer-tg {
+            font-size: 0.75rem;
+            color: #666;
+        }
+        
+        .back-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            margin-top: 10px;
+            background-color: #111;
+            border-radius: 2px;
+            text-decoration: none;
+            color: #ccc;
+            transition: background-color 0.2s;
+            border: 1px solid #2a2a2a;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .back-button:hover {
+            background-color: #1a1a1a;
+        }
+        
         /* Адаптация для мобильных устройств */
         @media (max-width: 768px) {
             .container {
@@ -277,7 +364,7 @@
                 font-size: 0.8rem;
             }
             
-            .social-links, .news-section {
+            .social-links, .news-section, .developers-panel {
                 padding: 0;
                 min-height: 180px;
             }
@@ -356,6 +443,25 @@
             footer p {
                 font-size: 0.7rem;
             }
+            
+            .developer-item {
+                padding: 8px;
+                margin-bottom: 8px;
+            }
+            
+            .developer-avatar {
+                width: 35px;
+                height: 35px;
+                margin-right: 10px;
+            }
+            
+            .developer-name {
+                font-size: 0.85rem;
+            }
+            
+            .developer-role, .developer-tg {
+                font-size: 0.7rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -365,7 +471,7 @@
                 gap: 10px;
             }
             
-            .social-links, .news-section, .center-content {
+            .social-links, .news-section, .center-content, .developers-panel {
                 grid-column: 1;
                 min-height: auto;
             }
@@ -374,7 +480,7 @@
                 order: 1;
             }
             
-            .social-links {
+            .social-links, .developers-panel {
                 order: 2;
             }
             
@@ -444,12 +550,36 @@
                 </svg>
                 Игровой ТГ чат
             </a>
-            <a href="https://t.me/bBBbdMCSW" class="social-link" target="_blank">
+            <a href="#" class="social-link" id="developers-link">
                 <svg class="social-icon" viewBox="0 0 24 24" fill="#ccc">
                     <path d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56l.4-5.78 10.1-9.13c.45-.4-.1-.62-.69-.22L7.74 13.3 2.2 11.9c-1.18-.37-1.19-1.16.26-1.75l21.26-8.2c.97-.43 1.81.24 1.53 1.73z"/>
                 </svg>
-                ТГ разработчика
+                ТГ Разработчиков
             </a>
+        </div>
+        
+        <!-- Панель разработчиков (изначально скрыта) -->
+        <div class="developers-panel" id="developers-panel">
+            <h2>Разработчики</h2>
+            <a href="https://t.me/bBBbdMCSW" class="developer-item" target="_blank">
+                <img src="Img/Admins/bBBbdMCSW.jpg" alt="Конопля" class="developer-avatar">
+                <div class="developer-info">
+                    <div class="developer-name">Конопля</div>
+                    <div class="developer-role">Основатель и программист</div>
+                    <div class="developer-tg">@bBBbdMCSW</div>
+                </div>
+            </a>
+            <a href="https://t.me/La_Forza_della_Morte" class="developer-item" target="_blank">
+                <img src="Img/Admins/La_Forza_della_Morte.jpg" alt="`" class="developer-avatar">
+                <div class="developer-info">
+                    <div class="developer-name">`</div>
+                    <div class="developer-role">Веб-дизайнер, идеалист и программист</div>
+                    <div class="developer-tg">@La_Forza_della_Morte</div>
+                </div>
+            </a>
+            <div class="back-button" id="back-button">
+                ← Назад к соцсетям
+            </div>
         </div>
         
         <div class="center-content">
@@ -550,6 +680,23 @@
                     e.preventDefault();
                 }
             }, { passive: false });
+            
+            // Обработка переключения между соцсетями и разработчиками
+            const socialLinksPanel = document.querySelector('.social-links');
+            const developersPanel = document.getElementById('developers-panel');
+            const developersLink = document.getElementById('developers-link');
+            const backButton = document.getElementById('back-button');
+            
+            developersLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                socialLinksPanel.style.display = 'none';
+                developersPanel.style.display = 'block';
+            });
+            
+            backButton.addEventListener('click', function() {
+                socialLinksPanel.style.display = 'block';
+                developersPanel.style.display = 'none';
+            });
         });
     </script>
 </body>

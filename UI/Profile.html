@@ -334,11 +334,11 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Валюта</div>
-                    <div class="money-value">1,000</div>
+                    <div class="money-value" id="profile-money">1,000</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Золото</div>
-                    <div class="gold-value">50</div>
+                    <div class="gold-value" id="profile-gold">50</div>
                 </div>
             </div>
             
@@ -387,30 +387,66 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Загрузка данных профиля
-            setTimeout(() => {
-                // Основная информация
-                document.getElementById('profile-nickname').textContent = 'Новый Игрок';
+        // Функция для загрузки данных игрока из localStorage
+        function loadPlayerData() {
+            const savedData = localStorage.getItem('playerData');
+            
+            if (savedData) {
+                const playerData = JSON.parse(savedData);
                 
-                // Даты
+                // Обновляем данные профиля
+                document.getElementById('profile-nickname').textContent = playerData.nickname;
+                document.getElementById('profile-money').textContent = playerData.money;
+                document.getElementById('profile-gold').textContent = playerData.gold;
+                document.getElementById('info-country').textContent = playerData.country;
+                document.getElementById('info-region').textContent = playerData.region;
+                document.getElementById('info-party').textContent = playerData.party;
+                document.getElementById('info-army').textContent = playerData.army;
+                
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Функция для сохранения даты последнего входа
+        function updateLastLogin() {
+            const now = new Date();
+            localStorage.setItem('lastLogin', now.toLocaleString('ru-RU'));
+            document.getElementById('info-lastlogin').textContent = now.toLocaleString('ru-RU');
+        }
+        
+        // Функция для установки даты регистрации, если она еще не установлена
+        function setRegistrationDate() {
+            let regDate = localStorage.getItem('regDate');
+            
+            if (!regDate) {
                 const now = new Date();
-                const regDate = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000); // 2 дня назад
-                
-                document.getElementById('info-regdate').textContent = regDate.toLocaleDateString('ru-RU');
-                document.getElementById('info-lastlogin').textContent = now.toLocaleString('ru-RU');
-                
-                // Игровая информация
+                regDate = now.toLocaleDateString('ru-RU');
+                localStorage.setItem('regDate', regDate);
+            }
+            
+            document.getElementById('info-regdate').textContent = regDate;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем данные игрока
+            const hasSavedData = loadPlayerData();
+            
+            // Если данных нет, устанавливаем значения по умолчанию
+            if (!hasSavedData) {
+                document.getElementById('profile-nickname').textContent = 'Новый Игрок';
+                document.getElementById('profile-money').textContent = '1,000';
+                document.getElementById('profile-gold').textContent = '50';
                 document.getElementById('info-country').textContent = 'Российская Республика';
                 document.getElementById('info-region').textContent = 'Москва';
                 document.getElementById('info-party').textContent = 'Не состоит';
                 document.getElementById('info-army').textContent = 'Не служит';
-                
-                // Репутация
-                document.getElementById('profile-reputation').textContent = '0';
-                document.getElementById('profile-reputation').className = 'stat-value reputation-neutral';
-                
-            }, 500);
+            }
+            
+            // Устанавливаем даты
+            setRegistrationDate();
+            updateLastLogin();
             
             // Блокировка масштабирования
             document.addEventListener('wheel', function(e) {

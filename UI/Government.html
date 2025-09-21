@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kriegspolitik - Правительство</title>
+    <link rel="icon" href="../Icons.jpg" type="image/jpeg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            color: #ccc;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            min-width: 320px;
+        }
+        
+        .header {
+            background-color: #0a0a0a;
+            padding: 15px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        
+        .back-button {
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #2a2a2a;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .back-button:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .government-card {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        
+        .government-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background-color: #111;
+            border-radius: 3px;
+            border: 1px solid #1a1a1a;
+        }
+        
+        .info-label {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .ruling-ideology {
+            color: #ff6b6b !important;
+        }
+        
+        .ideology-section {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .pie-chart-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        .pie-chart {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .ideology-legend {
+            flex: 1;
+            max-height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 5px;
+        }
+        
+        .ideology-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 3px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+        }
+        
+        .ideology-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        
+        .ideology-name {
+            font-size: 0.85rem;
+            flex: 1;
+        }
+        
+        .ideology-link {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .ideology-link:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        
+        .ideology-percentage {
+            font-size: 0.85rem;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: right;
+        }
+        
+        .legislation-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .legislation-item {
+            padding: 10px;
+            background-color: #111;
+            border-radius: 3px;
+            border: 1px solid #1a1a1a;
+            font-size: 0.9rem;
+        }
+        
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            padding: 20px 0;
+        }
+        
+        /* Цвета для идеологий */
+        .color-ns { background-color: #8b0000; } /* Национал-социализм */
+        .color-rev { background-color: #9c0000; } /* Реваншизм */
+        .color-mil { background-color: #8b4513; } /* Милитаризм */
+        .color-phal { background-color: #800020; } /* Фалангизм */
+        
+        .color-stal { background-color: #cc0000; } /* Сталинизм */
+        .color-trot { background-color: #ff4500; } /* Троцкизм */
+        .color-len { background-color: #ff0000; } /* Ленинизм */
+        .color-marx { background-color: #dc143c; } /* Марксизм */
+        
+        .color-lib { background-color: #007fff; } /* Либерализм */
+        .color-cons { background-color: #000080; } /* Консерватизм */
+        .color-dd { background-color: #228b22; } /* Прямая Демократия */
+        .color-sd { background-color: #ff69b4; } /* Социал-Демократия */
+        
+        .color-mon { background-color: #9370db; } /* Монархизм */
+        .color-auth { background-color: #2f4f4f; } /* Авторитаризм */
+        .color-pat { background-color: #2e8b57; } /* Патернализм */
+        .color-neut { background-color: #708090; } /* Нейтралитет */
+        
+        /* Стили для скроллбара */
+        .ideology-legend::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .ideology-legend::-webkit-scrollbar-track {
+            background: #0a0a0a;
+            border-radius: 3px;
+        }
+        
+        .ideology-legend::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+        
+        .ideology-legend::-webkit-scrollbar-thumb:hover {
+            background: #3a3a3a;
+        }
+        
+        /* Адаптация для телефонов */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 10px;
+                gap: 15px;
+                grid-template-columns: 1fr;
+            }
+            
+            .government-card {
+                padding: 12px;
+            }
+            
+            .government-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .ideology-section {
+                flex-direction: column;
+            }
+            
+            .pie-chart {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .ideology-legend {
+                max-height: 200px;
+            }
+        }
+        
+        /* Полное отключение масштабирования */
+        @media (pointer: coarse) {
+            input, textarea, [contenteditable] {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Улучшение скролла */
+        .container {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        
+        .container::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .container::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Правительство страны</h1>
+        <button class="back-button" onclick="goBack()">Назад</button>
+    </div>
+    
+    <div class="container" id="government-container">
+        <!-- Левая колонка - информация о правительстве и идеологиях -->
+        <div class="left-column" id="left-column">
+            <!-- Информация будет загружена через JavaScript -->
+        </div>
+        
+        <!-- Правая колонка - законопроекты -->
+        <div class="right-column">
+            <div class="government-card">
+                <div class="card-header">
+                    <h2 class="card-title">Законопроекты</h2>
+                </div>
+                
+                <div class="legislation-section">
+                    <div class="no-data">На данный момент нет активных законопроектов</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+        
+        // Функция для получения ссылки на Wikipedia для идеологии
+        function getWikipediaLink(ideology) {
+            const links = {
+                "Национал-социализм": "https://ru.wikipedia.org/wiki/Национал-социализм",
+                "Реваншизм": "https://ru.wikipedia.org/wiki/Реваншизм",
+                "Милитаризм": "https://ru.wikipedia.org/wiki/Милитаризм",
+                "Фалангизм": "https://ru.wikipedia.org/wiki/Фалангизм",
+                "Сталинизм": "https://ru.wikipedia.org/wiki/Сталинизм",
+                "Троцкизм": "https://ru.wikipedia.org/wiki/Троцкизм",
+                "Ленинизм": "https://ru.wikipedia.org/wiki/Ленинизм",
+                "Марксизм": "https://ru.wikipedia.org/wiki/Марксизм",
+                "Либерализм": "https://ru.wikipedia.org/wiki/Либерализм",
+                "Консерватизм": "https://ru.wikipedia.org/wiki/Консерватизм",
+                "Прямая Демократия": "https://ru.wikipedia.org/wiki/Прямая_демократия",
+                "Социал-Демократия": "https://ru.wikipedia.org/wiki/Социал-демократия",
+                "Монархизм": "https://ru.wikipedia.org/wiki/Монархизм",
+                "Авторитаризм": "https://ru.wikipedia.org/wiki/Авторитаризм",
+                "Патернализм": "https://ru.wikipedia.org/wiki/Патернализм",
+                "Нейтралитет": "https://ru.wikipedia.org/wiki/Нейтралитет"
+            };
+            
+            return links[ideology] || "https://ru.wikipedia.org";
+        }
+        
+        // Функция для получения класса цвета для идеологии
+        function getIdeologyColorClass(ideology) {
+            const colorClasses = {
+                "Национал-социализм": "color-ns",
+                "Реваншизм": "color-rev",
+                "Милитаризм": "color-mil",
+                "Фалангизм": "color-phal",
+                "Сталинизм": "color-stal",
+                "Троцкизм": "color-trot",
+                "Ленинизм": "color-len",
+                "Марксизм": "color-marx",
+                "Либерализм": "color-lib",
+                "Консерватизм": "color-cons",
+                "Прямая Демократия": "color-dd",
+                "Социал-Демократия": "color-sd",
+                "Монархизм": "color-mon",
+                "Авторитаризм": "color-auth",
+                "Патернализм": "color-pat",
+                "Нейтралитет": "color-neut"
+            };
+            
+            return colorClasses[ideology] || "";
+        }
+        
+        // Функция для загрузки данных о правительстве
+        function loadGovernmentData() {
+            // Загружаем данные игрока из localStorage
+            const savedData = localStorage.getItem('playerData');
+            
+            if (!savedData) {
+                document.getElementById('left-column').innerHTML = `
+                    <div class="government-card">
+                        <div class="no-data">Данные игрока не найдены. Сначала создайте персонажа.</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const playerData = JSON.parse(savedData);
+            const playerCountry = playerData.country;
+            
+            // Ищем данные о правительстве для страны игрока
+            const governmentData = countryGovernments[playerCountry];
+            
+            if (!governmentData) {
+                document.getElementById('left-column').innerHTML = `
+                    <div class="government-card">
+                        <h2 class="card-title">Правительство: ${playerCountry}</h2>
+                        <div class="no-data">Информация о правительстве этой страны отсутствует.</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Формируем HTML для отображения информации о правительстве
+            let html = `
+                <div class="government-card">
+                    <div class="card-header">
+                        <h2 class="card-title">${playerCountry}</h2>
+                    </div>
+                    
+                    <div class="government-info">
+                        <div class="info-row">
+                            <span class="info-label">Правитель:</span>
+                            <span class="info-value">${governmentData.leader}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Форма правления:</span>
+                            <span class="info-value">${governmentData.government}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Правящая идеология:</span>
+                            <span class="info-value ruling-ideology">${governmentData.rulingIdeology}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Стабильность:</span>
+                            <span class="info-value">${governmentData.stability || "75%"}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Поддержка населения:</span>
+                            <span class="info-value">${governmentData.support || "68%"}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="government-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Идеологии в правительстве</h2>
+                    </div>
+                    
+                    <div class="ideology-section">
+                        <div class="pie-chart-container">
+                            <div class="pie-chart" id="ideology-pie-chart"></div>
+                        </div>
+                        
+                        <div class="ideology-legend">
+            `;
+            
+            // Добавляем информацию об идеологиях в легенду
+            for (const group in governmentData.ideologies) {
+                governmentData.ideologies[group].forEach(ideology => {
+                    if (ideology.percentage > 0) {
+                        const colorClass = getIdeologyColorClass(ideology.name);
+                        const wikiLink = getWikipediaLink(ideology.name);
+                        
+                        html += `
+                            <div class="ideology-item">
+                                <div class="ideology-color ${colorClass}"></div>
+                                <span class="ideology-name">
+                                    <a href="${wikiLink}" target="_blank" class="ideology-link">${ideology.name}</a>
+                                </span>
+                                <span class="ideology-percentage">${ideology.percentage}%</span>
+                            </div>
+                        `;
+                    }
+                });
+            }
+            
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('left-column').innerHTML = html;
+            
+            // Обновляем круговую диаграмму с реальными данными
+            updatePieChart(governmentData);
+        }
+        
+        // Функция для обновления круговой диаграммы
+        function updatePieChart(governmentData) {
+            const pieChart = document.getElementById('ideology-pie-chart');
+            if (!pieChart) return;
+            
+            // Собираем все идеологии в один массив
+            let allIdeologies = [];
+            for (const group in governmentData.ideologies) {
+                allIdeologies = allIdeologies.concat(governmentData.ideologies[group]);
+            }
+            
+            // Фильтруем идеологии с нулевым процентом
+            allIdeologies = allIdeologies.filter(ideology => ideology.percentage > 0);
+            
+            // Создаем градиент для круговой диаграммы
+            let gradientString = "";
+            let currentPercent = 0;
+            
+            for (const ideology of allIdeologies) {
+                const color = getIdeologyColor(ideology.name);
+                const nextPercent = currentPercent + ideology.percentage * 3.6; // Convert percentage to degrees (100% = 360deg)
+                gradientString += `${color} ${currentPercent}deg ${nextPercent}deg, `;
+                currentPercent = nextPercent;
+            }
+            
+            // Убираем последнюю запятую и пробел
+            if (gradientString.length > 0) {
+                gradientString = gradientString.slice(0, -2);
+            }
+            
+            // Применяем градиент к диаграмме
+            pieChart.style.backgroundImage = `conic-gradient(${gradientString})`;
+        }
+        
+        // Функция для получения цвета для идеологии
+        function getIdeologyColor(ideology) {
+            const colors = {
+                "Национал-социализм": "#8b0000",
+                "Реваншизм": "#9c0000",
+                "Милитаризм": "#8b4513",
+                "Фалангизм": "#800020",
+                "Сталинизм": "#cc0000",
+                "Троцкизм": "#ff4500",
+                "Ленинизм": "#ff0000",
+                "Марксизм": "#dc143c",
+                "Либерализм": "#007fff",
+                "Консерватизм": "#000080",
+                "Прямая Демократия": "#228b22",
+                "Социал-Демократия": "#ff69b4",
+                "Монархизм": "#9370db",
+                "Авторитаризм": "#2f4f4f",
+                "Патернализм": "#2e8b57",
+                "Нейтралитет": "#708090"
+            };
+            
+            return colors[ideology] || "#3a7a3a";
+        }
+        
+        // Загрузка данных при открытии страницы
+        document.addEventListener('DOMContentLoaded', loadGovernmentData);
+    </script>
+    
+    <!-- Подключаем файл с данными о правительствах -->
+    <script src="Government.js"></script>
+</body>
+</html>
