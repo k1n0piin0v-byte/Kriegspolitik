@@ -339,44 +339,23 @@
         /* Адаптация для телефонов (горизонтальная ориентация) */
         @media (max-width: 768px) and (orientation: landscape) {
             .container {
+                grid-template-columns: 0 1fr 40px; /* Скрываем левую панель, уменьшаем правую */
                 gap: 8px;
                 padding: 10px;
             }
             
-            .player-info, .world-map, .navigation {
+            .player-info {
+                display: none; /* Полностью скрываем левую панель */
+            }
+            
+            .world-map {
                 padding: 10px;
             }
             
-            .player-info h2, .world-map h2, .navigation h2 {
+            .world-map h2 {
                 font-size: 0.9rem;
                 padding-bottom: 6px;
                 margin-bottom: 8px;
-            }
-            
-            .player-nickname {
-                font-size: 1rem;
-                padding: 6px 0;
-            }
-            
-            .info-item {
-                padding: 6px 0;
-            }
-            
-            .info-label, .info-value {
-                font-size: 0.8rem;
-            }
-            
-            .info-icon {
-                width: 14px;
-                height: 14px;
-            }
-            
-            .currency-item {
-                padding: 5px 0;
-            }
-            
-            .currency-label, .currency-value, .money-value {
-                font-size: 0.8rem;
             }
             
             .region-item {
@@ -391,23 +370,101 @@
                 font-size: 0.75rem;
             }
             
+            /* Компактная навигация только с иконками */
+            .navigation {
+                padding: 5px;
+                width: 40px;
+            }
+            
+            .navigation h2 {
+                display: none; /* Скрываем заголовок навигации */
+            }
+            
+            .nav-buttons-container {
+                gap: 8px;
+            }
+            
             .nav-button {
-                padding: 10px;
-                gap: 10px;
+                padding: 5px;
+                width: 40px;
+                height: 40px;
+                justify-content: center;
+            }
+            
+            .nav-text {
+                display: none; /* Скрываем текст навигации */
             }
             
             .nav-icon {
                 width: 28px;
                 height: 28px;
+                margin: 0;
             }
             
-            .nav-text {
-                font-size: 0.9rem;
+            .nav-button.disabled::after {
+                right: 2px;
+                font-size: 1rem;
             }
             
             .region-modal {
                 width: 250px;
                 padding: 15px;
+            }
+        }
+        
+        /* Адаптация для телефонов (вертикальная ориентация) */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .player-info {
+                display: none; /* Скрываем левую панель */
+            }
+            
+            .world-map {
+                order: 1;
+            }
+            
+            .navigation {
+                order: 2;
+                padding: 10px;
+            }
+            
+            .nav-buttons-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            
+            .nav-button {
+                flex: 0 0 calc(25% - 8px);
+                flex-direction: column;
+                padding: 8px;
+                min-height: 60px;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .nav-icon {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 4px;
+            }
+            
+            .nav-text {
+                font-size: 0.7rem;
+                line-height: 1;
+            }
+            
+            .nav-button.disabled::after {
+                top: 5px;
+                right: 5px;
+                font-size: 0.8rem;
             }
         }
         
@@ -584,7 +641,7 @@
             { name: 'Кутаиси', country: 'Грузия' },
             { name: 'Батуми', country: 'Грузия' },
             { name: 'Ереван', country: 'Армения' },
-            { name: 'Гюмри', country: 'Армения' },
+            { name: 'Гюмri', country: 'Армения' },
             { name: 'Баку', country: 'Азербайджан' },
             { name: 'Гянджа', country: 'Азербайджан' },
             
@@ -708,7 +765,7 @@
             { name: 'Кызыл', country: 'Республика Тыва' },
             { name: 'Ак-Довурак', country: 'Республика Тыва' },
             { name: 'Туран', country: 'Республика Тыва' },
-            { name: 'Шагонар', country: 'Республика Тыва' },
+            { name: 'Шагонар', country: 'Республика Тыva' },
             { name: 'Чадан', country: 'Республика Тыва' }
         ];
 
