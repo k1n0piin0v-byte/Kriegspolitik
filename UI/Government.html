@@ -43,6 +43,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
         
         .header h1 {
@@ -270,8 +271,8 @@
             background: #3a3a3a;
         }
         
-        /* Адаптация для телефонов */
-        @media (max-width: 768px) {
+        /* Адаптация для телефонов (горизонтальная ориентация) */
+        @media (max-width: 768px) and (orientation: landscape) {
             .header {
                 padding: 10px;
             }
@@ -292,10 +293,70 @@
             
             .government-info {
                 grid-template-columns: 1fr;
+                gap: 10px;
             }
             
             .ideology-section {
                 flex-direction: column;
+            }
+            
+            .pie-chart-container {
+                min-height: 200px;
+            }
+            
+            .pie-chart {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .ideology-legend {
+                max-height: 200px;
+            }
+            
+            .info-row {
+                padding: 6px;
+            }
+            
+            .info-label, .info-value {
+                font-size: 0.85rem;
+            }
+            
+            .ideology-item {
+                padding: 6px;
+            }
+        }
+        
+        /* Адаптация для телефонов (вертикальная ориентация) */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .header {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 10px;
+                gap: 15px;
+                grid-template-columns: 1fr;
+            }
+            
+            .government-card {
+                padding: 12px;
+            }
+            
+            .government-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .ideology-section {
+                flex-direction: column;
+            }
+            
+            .pie-chart-container {
+                min-height: 250px;
             }
             
             .pie-chart {
@@ -305,6 +366,47 @@
             
             .ideology-legend {
                 max-height: 200px;
+            }
+            
+            .info-row {
+                padding: 8px;
+            }
+            
+            .info-label, .info-value {
+                font-size: 0.85rem;
+            }
+            
+            .ideology-item {
+                padding: 8px;
+            }
+        }
+        
+        /* Адаптация для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1rem;
+            }
+            
+            .back-button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .card-title {
+                font-size: 1rem;
+            }
+            
+            .pie-chart {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .ideology-name {
+                font-size: 0.8rem;
+            }
+            
+            .ideology-percentage {
+                font-size: 0.8rem;
             }
         }
         
@@ -356,6 +458,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Подключаем файл с данными о правительствах -->
+    <script src="Government.js"></script>
 
     <script>
         function goBack() {
@@ -448,10 +553,6 @@
                     </div>
                     
                     <div class="government-info">
-                        <div class="info-row">
-                            <span class="info-label">Правитель:</span>
-                            <span class="info-value">${governmentData.leader}</span>
-                        </div>
                         <div class="info-row">
                             <span class="info-label">Форма правления:</span>
                             <span class="info-value">${governmentData.government}</span>
@@ -575,10 +676,25 @@
         }
         
         // Загрузка данных при открытии страницы
-        document.addEventListener('DOMContentLoaded', loadGovernmentData);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ждем загрузки Government.js
+            if (typeof countryGovernments !== 'undefined') {
+                loadGovernmentData();
+            } else {
+                // Если Government.js еще не загружен, ждем немного и пробуем снова
+                setTimeout(() => {
+                    if (typeof countryGovernments !== 'undefined') {
+                        loadGovernmentData();
+                    } else {
+                        document.getElementById('left-column').innerHTML = `
+                            <div class="government-card">
+                                <div class="no-data">Ошибка загрузки данных о правительствах</div>
+                            </div>
+                        `;
+                    }
+                }, 500);
+            }
+        });
     </script>
-    
-    <!-- Подключаем файл с данными о правительствах -->
-    <script src="Government.js"></script>
 </body>
 </html>

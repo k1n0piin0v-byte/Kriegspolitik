@@ -43,6 +43,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
         
         .header-title {
@@ -69,6 +70,7 @@
             border-bottom: 1px solid #1a1a1a;
             overflow-x: auto;
             scrollbar-width: none;
+            flex-shrink: 0;
         }
         
         .tabs::-webkit-scrollbar {
@@ -86,6 +88,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-shrink: 0;
         }
         
         .tab.active {
@@ -301,24 +304,32 @@
             font-weight: bold;
         }
         
-        /* Адаптация для мобильных устройств */
-        @media (max-width: 768px) {
+        /* Адаптация для мобильных устройств (горизонтальная ориентация) */
+        @media (max-width: 768px) and (orientation: landscape) {
             .header {
                 padding: 6px 10px;
             }
             
             .tabs {
                 overflow-x: auto;
+                padding: 0 5px;
             }
             
             .tab {
-                padding: 8px 12px;
+                padding: 8px 10px;
                 font-size: 0.7rem;
+                min-width: auto;
+                flex: 1;
+            }
+            
+            .tab span {
+                display: none;
             }
             
             .tab-icon {
                 width: 24px;
                 height: 24px;
+                margin: 0 auto;
             }
             
             .energy-icon {
@@ -353,135 +364,92 @@
                 width: 36px;
                 height: 36px;
             }
-        }
-        
-        /* Улучшение для вертикальной ориентации на мобильных */
-        @media (max-width: 768px) and (orientation: portrait) {
-            .work-table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            .work-table th,
-            .work-table td {
-                padding: 4px;
-                font-size: 0.7rem;
-            }
             
             .action-title {
-                font-size: 0.75rem;
-            }
-            
-            .action-desc {
-                font-size: 0.65rem;
-            }
-            
-            .slider-container {
-                flex-direction: column;
-                gap: 5px;
-                align-items: stretch;
-            }
-            
-            .action-count {
-                text-align: center;
-                min-width: auto;
-            }
-            
-            .action-controls {
-                gap: 5px;
-            }
-            
-            .total-cost-reward {
-                font-size: 0.65rem;
-            }
-            
-            .tab {
-                padding: 6px 8px;
-                font-size: 0.65rem;
-            }
-            
-            .tab-icon {
-                width: 20px;
-                height: 20px;
-            }
-        }
-        
-        /* Улучшение для горизонтальной ориентации на мобильных */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .work-table th,
-            .work-table td {
-                padding: 4px;
-                font-size: 0.7rem;
-            }
-            
-            .action-title {
-                font-size: 0.75rem;
-            }
-            
-            .action-desc {
-                font-size: 0.65rem;
-            }
-            
-            .slider-container {
-                gap: 5px;
-            }
-            
-            .action-count {
-                min-width: 40px;
-                font-size: 0.65rem;
-            }
-            
-            .total-cost-reward {
-                font-size: 0.65rem;
-            }
-            
-            .tab {
-                padding: 6px 8px;
-                font-size: 0.65rem;
-            }
-            
-            .tab-icon {
-                width: 20px;
-                height: 20px;
-            }
-        }
-        
-        /* Улучшение для очень маленьких экранов */
-        @media (max-width: 360px) {
-            .header-title {
-                font-size: 0.9rem;
-            }
-            
-            .energy-display {
                 font-size: 0.8rem;
             }
             
+            .action-desc {
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Адаптация для мобильных устройств (вертикальная ориентация) */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .header {
+                padding: 6px 10px;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding: 0 5px;
+            }
+            
             .tab {
-                padding: 4px 6px;
+                padding: 8px 10px;
+                font-size: 0.7rem;
+                min-width: auto;
+                flex: 1;
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .tab span {
                 font-size: 0.6rem;
+                text-align: center;
             }
             
             .tab-icon {
-                width: 16px;
-                height: 16px;
+                width: 28px;
+                height: 28px;
             }
             
-            .work-table th,
-            .work-table td {
-                padding: 3px;
-                font-size: 0.65rem;
+            .energy-icon {
+                width: 24px;
+                height: 24px;
             }
             
-            .action-title {
+            .content {
+                padding: 8px;
+            }
+            
+            .work-table {
                 font-size: 0.7rem;
             }
             
-            .action-desc {
-                display: none;
+            .work-table th, 
+            .work-table td {
+                padding: 6px;
             }
             
             .action-button {
-                padding: 3px 6px;
+                padding: 6px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .action-count {
+                font-size: 0.7rem;
+                min-width: 50px;
+            }
+            
+            .item-icon {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .action-title {
+                font-size: 0.8rem;
+            }
+            
+            .action-desc {
+                font-size: 0.65rem;
+            }
+            
+            .slider-container {
+                gap: 8px;
+            }
+            
+            .total-cost-reward {
                 font-size: 0.65rem;
             }
         }
@@ -499,6 +467,52 @@
         .content::-webkit-scrollbar-thumb {
             background: #2a2a2a;
             border-radius: 2px;
+        }
+        
+        /* Улучшение для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 0.9rem;
+            }
+            
+            .energy-display {
+                font-size: 0.8rem;
+            }
+            
+            .tab {
+                padding: 6px 8px;
+            }
+            
+            .tab-icon {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .tab span {
+                font-size: 0.55rem;
+            }
+            
+            .work-table {
+                font-size: 0.65rem;
+            }
+            
+            .work-table th, 
+            .work-table td {
+                padding: 4px;
+            }
+            
+            .action-title {
+                font-size: 0.75rem;
+            }
+            
+            .action-desc {
+                font-size: 0.6rem;
+            }
+            
+            .action-button {
+                padding: 4px 6px;
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
@@ -1114,6 +1128,9 @@
                                 <button class="action-button" data-action="produce_apc">Произвести</button>
                             </div>
                         </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         
         <!-- Склад -->
@@ -1219,6 +1236,21 @@
             supporters: 'Сторонники'
         };
         
+        // Функция для синхронизации энергии с MainGame.html
+        function syncEnergyWithMainGame() {
+            // Сохраняем данные энергии
+            savePlayerData();
+            
+            // Обновляем отображение энергии на этой странице
+            updateEnergyDisplay();
+        }
+        
+        // Функция для обновления отображения энергии
+        function updateEnergyDisplay() {
+            document.getElementById('energy-value').textContent = 
+                `${playerData.energy}/${playerData.maxEnergy}`;
+        }
+        
         // Загрузка данных игрока
         function loadPlayerData() {
             const savedData = localStorage.getItem('playerWorkData');
@@ -1232,6 +1264,9 @@
                 
                 // Обновляем энергию
                 updateEnergy();
+            } else {
+                // Если данных нет, создаем новые и синхронизируем с MainGame
+                savePlayerData();
             }
             
             // Обновляем отображение склада
@@ -1241,6 +1276,38 @@
         // Сохранение данных игрока
         function savePlayerData() {
             localStorage.setItem('playerWorkData', JSON.stringify(playerData));
+            
+            // Также обновляем данные в MainGame.html
+            updateMainGameData();
+        }
+        
+        // Функция для обновления данных в MainGame.html
+        function updateMainGameData() {
+            // Получаем текущие данные из MainGame.html
+            const mainGameData = localStorage.getItem('playerData');
+            let playerMainData = {};
+            
+            if (mainGameData) {
+                playerMainData = JSON.parse(mainGameData);
+            } else {
+                // Создаем базовые данные, если их нет
+                playerMainData = {
+                    nickname: 'Новый Игрок',
+                    energy: '100/100',
+                    money: '1000',
+                    gold: '50',
+                    country: 'Российская Республика',
+                    region: 'Москва',
+                    party: 'Не состоит',
+                    army: 'Не служит'
+                };
+            }
+            
+            // Обновляем только энергию, сохраняя остальные данные
+            playerMainData.energy = `${playerData.energy}/${playerData.maxEnergy}`;
+            
+            // Сохраняем обновленные данные
+            localStorage.setItem('playerData', JSON.stringify(playerMainData));
         }
         
         // Обновление энергии (восстановление со временем)
@@ -1258,22 +1325,13 @@
             }
             
             // Обновляем отображение энергии
-            document.getElementById('energy-value').textContent = `${playerData.energy}/${playerData.maxEnergy}`;
+            updateEnergyDisplay();
             
             // Обновляем состояние кнопок
             updateButtonsState();
             
             // Обновляем максимальные значения ползунков
             updateSlidersMax();
-            
-            // Обновляем отображение ползунков
-            updateAllSlidersDisplay();
-        }
-        
-        // Обновление отображения всех ползунков
-        function updateAllSlidersDisplay() {
-            const sliders = document.querySelectorAll('.action-slider');
-            sliders.forEach(slider => updateSliderDisplay(slider));
         }
         
         // Обновление максимальных значений ползунков
@@ -1303,7 +1361,11 @@
                 // Если текущее значение больше нового максимума, устанавливаем его в максимум
                 if (parseInt(slider.value) > parseInt(slider.max)) {
                     slider.value = slider.max;
+                    updateSliderDisplay(slider);
                 }
+                
+                // Обновляем отображение ползунка
+                updateSliderDisplay(slider);
             });
         }
         
@@ -1321,8 +1383,7 @@
             const totalCostRewardElement = container.querySelector('.total-cost-reward');
             
             // Обновляем отображение количества
-            const timesText = count === 1 ? 'раз' : 'раза';
-            countElement.textContent = `${count} ${timesText}`;
+            countElement.textContent = `${count} раз`;
             
             // Рассчитываем общие затраты и награду
             const totalEnergy = workDef.energy * count;
@@ -1432,6 +1493,9 @@
             updateEnergy();
             updateStorageDisplay();
             
+            // Синхронизируем изменения с MainGame
+            syncEnergyWithMainGame();
+            
             // Показываем сообщение об успехе
             alert(`Работа выполнена успешно ${count} раз!`);
         }
@@ -1464,6 +1528,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Загрузка данных игрока
             loadPlayerData();
+            
+            // Синхронизация с MainGame при загрузке
+            syncEnergyWithMainGame();
             
             // Настройка навигации по вкладкам
             const tabs = document.querySelectorAll('.tab');
@@ -1517,6 +1584,18 @@
             
             // Обновляем энергию каждую минуту
             setInterval(updateEnergy, 60000);
+            
+            // Синхронизируем с MainGame при возвращении на страницу
+            window.addEventListener('focus', syncEnergyWithMainGame);
+            
+            // Слушаем изменения в localStorage (для синхронизации между вкладками)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'playerData') {
+                    // Если MainGame обновил данные, загружаем их
+                    loadPlayerData();
+                    updateEnergyDisplay();
+                }
+            });
             
             // Блокировка масштабирования
             document.addEventListener('wheel', function(e) {
