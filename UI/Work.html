@@ -210,26 +210,61 @@
             text-align: right;
         }
         
-        .action-button {
-            padding: 6px 10px;
+        .compact-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            justify-content: flex-end;
+        }
+        
+        .auto-btn {
+            width: 30px;
+            height: 30px;
+            background: #555;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .auto-btn.active {
+            background: #ff4444;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .work-button {
+            padding: 6px 12px;
             background-color: #1a4c7a;
             color: #fff;
             border: none;
-            border-radius: 2px;
+            border-radius: 3px;
             cursor: pointer;
             font-size: 0.75rem;
             transition: background-color 0.2s;
             white-space: nowrap;
+            min-width: 70px;
         }
         
-        .action-button:hover {
+        .work-button:hover {
             background-color: #2a5c8a;
         }
         
-        .action-button:disabled {
+        .work-button:disabled {
             background-color: #555;
             cursor: not-allowed;
             opacity: 0.7;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
         
         .total-cost-reward {
@@ -300,52 +335,6 @@
             font-weight: bold;
         }
         
-        /* Компактная кнопка авто-работы */
-        .auto-btn {
-            width: 24px;
-            height: 24px;
-            background: #555;
-            border: none;
-            border-radius: 3px;
-            color: #fff;
-            font-size: 0.6rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 5px;
-            transition: all 0.3s ease;
-        }
-        
-        .auto-btn.active {
-            background: #ff4444;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        
-        .action-header {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .compact-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .compact-button {
-            padding: 4px 8px;
-            font-size: 0.7rem;
-            min-width: 60px;
-        }
-        
         /* Адаптация для мобильных */
         @media (max-width: 768px) and (orientation: landscape) {
             .header { padding: 6px 10px; }
@@ -357,12 +346,12 @@
             .content { padding: 8px; }
             .work-table { font-size: 0.7rem; }
             .work-table th, .work-table td { padding: 6px; }
-            .action-button { padding: 4px 8px; font-size: 0.7rem; }
+            .work-button { padding: 5px 8px; font-size: 0.7rem; min-width: 60px; }
             .action-count { font-size: 0.7rem; min-width: 50px; }
             .item-icon { width: 36px; height: 36px; }
             .action-title { font-size: 0.8rem; }
             .action-desc { font-size: 0.7rem; }
-            .auto-btn { width: 22px; height: 22px; font-size: 0.5rem; }
+            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; }
         }
         
         @media (max-width: 768px) and (orientation: portrait) {
@@ -375,14 +364,14 @@
             .content { padding: 8px; }
             .work-table { font-size: 0.7rem; }
             .work-table th, .work-table td { padding: 6px; }
-            .action-button { padding: 6px 8px; font-size: 0.7rem; }
+            .work-button { padding: 6px 10px; font-size: 0.7rem; min-width: 65px; }
             .action-count { font-size: 0.7rem; min-width: 50px; }
             .item-icon { width: 36px; height: 36px; }
             .action-title { font-size: 0.8rem; }
             .action-desc { font-size: 0.65rem; }
             .slider-container { gap: 8px; }
             .total-cost-reward { font-size: 0.65rem; }
-            .auto-btn { width: 22px; height: 22px; font-size: 0.5rem; }
+            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; }
         }
         
         @media (max-width: 480px) {
@@ -395,8 +384,8 @@
             .work-table th, .work-table td { padding: 4px; }
             .action-title { font-size: 0.75rem; }
             .action-desc { font-size: 0.6rem; }
-            .action-button { padding: 4px 6px; font-size: 0.65rem; }
-            .auto-btn { width: 20px; height: 20px; font-size: 0.45rem; }
+            .work-button { padding: 4px 8px; font-size: 0.65rem; min-width: 55px; }
+            .auto-btn { width: 26px; height: 26px; font-size: 0.6rem; }
         }
         
         .content {
@@ -455,19 +444,16 @@
             <table class="work-table">
                 <thead>
                     <tr>
-                        <th width="35%">Действие</th>
+                        <th width="40%">Действие</th>
                         <th width="25%">Затраты</th>
                         <th width="20%">Награда</th>
-                        <th width="20%"></th>
+                        <th width="15%"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <div class="action-header">
-                                <div class="action-title">Добыча угля</div>
-                                <button class="auto-btn" data-action="mine_coal" title="Авто-работа">A</button>
-                            </div>
+                            <div class="action-title">Добыча угля</div>
                             <div class="action-desc">Добыть уголь для производства</div>
                         </td>
                         <td class="cost">
@@ -483,17 +469,15 @@
                                     <span class="action-count">1 раз</span>
                                 </div>
                                 <div class="compact-controls">
-                                    <button class="action-button compact-button" data-action="mine_coal">Работать</button>
+                                    <button class="auto-btn" data-action="mine_coal" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="mine_coal">Работать</button>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div class="action-header">
-                                <div class="action-title">Добыча железа</div>
-                                <button class="auto-btn" data-action="mine_iron" title="Авто-работа">A</button>
-                            </div>
+                            <div class="action-title">Добыча железа</div>
                             <div class="action-desc">Добыть железную руду</div>
                         </td>
                         <td class="cost">
@@ -509,17 +493,15 @@
                                     <span class="action-count">1 раз</span>
                                 </div>
                                 <div class="compact-controls">
-                                    <button class="action-button compact-button" data-action="mine_iron">Работать</button>
+                                    <button class="auto-btn" data-action="mine_iron" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="mine_iron">Работать</button>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div class="action-header">
-                                <div class="action-title">Добыча боксита</div>
-                                <button class="auto-btn" data-action="mine_bauxite" title="Авто-работа">A</button>
-                            </div>
+                            <div class="action-title">Добыча боксита</div>
                             <div class="action-desc">Добыть бокситовую руду</div>
                         </td>
                         <td class="cost">
@@ -535,7 +517,8 @@
                                     <span class="action-count">1 раз</span>
                                 </div>
                                 <div class="compact-controls">
-                                    <button class="action-button compact-button" data-action="mine_bauxite">Работать</button>
+                                    <button class="auto-btn" data-action="mine_bauxite" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="mine_bauxite">Работать</button>
                                 </div>
                             </div>
                         </td>
@@ -548,19 +531,16 @@
             <table class="work-table">
                 <thead>
                     <tr>
-                        <th width="35%">Действие</th>
+                        <th width="40%">Действие</th>
                         <th width="25%">Затраты</th>
                         <th width="20%">Награда</th>
-                        <th width="20%"></th>
+                        <th width="15%"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <div class="action-header">
-                                <div class="action-title">Добыча нефти</div>
-                                <button class="auto-btn" data-action="oil_drill" title="Авто-работа">A</button>
-                            </div>
+                            <div class="action-title">Добыча нефти</div>
                             <div class="action-desc">Добыть сырую нефть</div>
                         </td>
                         <td class="cost">
@@ -576,7 +556,8 @@
                                     <span class="action-count">1 раз</span>
                                 </div>
                                 <div class="compact-controls">
-                                    <button class="action-button compact-button" data-action="oil_drill">Работать</button>
+                                    <button class="auto-btn" data-action="oil_drill" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="oil_drill">Работать</button>
                                 </div>
                             </div>
                         </td>
@@ -585,8 +566,435 @@
             </table>
         </div>
         
-        <!-- Остальные вкладки аналогично с добавлением auto-btn -->
+        <div class="tab-content" id="farm-tab">
+            <table class="work-table">
+                <thead>
+                    <tr>
+                        <th width="40%">Действие</th>
+                        <th width="25%">Затраты</th>
+                        <th width="20%">Награда</th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="action-title">Выращивание какао</div>
+                            <div class="action-desc">Вырастить какао-бобы</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 8</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Какао: 6</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="12" value="1" data-action="farm_cocoa">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="farm_cocoa" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="farm_cocoa">Работать</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Выращивание специй</div>
+                            <div class="action-desc">Вырастить различные специи</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 10</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Специи: 5</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="10" value="1" data-action="farm_spices">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="farm_spices" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="farm_spices">Работать</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Выращивание конопли</div>
+                            <div class="action-desc">Вырастить коноплю для производства</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 12</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Конопля: 7</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="8" value="1" data-action="farm_hemp">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="farm_hemp" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="farm_hemp">Работать</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство красителя</div>
+                            <div class="action-desc">Создать красители из растений</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 15</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Краситель: 4</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="6" value="1" data-action="farm_dye">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="farm_dye" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="farm_dye">Работать</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         
+        <div class="tab-content" id="civilian-tab">
+            <table class="work-table">
+                <thead>
+                    <tr>
+                        <th width="40%">Действие</th>
+                        <th width="25%">Затраты</th>
+                        <th width="20%">Награда</th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство бумаги</div>
+                            <div class="action-desc">Создать бумагу из конопли</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 10</span>
+                            <span class="resource-cost">Конопля: 3</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Бумага: 5</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="10" value="1" data-action="produce_paper">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_paper" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_paper">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство ткани</div>
+                            <div class="action-desc">Создать ткань из конопли</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 12</span>
+                            <span class="resource-cost">Конопля: 4</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Ткань: 4</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="8" value="1" data-action="produce_fabric">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_fabric" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_fabric">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство стекла</div>
+                            <div class="action-desc">Создать стекло из угля</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 15</span>
+                            <span class="resource-cost">Уголь: 5</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Стекло: 3</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="6" value="1" data-action="produce_glass">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_glass" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_glass">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство пластика</div>
+                            <div class="action-desc">Создать пластик из нефти</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 20</span>
+                            <span class="resource-cost">Нефть: 4</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Пластик: 3</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="5" value="1" data-action="produce_plastic">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_plastic" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_plastic">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство кофе</div>
+                            <div class="action-desc">Создать кофе из какао и специй</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 15</span>
+                            <span class="resource-cost">Какао: 3, Специи: 2</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Кофе: 4</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="6" value="1" data-action="produce_coffee">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_coffee" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_coffee">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Производство табака</div>
+                            <div class="action-desc">Создать табак из конопли и специй</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 18</span>
+                            <span class="resource-cost">Конопля: 4, Специи: 2</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Табак: 4</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="5" value="1" data-action="produce_tobacco">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_tobacco" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_tobacco">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="tab-content" id="military-tab">
+            <table class="work-table">
+                <thead>
+                    <tr>
+                        <th width="40%">Действие</th>
+                        <th width="25%">Затраты</th>
+                        <th width="20%">Награда</th>
+                        <th width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="action-title">Военная униформа</div>
+                            <div class="action-desc">Создать военную униформу из ткани</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 20</span>
+                            <span class="resource-cost">Ткань: 5</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Униформа: 2</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="5" value="1" data-action="produce_uniform">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_uniform" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_uniform">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Боеприпасы</div>
+                            <div class="action-desc">Создать боеприпасы из железа и угля</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 25</span>
+                            <span class="resource-cost">Железо: 4, Уголь: 3</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Боеприпасы: 3</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="4" value="1" data-action="produce_ammo">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_ammo" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_ammo">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Автоматы</div>
+                            <div class="action-desc">Создать автоматы из железа</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 30</span>
+                            <span class="resource-cost">Железo: 8</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Автоматы: 1</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="3" value="1" data-action="produce_rifles">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_rifles" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_rifles">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Танки</div>
+                            <div class="action-desc">Создать танки из железа и боксита</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 50</span>
+                            <span class="resource-cost">Железо: 15, Боксит: 10</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">Танки: 1</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="2" value="1" data-action="produce_tanks">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_tanks" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_tanks">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="action-title">Бронетранспортеры</div>
+                            <div class="action-desc">Создать БТР из железа и пластика</div>
+                        </td>
+                        <td class="cost">
+                            <span class="energy-cost">Энергия: 40</span>
+                            <span class="resource-cost">Железо: 10, Пластик: 5</span>
+                        </td>
+                        <td class="reward">
+                            <span class="resource-reward">БТР: 1</span>
+                        </td>
+                        <td>
+                            <div class="action-controls">
+                                <div class="slider-container">
+                                    <input type="range" class="action-slider" min="1" max="2" value="1" data-action="produce_apc">
+                                    <span class="action-count">1 раз</span>
+                                </div>
+                                <div class="compact-controls">
+                                    <button class="auto-btn" data-action="produce_apc" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="produce_apc">Произвести</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="tab-content" id="storage-tab">
+            <table class="storage-table">
+                <thead>
+                    <tr>
+                        <th width="80%">Ресурс</th>
+                        <th width="20%">Количество</th>
+                    </tr>
+                </thead>
+                <tbody id="storage-body">
+                    <!-- Ресурсы будут загружены через JavaScript -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -606,12 +1014,35 @@
             mine_coal: { energy: 10, reward: { coal: 5 } },
             mine_iron: { energy: 15, reward: { iron: 3 } },
             mine_bauxite: { energy: 20, reward: { bauxite: 2 } },
-            oil_drill: { energy: 25, reward: { oil: 4 } }
+            oil_drill: { energy: 25, reward: { oil: 4 } },
+            farm_cocoa: { energy: 8, reward: { cocoa: 6 } },
+            farm_spices: { energy: 10, reward: { spices: 5 } },
+            farm_hemp: { energy: 12, reward: { hemp: 7 } },
+            farm_dye: { energy: 15, reward: { dye: 4 } },
+            produce_paper: { energy: 10, cost: { hemp: 3 }, reward: { paper: 5 } },
+            produce_fabric: { energy: 12, cost: { hemp: 4 }, reward: { fabric: 4 } },
+            produce_glass: { energy: 15, cost: { coal: 5 }, reward: { glass: 3 } },
+            produce_plastic: { energy: 20, cost: { oil: 4 }, reward: { plastic: 3 } },
+            produce_coffee: { energy: 15, cost: { cocoa: 3, spices: 2 }, reward: { coffee: 4 } },
+            produce_tobacco: { energy: 18, cost: { hemp: 4, spices: 2 }, reward: { tobacco: 4 } },
+            produce_uniform: { energy: 20, cost: { fabric: 5 }, reward: { uniform: 2 } },
+            produce_ammo: { energy: 25, cost: { iron: 4, coal: 3 }, reward: { ammo: 3 } },
+            produce_rifles: { energy: 30, cost: { iron: 8 }, reward: { rifles: 1 } },
+            produce_tanks: { energy: 50, cost: { iron: 15, bauxite: 10 }, reward: { tanks: 1 } },
+            produce_apc: { energy: 40, cost: { iron: 10, plastic: 5 }, reward: { apc: 1 } }
         };
         
         const tabNames = {
             mine: "Шахта", oil: "Нефтяная вышка", farm: "Ферма",
             civilian: "Гражданская фабрика", military: "Военный завод", storage: "Склад"
+        };
+
+        const resourceNames = {
+            coal: 'Уголь', iron: 'Железо', bauxite: 'Боксит', oil: 'Нефть',
+            paper: 'Бумага', fabric: 'Ткань', glass: 'Стекло', plastic: 'Пластик',
+            cocoa: 'Какао', spices: 'Специи', hemp: 'Конопля', dye: 'Краситель',
+            uniform: 'Военная униформа', ammo: 'Боеприпасы', rifles: 'Автоматы',
+            tanks: 'Танки', apc: 'Бронетранспортеры', coffee: 'Кофе', tobacco: 'Табак'
         };
 
         function toggleAutoWork(action) {
@@ -623,7 +1054,7 @@
                     if (!confirm("Заменить текущую авто-работу?")) return;
                 }
                 playerData.autoWork = action;
-                showFeedback("Авто-работа включена");
+                showFeedback("Авто-работа включена: " + getActionName(action));
             }
             updateAutoButtons();
             savePlayerData();
@@ -642,13 +1073,55 @@
             });
         }
 
+        function getActionName(action) {
+            const actionNames = {
+                'mine_coal': 'Добыча угля',
+                'mine_iron': 'Добыча железа',
+                'mine_bauxite': 'Добыча боксита',
+                'oil_drill': 'Добыча нефти',
+                'farm_cocoa': 'Выращивание какао',
+                'farm_spices': 'Выращивание специй',
+                'farm_hemp': 'Выращивание конопли',
+                'farm_dye': 'Производство красителя',
+                'produce_paper': 'Производство бумаги',
+                'produce_fabric': 'Производство ткани',
+                'produce_glass': 'Производство стекла',
+                'produce_plastic': 'Производство пластика',
+                'produce_coffee': 'Производство кофе',
+                'produce_tobacco': 'Производство табака',
+                'produce_uniform': 'Военная униформа',
+                'produce_ammo': 'Боеприпасы',
+                'produce_rifles': 'Автоматы',
+                'produce_tanks': 'Танки',
+                'produce_apc': 'Бронетранспортеры'
+            };
+            return actionNames[action] || action;
+        }
+
         function performAutoWork() {
             if (!playerData.autoWork) return;
             
             const workDef = workDefinitions[playerData.autoWork];
             if (playerData.energy >= workDef.energy) {
-                performWork(playerData.autoWork, 1, true);
+                if (canPerformWork(playerData.autoWork, 1)) {
+                    performWork(playerData.autoWork, 1, true);
+                }
             }
+        }
+
+        function canPerformWork(action, count) {
+            const workDef = workDefinitions[action];
+            const totalEnergy = workDef.energy * count;
+            
+            if (playerData.energy < totalEnergy) return false;
+            
+            if (workDef.cost) {
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    if (playerData.resources[resource] < amount * count) return false;
+                }
+            }
+            
+            return true;
         }
 
         function performWork(action, count, isAuto = false) {
@@ -660,7 +1133,22 @@
                 return;
             }
             
+            if (workDef.cost) {
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    if (playerData.resources[resource] < amount * count) {
+                        if (!isAuto) alert(`Недостаточно ${resourceNames[resource]}!`);
+                        return;
+                    }
+                }
+            }
+            
             playerData.energy -= totalEnergy;
+            
+            if (workDef.cost) {
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    playerData.resources[resource] -= amount * count;
+                }
+            }
             
             for (const [resource, amount] of Object.entries(workDef.reward)) {
                 playerData.resources[resource] += amount * count;
@@ -669,6 +1157,7 @@
             savePlayerData();
             updateEnergyDisplay();
             updateStorageDisplay();
+            updateSlidersMax();
             
             if (!isAuto) {
                 showFeedback(`Работа выполнена ${count} раз!`);
@@ -676,7 +1165,7 @@
         }
 
         function showFeedback(message) {
-            console.log(message);
+            alert(message);
         }
 
         function updateEnergyDisplay() {
@@ -685,7 +1174,63 @@
         }
 
         function updateStorageDisplay() {
-            // Логика обновления склада
+            const storageBody = document.getElementById('storage-body');
+            storageBody.innerHTML = '';
+            
+            for (const [resource, amount] of Object.entries(playerData.resources)) {
+                if (amount > 0) {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>
+                            <div class="item-cell">
+                                <img src="../Img/Resources/${resource}.png" alt="${resourceNames[resource]}" class="item-icon">
+                                <span class="item-name">${resourceNames[resource]}</span>
+                            </div>
+                        </td>
+                        <td class="item-count">${amount}</td>
+                    `;
+                    
+                    storageBody.appendChild(row);
+                }
+            }
+        }
+
+        function updateSlidersMax() {
+            const sliders = document.querySelectorAll('.action-slider');
+            
+            sliders.forEach(slider => {
+                const action = slider.dataset.action;
+                const workDef = workDefinitions[action];
+                const maxFromEnergy = Math.floor(playerData.energy / workDef.energy);
+                
+                let maxFromResources = Infinity;
+                if (workDef.cost) {
+                    for (const [resource, amount] of Object.entries(workDef.cost)) {
+                        const resourceMax = Math.floor(playerData.resources[resource] / amount);
+                        maxFromResources = Math.min(maxFromResources, resourceMax);
+                    }
+                }
+                
+                const maxActions = Math.min(maxFromEnergy, maxFromResources, 50);
+                slider.max = Math.max(1, maxActions);
+                
+                if (parseInt(slider.value) > parseInt(slider.max)) {
+                    slider.value = slider.max;
+                    updateSliderDisplay(slider);
+                }
+            });
+        }
+
+        function updateSliderDisplay(slider) {
+            const action = slider.dataset.action;
+            const count = parseInt(slider.value);
+            const workDef = workDefinitions[action];
+            
+            const container = slider.closest('.action-controls');
+            const countElement = container.querySelector('.action-count');
+            
+            countElement.textContent = `${count} раз`;
         }
 
         function savePlayerData() {
@@ -695,9 +1240,17 @@
         function loadPlayerData() {
             const saved = localStorage.getItem('playerWorkData');
             if (saved) {
-                Object.assign(playerData, JSON.parse(saved));
+                const data = JSON.parse(saved);
+                playerData.energy = data.energy;
+                playerData.maxEnergy = data.maxEnergy;
+                playerData.lastEnergyUpdate = data.lastEnergyUpdate;
+                playerData.resources = data.resources;
+                playerData.autoWork = data.autoWork;
+                
                 updateEnergyDisplay();
                 updateAutoButtons();
+                updateStorageDisplay();
+                updateSlidersMax();
             }
         }
 
@@ -720,7 +1273,7 @@
                 });
             });
 
-            document.querySelectorAll('.action-button').forEach(btn => {
+            document.querySelectorAll('.work-button').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const action = this.dataset.action;
                     const slider = document.querySelector(`.action-slider[data-action="${action}"]`);
@@ -731,19 +1284,20 @@
 
             document.querySelectorAll('.action-slider').forEach(slider => {
                 slider.addEventListener('input', function() {
-                    const count = this.value;
-                    this.nextElementSibling.textContent = `${count} раз`;
+                    updateSliderDisplay(this);
                 });
             });
 
             setInterval(performAutoWork, 3000);
+            
             setInterval(() => {
                 const now = Date.now();
                 const timeDiff = now - playerData.lastEnergyUpdate;
                 const energyGain = Math.floor(timeDiff / (2.5 * 60 * 1000)) * 10;
+                
                 if (energyGain > 0) {
                     playerData.energy = Math.min(playerData.maxEnergy, playerData.energy + energyGain);
-                    playerData.lastEnergyUpdate = now;
+                    playerData.lastEnergyUpdate = now - (timeDiff % (2.5 * 60 * 1000));
                     updateEnergyDisplay();
                     savePlayerData();
                 }
