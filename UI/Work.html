@@ -323,12 +323,12 @@
             }
             
             .tab span {
-                display: none;
+                display: none; /* Скрываем текст на телефонах */
             }
             
             .tab-icon {
-                width: 24px;
-                height: 24px;
+                width: 32px; /* Увеличиваем размер иконок для лучшей видимости */
+                height: 32px;
                 margin: 0 auto;
             }
             
@@ -395,13 +395,12 @@
             }
             
             .tab span {
-                font-size: 0.6rem;
-                text-align: center;
+                display: none; /* Скрываем текст на телефонах */
             }
             
             .tab-icon {
-                width: 28px;
-                height: 28px;
+                width: 36px; /* Увеличиваем размер иконок для лучшей видимости */
+                height: 36px;
             }
             
             .energy-icon {
@@ -484,12 +483,12 @@
             }
             
             .tab-icon {
-                width: 20px;
-                height: 20px;
+                width: 28px; /* Увеличиваем размер иконок для лучшей видимости */
+                height: 28px;
             }
             
             .tab span {
-                font-size: 0.55rem;
+                display: none; /* Скрываем текст на очень маленьких экранах */
             }
             
             .work-table {
@@ -512,6 +511,19 @@
             .action-button {
                 padding: 4px 6px;
                 font-size: 0.65rem;
+            }
+        }
+        
+        /* Дополнительные стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .tab {
+                justify-content: center; /* Центрируем иконки */
+                padding: 8px 5px; /* Уменьшаем отступы для компактности */
+            }
+            
+            .tab-icon {
+                width: 32px; /* Стандартный размер иконок для мобильных */
+                height: 32px;
             }
         }
     </style>
