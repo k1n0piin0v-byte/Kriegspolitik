@@ -304,7 +304,119 @@
             font-weight: bold;
         }
         
-        /* Адаптация для мобильных устройств (горизонтальная ориентация) */
+        /* Стили для автоматизации */
+        .auto-production {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+            padding: 5px;
+            background: rgba(26, 58, 95, 0.2);
+            border-radius: 3px;
+            font-size: 0.7rem;
+            flex-wrap: wrap;
+        }
+        
+        .auto-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .auto-checkbox input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
+        
+        .auto-count {
+            width: 40px;
+            padding: 2px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            font-size: 0.7rem;
+        }
+        
+        .auto-active {
+            background: rgba(76, 175, 80, 0.3);
+            border: 1px solid #4CAF50;
+        }
+        
+        .auto-set-btn {
+            padding: 3px 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            white-space: nowrap;
+        }
+        
+        .auto-set-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        
+        .auto-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        /* Индикатор активной автоматизации */
+        .global-auto-indicator {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            transform: translateY(-50%);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        /* Уведомления */
+        .feedback {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1001;
+            font-size: 0.8rem;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .feedback.success {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .feedback.error {
+            background: #f44336;
+            color: white;
+        }
+        
+        @keyframes slideDown {
+            from { top: -50px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+        
+        /* Адаптация для мобильных устройств */
         @media (max-width: 768px) and (orientation: landscape) {
             .header {
                 padding: 6px 10px;
@@ -320,16 +432,17 @@
                 font-size: 0.7rem;
                 min-width: auto;
                 flex: 1;
+                justify-content: center;
             }
             
             .tab span {
-                display: none; /* Скрываем текст на телефонах */
+                display: none;
             }
             
             .tab-icon {
-                width: 32px; /* Увеличиваем размер иконок для лучшей видимости */
+                width: 32px;
                 height: 32px;
-                margin: 0 auto;
+                margin: 0;
             }
             
             .energy-icon {
@@ -372,9 +485,19 @@
             .action-desc {
                 font-size: 0.7rem;
             }
+            
+            .auto-production {
+                font-size: 0.65rem;
+                gap: 6px;
+            }
+            
+            .global-auto-indicator {
+                right: 5px;
+                font-size: 0.65rem;
+                padding: 5px 10px;
+            }
         }
         
-        /* Адаптация для мобильных устройств (вертикальная ориентация) */
         @media (max-width: 768px) and (orientation: portrait) {
             .header {
                 padding: 6px 10px;
@@ -392,15 +515,18 @@
                 flex: 1;
                 flex-direction: column;
                 gap: 4px;
+                justify-content: center;
+                align-items: center;
             }
             
             .tab span {
-                display: none; /* Скрываем текст на телефонах */
+                display: none;
             }
             
             .tab-icon {
-                width: 36px; /* Увеличиваем размер иконок для лучшей видимости */
-                height: 36px;
+                width: 32px;
+                height: 32px;
+                margin: 0;
             }
             
             .energy-icon {
@@ -451,24 +577,13 @@
             .total-cost-reward {
                 font-size: 0.65rem;
             }
+            
+            .auto-production {
+                font-size: 0.65rem;
+                gap: 6px;
+            }
         }
         
-        /* Улучшение скролла */
-        .content {
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-        }
-        
-        .content::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .content::-webkit-scrollbar-thumb {
-            background: #2a2a2a;
-            border-radius: 2px;
-        }
-        
-        /* Улучшение для очень маленьких экранов */
         @media (max-width: 480px) {
             .header-title {
                 font-size: 0.9rem;
@@ -483,12 +598,12 @@
             }
             
             .tab-icon {
-                width: 28px; /* Увеличиваем размер иконок для лучшей видимости */
+                width: 28px;
                 height: 28px;
             }
             
             .tab span {
-                display: none; /* Скрываем текст на очень маленьких экранах */
+                display: none;
             }
             
             .work-table {
@@ -512,23 +627,30 @@
                 padding: 4px 6px;
                 font-size: 0.65rem;
             }
-        }
-        
-        /* Дополнительные стили для мобильных устройств */
-        @media (max-width: 768px) {
-            .tab {
-                justify-content: center; /* Центрируем иконки */
-                padding: 8px 5px; /* Уменьшаем отступы для компактности */
+            
+            .auto-production {
+                font-size: 0.6rem;
+                gap: 4px;
             }
             
-            .tab-icon {
-                width: 32px; /* Стандартный размер иконок для мобильных */
-                height: 32px;
+            .auto-count {
+                width: 35px;
+                font-size: 0.6rem;
+            }
+            
+            .auto-set-btn {
+                font-size: 0.6rem;
+                padding: 2px 6px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Глобальный индикатор автоматизации -->
+    <div class="global-auto-indicator" id="global-auto-indicator" style="display: none;">
+        ⚙️ Авто: <span id="current-auto-action"></span>
+    </div>
+
     <!-- Компактный заголовок -->
     <div class="header">
         <div class="header-title" id="current-tab">Шахта</div>
@@ -1188,6 +1310,12 @@
                 coffee: 0,
                 tobacco: 0,
                 supporters: 0
+            },
+            automation: {
+                active: false,
+                action: null,
+                count: 1,
+                remaining: 0
             }
         };
         
@@ -1248,12 +1376,32 @@
             supporters: 'Сторонники'
         };
         
+        // Названия действий для автоматизации
+        const actionNames = {
+            mine_coal: 'Добыча угля',
+            mine_iron: 'Добыча железа',
+            mine_bauxite: 'Добыча боксита',
+            oil_drill: 'Добыча нефти',
+            farm_cocoa: 'Выращивание какао',
+            farm_spices: 'Выращивание специй',
+            farm_hemp: 'Выращивание конопли',
+            farm_dye: 'Производство красителя',
+            produce_paper: 'Производство бумаги',
+            produce_fabric: 'Производство ткани',
+            produce_glass: 'Производство стекла',
+            produce_plastic: 'Производство пластика',
+            produce_coffee: 'Производство кофе',
+            produce_tobacco: 'Производство табака',
+            produce_uniform: 'Военная униформа',
+            produce_ammo: 'Боеприпасы',
+            produce_rifles: 'Автоматы',
+            produce_tanks: 'Танки',
+            produce_apc: 'Бронетранспортеры'
+        };
+
         // Функция для синхронизации энергии с MainGame.html
         function syncEnergyWithMainGame() {
-            // Сохраняем данные энергии
             savePlayerData();
-            
-            // Обновляем отображение энергии на этой странице
             updateEnergyDisplay();
         }
         
@@ -1269,40 +1417,35 @@
             
             if (savedData) {
                 const data = JSON.parse(savedData);
-                playerData.energy = data.energy;
-                playerData.maxEnergy = data.maxEnergy;
-                playerData.lastEnergyUpdate = data.lastEnergyUpdate;
-                playerData.resources = data.resources;
+                playerData.energy = data.energy || 100;
+                playerData.maxEnergy = data.maxEnergy || 100;
+                playerData.lastEnergyUpdate = data.lastEnergyUpdate || Date.now();
+                playerData.resources = data.resources || playerData.resources;
+                playerData.automation = data.automation || playerData.automation;
                 
-                // Обновляем энергию
+                // Обновляем энергию (офлайн-расчет)
                 updateEnergy();
             } else {
-                // Если данных нет, создаем новые и синхронизируем с MainGame
                 savePlayerData();
             }
             
-            // Обновляем отображение склада
             updateStorageDisplay();
         }
         
         // Сохранение данных игрока
         function savePlayerData() {
             localStorage.setItem('playerWorkData', JSON.stringify(playerData));
-            
-            // Также обновляем данные в MainGame.html
             updateMainGameData();
         }
         
         // Функция для обновления данных в MainGame.html
         function updateMainGameData() {
-            // Получаем текущие данные из MainGame.html
             const mainGameData = localStorage.getItem('playerData');
             let playerMainData = {};
             
             if (mainGameData) {
                 playerMainData = JSON.parse(mainGameData);
             } else {
-                // Создаем базовые данные, если их нет
                 playerMainData = {
                     nickname: 'Новый Игрок',
                     energy: '100/100',
@@ -1315,35 +1458,186 @@
                 };
             }
             
-            // Обновляем только энергию, сохраняя остальные данные
             playerMainData.energy = `${playerData.energy}/${playerData.maxEnergy}`;
-            
-            // Сохраняем обновленные данные
             localStorage.setItem('playerData', JSON.stringify(playerMainData));
         }
         
-        // Обновление энергии (восстановление со временем)
+        // Обновление энергии (восстановление со временем) + автоматическая работа
         function updateEnergy() {
             const now = Date.now();
             const timeDiff = now - playerData.lastEnergyUpdate;
             
-            // Восстанавливаем 10 энергии каждые 2.5 минуты (10 за 10 минут с коэффициентом 4x)
+            // Восстанавливаем энергию
             const energyGain = Math.floor(timeDiff / (2.5 * 60 * 1000)) * 10;
             
             if (energyGain > 0) {
                 playerData.energy = Math.min(playerData.maxEnergy, playerData.energy + energyGain);
                 playerData.lastEnergyUpdate = now - (timeDiff % (2.5 * 60 * 1000));
+                
+                // Если есть активная автоматизация, выполняем работу
+                if (playerData.automation.active && playerData.automation.action) {
+                    performAutoWork();
+                }
+                
                 savePlayerData();
             }
             
-            // Обновляем отображение энергии
             updateEnergyDisplay();
-            
-            // Обновляем состояние кнопок
             updateButtonsState();
-            
-            // Обновляем максимальные значения ползунков
             updateSlidersMax();
+        }
+        
+        // Функция для выполнения автоматической работы
+        function performAutoWork() {
+            if (!playerData.automation.active || !playerData.automation.action) return;
+
+            const action = playerData.automation.action;
+            const workDef = workDefinitions[action];
+            const singleEnergy = workDef.energy;
+
+            // Проверяем, хватает ли энергии хотя бы на одно выполнение
+            if (playerData.energy >= singleEnergy) {
+                // Выполняем работу (максимум 5 раз за один цикл для баланса)
+                const maxPerCycle = Math.min(playerData.automation.remaining, 5);
+                let performed = 0;
+
+                for (let i = 0; i < maxPerCycle; i++) {
+                    if (canPerformWork(action, 1)) {
+                        performWork(action, 1, true); // true - флаг автоматического выполнения
+                        performed++;
+                        playerData.automation.remaining--;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (performed > 0) {
+                    console.log(`Автоматически выполнено: ${actionNames[action]} x${performed}`);
+                    updateAutomationUI();
+                }
+
+                // Если достигли лимита, отключаем автоматизацию
+                if (playerData.automation.remaining <= 0) {
+                    showFeedback(`Автоматизация завершена: ${actionNames[action]} x${playerData.automation.count}`, 'success');
+                    cancelAutomation();
+                }
+                
+                savePlayerData();
+            }
+        }
+        
+        // Функция проверки возможности выполнения работы
+        function canPerformWork(action, count) {
+            const workDef = workDefinitions[action];
+            const totalEnergy = workDef.energy * count;
+
+            if (playerData.energy < totalEnergy) return false;
+
+            if (workDef.cost) {
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    if (playerData.resources[resource] < amount * count) return false;
+                }
+            }
+
+            return true;
+        }
+        
+        // Функция для установки автоматизации
+        function setAutomation(action, count) {
+            // Если уже есть активная автоматизация, спросим подтверждение
+            if (playerData.automation.active && playerData.automation.action !== action) {
+                if (!confirm(`У вас уже активна автоматизация для "${actionNames[playerData.automation.action]}". Заменить на "${actionNames[action]}"?`)) {
+                    return false;
+                }
+            }
+
+            playerData.automation = {
+                active: true,
+                action: action,
+                count: parseInt(count),
+                remaining: parseInt(count)
+            };
+
+            updateAutomationUI();
+            savePlayerData();
+            showFeedback(`Автоматизация установлена: ${actionNames[action]} x${count}`, 'success');
+            
+            // Сразу пытаемся выполнить работу, если есть энергия
+            performAutoWork();
+            
+            return true;
+        }
+
+        // Функция для отмены автоматизации
+        function cancelAutomation() {
+            playerData.automation = {
+                active: false,
+                action: null,
+                count: 1,
+                remaining: 0
+            };
+            
+            updateAutomationUI();
+            savePlayerData();
+        }
+
+        // Обновление интерфейса автоматизации
+        function updateAutomationUI() {
+            const indicator = document.getElementById('global-auto-indicator');
+            const currentActionSpan = document.getElementById('current-auto-action');
+
+            if (playerData.automation.active && playerData.automation.action) {
+                // Показываем глобальный индикатор
+                indicator.style.display = 'block';
+                currentActionSpan.textContent = `${actionNames[playerData.automation.action]} ${playerData.automation.remaining}/${playerData.automation.count}`;
+
+                // Обновляем все элементы автоматизации
+                document.querySelectorAll('.auto-production').forEach(autoProd => {
+                    const action = autoProd.closest('.action-controls').querySelector('.action-button').dataset.action;
+                    const checkbox = autoProd.querySelector('.auto-checkbox-input');
+                    const countInput = autoProd.querySelector('.auto-count');
+                    const setBtn = autoProd.querySelector('.auto-set-btn');
+
+                    if (action === playerData.automation.action) {
+                        // Активное действие
+                        autoProd.classList.add('auto-active');
+                        checkbox.checked = true;
+                        countInput.value = playerData.automation.count;
+                        setBtn.textContent = 'Отменить';
+                        setBtn.onclick = () => cancelAutomation();
+                    } else {
+                        // Неактивные действия
+                        autoProd.classList.remove('auto-active');
+                        autoProd.classList.add('auto-disabled');
+                        checkbox.checked = false;
+                        checkbox.disabled = true;
+                        countInput.disabled = true;
+                        setBtn.disabled = true;
+                    }
+                });
+            } else {
+                // Скрываем индикатор и активируем все элементы
+                indicator.style.display = 'none';
+                
+                document.querySelectorAll('.auto-production').forEach(autoProd => {
+                    autoProd.classList.remove('auto-active', 'auto-disabled');
+                    const checkbox = autoProd.querySelector('.auto-checkbox-input');
+                    const countInput = autoProd.querySelector('.auto-count');
+                    const setBtn = autoProd.querySelector('.auto-set-btn');
+                    
+                    checkbox.checked = false;
+                    checkbox.disabled = false;
+                    countInput.disabled = false;
+                    countInput.value = 1;
+                    setBtn.disabled = false;
+                    setBtn.textContent = 'Установить';
+                    setBtn.onclick = function() {
+                        const action = this.closest('.action-controls').querySelector('.action-button').dataset.action;
+                        const count = parseInt(this.closest('.auto-production').querySelector('.auto-count').value);
+                        setAutomation(action, count);
+                    };
+                });
+            }
         }
         
         // Обновление максимальных значений ползунков
@@ -1355,7 +1649,6 @@
                 const workDef = workDefinitions[action];
                 const maxFromEnergy = Math.floor(playerData.energy / workDef.energy);
                 
-                // Для действий, требующих ресурсы, вычисляем максимальное количество
                 let maxFromResources = Infinity;
                 if (workDef.cost) {
                     for (const [resource, amount] of Object.entries(workDef.cost)) {
@@ -1364,19 +1657,14 @@
                     }
                 }
                 
-                // Максимальное количество выполнений
-                const maxActions = Math.min(maxFromEnergy, maxFromResources, 50); // Ограничение сверху 50
-                
-                // Устанавливаем максимальное значение ползунка
+                const maxActions = Math.min(maxFromEnergy, maxFromResources, 50);
                 slider.max = Math.max(1, maxActions);
                 
-                // Если текущее значение больше нового максимума, устанавливаем его в максимум
                 if (parseInt(slider.value) > parseInt(slider.max)) {
                     slider.value = slider.max;
                     updateSliderDisplay(slider);
                 }
                 
-                // Обновляем отображение ползунка
                 updateSliderDisplay(slider);
             });
         }
@@ -1387,28 +1675,23 @@
             const count = parseInt(slider.value);
             const workDef = workDefinitions[action];
             
-            // Находим родительский контейнер
             const container = slider.closest('.action-controls');
             const countElement = container.querySelector('.action-count');
             const totalEnergyElement = container.querySelector('.total-energy');
             const totalRewardElement = container.querySelector('.total-reward');
             const totalCostRewardElement = container.querySelector('.total-cost-reward');
             
-            // Обновляем отображение количества
             countElement.textContent = `${count} раз`;
             
-            // Рассчитываем общие затраты и награду
             const totalEnergy = workDef.energy * count;
             totalEnergyElement.textContent = `Всего энергии: ${totalEnergy}`;
             
-            // Обновляем общую награду
             let rewardText = '';
             for (const [resource, amount] of Object.entries(workDef.reward)) {
                 rewardText += `Всего ${resourceNames[resource]}: ${amount * count}`;
             }
             totalRewardElement.textContent = rewardText;
             
-            // Обрабатываем ресурсные затраты
             let totalResourcesElement = container.querySelector('.total-resources');
             if (workDef.cost) {
                 let resourcesText = '';
@@ -1427,7 +1710,6 @@
                 }
             }
             
-            // Обновляем состояние кнопки
             const button = container.querySelector('.action-button');
             button.disabled = count === 0 || totalEnergy > playerData.energy;
         }
@@ -1437,19 +1719,19 @@
             const buttons = document.querySelectorAll('.action-button');
             
             buttons.forEach(button => {
+                if (button.classList.contains('auto-set-btn')) return;
+                
                 const action = button.dataset.action;
                 const workDef = workDefinitions[action];
                 const slider = document.querySelector(`.action-slider[data-action="${action}"]`);
                 const count = parseInt(slider.value);
                 const totalEnergy = workDef.energy * count;
                 
-                // Проверяем, хватает ли энергии
                 if (playerData.energy < totalEnergy) {
                     button.disabled = true;
                     return;
                 }
                 
-                // Проверяем, хватает ли ресурсов (если нужно)
                 if (workDef.cost) {
                     for (const [resource, amount] of Object.entries(workDef.cost)) {
                         if (playerData.resources[resource] < amount * count) {
@@ -1464,21 +1746,19 @@
         }
         
         // Выполнение работы
-        function performWork(action, count) {
+        function performWork(action, count, isAuto = false) {
             const workDef = workDefinitions[action];
             const totalEnergy = workDef.energy * count;
             
-            // Проверяем, хватает ли энергии
             if (playerData.energy < totalEnergy) {
-                alert('Недостаточно энергии!');
+                if (!isAuto) alert('Недостаточно энергии!');
                 return;
             }
             
-            // Проверяем, хватает ли ресурсов (если нужно)
             if (workDef.cost) {
                 for (const [resource, amount] of Object.entries(workDef.cost)) {
                     if (playerData.resources[resource] < amount * count) {
-                        alert(`Недостаточно ${resourceNames[resource]}!`);
+                        if (!isAuto) alert(`Недостаточно ${resourceNames[resource]}!`);
                         return;
                     }
                 }
@@ -1498,18 +1778,25 @@
                 playerData.resources[resource] += amount * count;
             }
             
-            // Сохраняем данные
-            savePlayerData();
+            if (!isAuto) {
+                // Если это ручное выполнение и есть активная автоматизация для этого действия, уменьшаем счетчик
+                if (playerData.automation.active && playerData.automation.action === action) {
+                    playerData.automation.remaining = Math.max(0, playerData.automation.remaining - count);
+                    if (playerData.automation.remaining <= 0) {
+                        showFeedback(`Автоматизация завершена: ${actionNames[action]} x${playerData.automation.count}`, 'success');
+                        cancelAutomation();
+                    } else {
+                        updateAutomationUI();
+                    }
+                }
+                
+                showFeedback(`Работа выполнена успешно ${count} раз!`, 'success');
+            }
             
-            // Обновляем отображение
+            savePlayerData();
             updateEnergy();
             updateStorageDisplay();
-            
-            // Синхронизируем изменения с MainGame
             syncEnergyWithMainGame();
-            
-            // Показываем сообщение об успехе
-            alert(`Работа выполнена успешно ${count} раз!`);
         }
         
         // Обновление отображения склада
@@ -1518,7 +1805,7 @@
             storageBody.innerHTML = '';
             
             for (const [resource, amount] of Object.entries(playerData.resources)) {
-                if (amount > 0) { // Показываем только те ресурсы, которые есть
+                if (amount > 0) {
                     const row = document.createElement('tr');
                     
                     row.innerHTML = `
@@ -1536,12 +1823,22 @@
             }
         }
         
+        // Функция показа уведомлений
+        function showFeedback(message, type = 'success') {
+            const feedback = document.createElement('div');
+            feedback.className = `feedback ${type}`;
+            feedback.textContent = message;
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.style.animation = 'slideDown 0.3s ease reverse';
+                setTimeout(() => feedback.remove(), 300);
+            }, 3000);
+        }
+
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            // Загрузка данных игрока
             loadPlayerData();
-            
-            // Синхронизация с MainGame при загрузке
             syncEnergyWithMainGame();
             
             // Настройка навигации по вкладкам
@@ -1549,33 +1846,55 @@
             
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
-                    // Убираем активный класс у всех вкладок
                     tabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Добавляем активный класс текущей вкладке
                     this.classList.add('active');
                     
-                    // Скрываем все вкладки контента
                     const tabContents = document.querySelectorAll('.tab-content');
                     tabContents.forEach(tab => tab.classList.remove('active'));
                     
-                    // Показываем нужную вкладку контента
                     const tabId = `${this.dataset.tab}-tab`;
                     document.getElementById(tabId).classList.add('active');
                     
-                    // Обновляем заголовок
                     document.getElementById('current-tab').textContent = tabNames[this.dataset.tab];
                 });
             });
             
+            // Добавляем элементы автоматизации в каждую action-controls
+            document.querySelectorAll('.action-controls').forEach(controls => {
+                const autoHtml = `
+                    <div class="auto-production">
+                        <label class="auto-checkbox">
+                            <input type="checkbox" class="auto-checkbox-input">
+                            Автоповтор
+                        </label>
+                        <input type="number" class="auto-count" min="1" max="50" value="1">
+                        <button class="auto-set-btn">Установить</button>
+                    </div>
+                `;
+                controls.querySelector('.action-button').insertAdjacentHTML('afterend', autoHtml);
+            });
+
+            // Обработчики для кнопок установки автоматизации
+            document.querySelectorAll('.auto-set-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const controls = this.closest('.action-controls');
+                    const action = controls.querySelector('.action-button').dataset.action;
+                    const count = parseInt(controls.querySelector('.auto-count').value);
+                    
+                    if (this.textContent === 'Установить') {
+                        setAutomation(action, count);
+                    } else {
+                        cancelAutomation();
+                    }
+                });
+            });
+
             // Настройка ползунков
             const sliders = document.querySelectorAll('.action-slider');
             
             sliders.forEach(slider => {
-                // Инициализация ползунка
                 updateSliderDisplay(slider);
                 
-                // Обработчик изменения ползунка
                 slider.addEventListener('input', function() {
                     updateSliderDisplay(this);
                 });
@@ -1585,6 +1904,8 @@
             const workButtons = document.querySelectorAll('.action-button');
             
             workButtons.forEach(button => {
+                if (button.classList.contains('auto-set-btn')) return;
+                
                 button.addEventListener('click', function() {
                     const action = this.dataset.action;
                     const slider = document.querySelector(`.action-slider[data-action="${action}"]`);
@@ -1597,23 +1918,22 @@
             // Обновляем энергию каждую минуту
             setInterval(updateEnergy, 60000);
             
+            // Запускаем проверку автоматизации каждые 10 секунд
+            setInterval(() => {
+                if (playerData.automation.active) {
+                    performAutoWork();
+                }
+            }, 10000);
+            
             // Синхронизируем с MainGame при возвращении на страницу
             window.addEventListener('focus', syncEnergyWithMainGame);
             
-            // Слушаем изменения в localStorage (для синхронизации между вкладками)
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'playerData') {
-                    // Если MainGame обновил данные, загружаем их
-                    loadPlayerData();
-                    updateEnergyDisplay();
-                }
-            });
+            // Сохраняем данные при выходе
+            window.addEventListener('beforeunload', savePlayerData);
             
             // Блокировка масштабирования
             document.addEventListener('wheel', function(e) {
-                if (e.ctrlKey) {
-                    e.preventDefault();
-                }
+                if (e.ctrlKey) e.preventDefault();
             }, { passive: false });
             
             document.addEventListener('keydown', function(e) {
@@ -1625,6 +1945,9 @@
             document.addEventListener('gesturestart', function(e) {
                 e.preventDefault();
             });
+
+            // Инициализация интерфейса автоматизации
+            updateAutomationUI();
         });
     </script>
 </body>
