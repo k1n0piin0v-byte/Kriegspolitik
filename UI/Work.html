@@ -218,13 +218,13 @@
         }
         
         .auto-btn {
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             background: #555;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             color: #fff;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
@@ -239,17 +239,17 @@
         }
         
         .work-button {
-            padding: 8px 16px;
+            padding: 6px 15px;
             background-color: #1a4c7a;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: background-color 0.2s;
             white-space: nowrap;
-            min-width: 85px;
-            height: 35px;
+            min-width: 80px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -350,21 +350,12 @@
             .content { padding: 8px; }
             .work-table { font-size: 0.7rem; }
             .work-table th, .work-table td { padding: 6px; }
-            .work-button { 
-                padding: 7px 14px; 
-                font-size: 0.75rem; 
-                min-width: 75px; 
-                height: 32px;
-            }
+            .work-button { padding: 5px 12px; font-size: 0.7rem; min-width: 70px; height: 28px; }
             .action-count { font-size: 0.7rem; min-width: 50px; }
             .item-icon { width: 36px; height: 36px; }
             .action-title { font-size: 0.8rem; }
             .action-desc { font-size: 0.7rem; }
-            .auto-btn { 
-                width: 32px; 
-                height: 32px; 
-                font-size: 0.75rem; 
-            }
+            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; }
         }
         
         @media (max-width: 768px) and (orientation: portrait) {
@@ -377,23 +368,14 @@
             .content { padding: 8px; }
             .work-table { font-size: 0.7rem; }
             .work-table th, .work-table td { padding: 6px; }
-            .work-button { 
-                padding: 8px 16px; 
-                font-size: 0.75rem; 
-                min-width: 80px; 
-                height: 35px;
-            }
+            .work-button { padding: 6px 14px; font-size: 0.7rem; min-width: 75px; height: 30px; }
             .action-count { font-size: 0.7rem; min-width: 50px; }
             .item-icon { width: 36px; height: 36px; }
             .action-title { font-size: 0.8rem; }
             .action-desc { font-size: 0.65rem; }
             .slider-container { gap: 8px; }
             .total-cost-reward { font-size: 0.65rem; }
-            .auto-btn { 
-                width: 35px; 
-                height: 35px; 
-                font-size: 0.75rem; 
-            }
+            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; }
         }
         
         @media (max-width: 480px) {
@@ -406,17 +388,8 @@
             .work-table th, .work-table td { padding: 4px; }
             .action-title { font-size: 0.75rem; }
             .action-desc { font-size: 0.6rem; }
-            .work-button { 
-                padding: 6px 12px; 
-                font-size: 0.7rem; 
-                min-width: 70px; 
-                height: 32px;
-            }
-            .auto-btn { 
-                width: 32px; 
-                height: 32px; 
-                font-size: 0.7rem; 
-            }
+            .work-button { padding: 4px 10px; font-size: 0.65rem; min-width: 65px; height: 26px; }
+            .auto-btn { width: 26px; height: 26px; font-size: 0.6rem; }
         }
         
         .content {
@@ -682,94 +655,12 @@
             if (playerData.energy < totalEnergy) return false;
             
             if (workDef.cost) {
-                for coffee: 'Кофе', tobacco: 'Табак'
-        };
-
-        function toggleAutoWork(action) {
-            if (playerData.autoWork === action) {
-                playerData.autoWork = null;
-                showFeedback("Авто-работа отключена");
-            } else {
-                if (playerData.autoWork) {
-                    if (!confirm("Заменить текущую авто-работу?")) return;
-                }
-                playerData.autoWork = action;
-                showFeedback("Авто-работа включена: " + getActionName(action));
-            }
-            updateAutoButtons();
-            savePlayerData();
-        }
-
-        function updateAutoButtons() {
-            document.querySelectorAll('.auto-btn').forEach(btn => {
-                const action = btn.dataset.action;
-                if (playerData.autoWork === action) {
-                    btn.classList.add('active');
-                    btn.title = "Авто-работа активна";
-                } else {
-                    btn.classList.remove('active');
-                    btn.title = "Включить авто-работу";
-                }
-            });
-        }
-
-        function getActionName(action) {
-            const actionNames = {
-                'mine_coal': 'Добыча угля (const [resource, amount] of Object.entries(workDef.cost)) {
-                    if (playerData.resources[resource] < amount * count) return',
-                'mine_iron': 'Добыча железа',
-                'mine_bauxite': 'Добыча боксита',
-                'oil_drill': 'Добыча нефти',
-                'farm_cocoa': 'Выращивание какао',
-                'farm_spices': 'Выращивание специй',
-                'farm_hemp': 'Выращивание конопли',
-                'farm_dye': 'Производство красителя',
-                'produce_paper': 'Производство бумаги',
-                'produce_fabric': 'Производство ткани',
-                'produce_glass': 'Производство стекла',
-                'produce_plastic': 'Производство пластика',
-                'produce_coffee': 'Производство кофе',
-                'produce_tobacco': 'Производство табака',
-                'produce_uniform': 'Военная униформа',
-                'produce_ammo': 'Боеприпасы',
-                'produce_rifles': 'Автоматы',
-                'produce_tanks': 'Танки',
-                'produce_apc': 'Бронетранспортеры'
-            };
-            return actionNames[action] || action;
-        }
-
-        function performAutoWork() {
-            if (!playerData.autoWork) return;
-            
-            const workDef = workDefinitions[playerData.autoWork];
-            if (playerData.energy >= workDef.energy) {
-                if (canPerformWork(playerData.autoWork, 1)) {
-                    performWork(playerData.autoWork, 1, true);
-                }
-            }
-        }
-
-        function canPerformWork(action, count) {
-            const workDef = workDefinitions[action];
-            const totalEnergy = workDef.energy * count;
-            
-            if (playerData.energy < totalEnergy) return false;
-            
-            if (workDef.cost) {
                 for (const [resource, amount] of Object.entries(workDef.cost)) {
                     if (playerData.resources[resource] < amount * count) return false;
                 }
             }
- false;
-                }
-            }
             
-            return            
             return true;
-        }
-
-        function performWork true;
         }
 
         function performWork(action, count, isAuto = false) {
@@ -777,82 +668,38 @@
             const totalEnergy = workDef.energy * count;
             
             if (playerData.energy < totalEnergy) {
-                if (!is(action, count, isAuto = false) {
-            const workDef = workDefinitions[action];
-            const totalEnergy = workDef.energy * count;
-            
-            if (playerData.energy < totalEnergy) {
-                if (!isAutoAuto) alert('Недостаточно энергии!');
-                return;
-) alert('Недостаточно энергии!');
+                if (!isAuto) alert('Недостаточно энергии!');
                 return;
             }
             
-            if (workDef.cost            }
-            
             if (workDef.cost) {
-                for) {
-                for (const [resource, amount] of Object. (const [resource, amount] of Object.entries(workDef.cost)) {
-entries(workDef.cost)) {
-                    if                    if (playerData.resources[resource] < amount * count) {
-                        if (! (playerData.resources[resource] < amount * count) {
-                        if (!isisAuto) alert(`Недостаточно ${resourceAuto) alert(`Недостаточно ${resourceNames[resource]}!`);
-                        return;
-                   Names[resource]}!`);
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    if (playerData.resources[resource] < amount * count) {
+                        if (!isAuto) alert(`Недостаточно ${resourceNames[resource]}!`);
                         return;
                     }
                 }
             }
             
-            playerData. }
-                }
-            }
-            
-            playerData.energy -=energy -= totalEnergy;
-            
-            if (workDef.cost) totalEnergy;
+            playerData.energy -= totalEnergy;
             
             if (workDef.cost) {
-                for (const [resource, amount] {
-                of Object.entries(workDef.c for (const [resource, amount] of Object.entries(workDef.cost)) {
-                    playerData.resourcesost)) {
-                    playerData.resources[resource] -= amount *[resource] -= amount * count;
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    playerData.resources[resource] -= amount * count;
                 }
             }
             
-            for (const count;
-                }
-            }
-            
-            for (const [resource, amount] of Object.entries(workDef.re [resource, amount] of Object.entries(workDef.reward))ward)) {
-                playerData.resources[resource] += amount * count {
+            for (const [resource, amount] of Object.entries(workDef.reward)) {
                 playerData.resources[resource] += amount * count;
-            }
-            
-            savePlayerData();
-            updateEnergyDisplay;
             }
             
             savePlayerData();
             updateEnergyDisplay();
             updateStorageDisplay();
             updateSlidersMax();
-();
-            updateStorageDisplay();
-            updateSlidersMax();
             
             if (!isAuto) {
-                showFeedback(`            
-            if (!isAuto) {
-                showFeedback(`Работа выполненаРабота выполнена ${count} ${count} раз!`);
-            }
-        }
-
-        function showFeedback(message) {
-            alert(message);
-        }
-
-        раз!`);
+                showFeedback(`Работа выполнена ${count} раз!`);
             }
         }
 
@@ -861,164 +708,83 @@ entries(workDef.cost)) {
         }
 
         function updateEnergyDisplay() {
-            document function updateEnergyDisplay() {
             document.getElementById('energy-value').textContent = 
-                `${player.getElementById('energy-value').textContent = 
-               Data.energy}/${playerData.maxEnergy}`;
+                `${playerData.energy}/${playerData.maxEnergy}`;
         }
 
-        function `${playerData.energy}/${playerData.maxEnergy}`;
-        }
-
-        function updateStorage updateStorageDisplay()Display() {
-            const storageBody = document.getElementById {
+        function updateStorageDisplay() {
             const storageBody = document.getElementById('storage-body');
             storageBody.innerHTML = '';
             
-('storage-body');
-            storageBody.innerHTML = '';
-            
-            for (const [resource,            for (const [resource, amount] of Object.entries(playerData.resources)) amount] of Object.entries(playerData.resources)) {
-                if (amount > 0) {
-                    const row {
+            for (const [resource, amount] of Object.entries(playerData.resources)) {
                 if (amount > 0) {
                     const row = document.createElement('tr');
- = document.createElement('tr');
                     
-                    row.innerHTML = `
-                                           
                     row.innerHTML = `
                         <td>
                             <div class="item-cell">
-                                < <td>
-                            <div class="item-cell">
-                                <img src="../Img/Resources/${resource}.png" altimg src="../Img/Resources/${resource}.png" alt="${resource="${resourceNames[resource]}" class="Names[resource]}" class="itemitem-icon">
-                                <span class="item-icon">
-                                <span class="item-name">-name">${resourceNames[resource]}</span>
-                            </div${resourceNames[resource]}</span>
+                                <img src="../Img/Resources/${resource}.png" alt="${resourceNames[resource]}" class="item-icon">
+                                <span class="item-name">${resourceNames[resource]}</span>
                             </div>
-                       >
                         </td>
-                        <td class="item-count">${amount </td>
                         <td class="item-count">${amount}</td>
                     `;
                     
                     storageBody.appendChild(row);
                 }
             }
-}</td>
-                    `;
-                    
-                    storageBody.appendChild(row);
-                }
-            }
         }
 
         function updateSlidersMax() {
-        }
-
-        function updateSlidersMax() {
-            const sliders = document.querySelectorAll('.action-slider');
-            
             const sliders = document.querySelectorAll('.action-slider');
             
             sliders.forEach(slider => {
-                const action = slider            sliders.forEach(slider => {
                 const action = slider.dataset.action;
-                const workDef = work.dataset.action;
                 const workDef = workDefinitions[action];
-                const maxFromEnergy =Definitions[action];
                 const maxFromEnergy = Math.floor(playerData.energy / workDef.energy);
                 
-                Math.floor(playerData.energy / workDef.energy);
-                
                 let maxFromResources = Infinity;
- let maxFromResources = Infinity;
-                if (workDef.cost                if (workDef.cost) {
-                    for (const [resource) {
-                    for (const [resource, amount] of Object.entries, amount] of Object.entries(workDef.cost)) {
-                        const resourceMax = Math.floor(playerData.resources(workDef.cost)) {
+                if (workDef.cost) {
+                    for (const [resource, amount] of Object.entries(workDef.cost)) {
                         const resourceMax = Math.floor(playerData.resources[resource] / amount);
-[resource] / amount);
-                        maxFromResources = Math.min(maxFromResources,                        maxFromResources = Math.min(maxFrom resourceMax);
+                        maxFromResources = Math.min(maxFromResources, resourceMax);
                     }
                 }
                 
-                constResources, resourceMax);
-                    }
-                }
+                const maxActions = Math.min(maxFromEnergy, maxFromResources, 50);
+                slider.max = Math.max(1, maxActions);
                 
-                const maxActions = Math.min(maxFromEnergy, maxFromResources maxActions = Math.min(maxFromEnergy, maxFromResources, 50);
-                slider.max = Math.max(, 50);
-                slider.max = Math.max(1,1, maxActions);
-                
-                if ( maxActions);
-                
-                if (parseInt(slider.value) > parseInt(slparseInt(slider.value) > parseInt(slider.max)) {
-                    slider.value = slider.max;
-                    updateider.max)) {
+                if (parseInt(slider.value) > parseInt(slider.max)) {
                     slider.value = slider.max;
                     updateSliderDisplay(slider);
-                }
-           SliderDisplay(slider);
                 }
             });
         }
 
         function updateSliderDisplay(slider) {
-            const action });
-        }
-
-        function updateSliderDisplay(slider) {
-            const action = slider = slider.dataset.action;
-            const count = parseInt(slider.dataset.action;
+            const action = slider.dataset.action;
             const count = parseInt(slider.value);
-            const workDef =.value);
             const workDef = workDefinitions[action];
             
-            const container = slider.closest workDefinitions[action];
-            
             const container = slider.closest('.action-controls');
-            const countElement =('.action-controls');
             const countElement = container.querySelector('.action-count');
-            
-            countElement.textContent = `${ container.querySelector('.action-count');
             
             countElement.textContent = `${count} раз`;
         }
 
-        function savePlayercount} раз`;
-        }
-
         function savePlayerData() {
-            localStorage.setData() {
             localStorage.setItem('playerWorkData', JSON.stringify(playerData));
         }
 
-       Item('playerWorkData', JSON.stringify(playerData));
-        }
-
         function loadPlayerData() {
-            const saved = localStorage function loadPlayerData() {
             const saved = localStorage.getItem('playerWorkData');
-           .getItem('playerWorkData');
-            if ( if (saved) {
-                const data = JSON.parsesaved) {
+            if (saved) {
                 const data = JSON.parse(saved);
                 playerData.energy = data.energy;
-                player(saved);
-                playerData.energy = data.energy;
                 playerData.maxEnergy = data.maxEnergy;
-               Data.maxEnergy = data.maxEnergy;
                 playerData.lastEnergyUpdate = data.lastEnergyUpdate;
-                playerData.res playerData.lastEnergyUpdate = data.lastEnergyUpdate;
                 playerData.resources = data.resources;
-                playerData.ources = data.resources;
-                playerData.autoWork = dataautoWork = data.autoWork;
-                
-                updateEnergyDisplay();
-                updateAutoButtons();
-                updateStorage.autoWork;
+                playerData.autoWork = data.autoWork;
                 
                 updateEnergyDisplay();
                 updateAutoButtons();
@@ -1027,111 +793,54 @@ entries(workDef.cost)) {
             }
         }
 
-        document.addEventListener('DOMContentLoaded',Display();
-                updateSlidersMax();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             loadPlayerData();
             
-            function() {
-            loadPlayerData();
-            
-            document.querySelectorAll('. document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click',tab').forEach(tab => {
-                tab function() {
-                    document.addEventListener('click', function() {
-                    document.querySelectorAll('.tab').forEach(t =>.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active t.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(t =>');
                     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                    document.getElementById(`${this.dat t.classList.remove('active'));
-                    document.getElementById(`${this.dataset.taset.tab}-tab`).classList.add('active');
-                    document.getElementById('current-tab}-tab`).classList.add('active');
-                    document.getElementById('current-tab').textContent = tabNames[this.dataset.tabab').textContent = tabNames[this.dataset.tab];
-               ];
+                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                    document.getElementById('current-tab').textContent = tabNames[this.dataset.tab];
                 });
             });
 
             document.querySelectorAll('.auto-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    });
-            });
-
-            document.querySelectorAll('.auto-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    toggleAuto toggleAutoWork(this.dataset.action);
-Work(this.dataset.action);
+                    toggleAutoWork(this.dataset.action);
                 });
             });
 
-            document.querySelectorAll('.work-button').                });
-            });
-
-            document.querySelectorAll('.work-button').forEach(btn =>forEach(btn => {
+            document.querySelectorAll('.work-button').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const action = this.dataset.action;
-                    {
-                btn.addEventListener('click', function() {
-                    const action = this.dataset.action;
-                    const slider = document.querySelector(`.action-slider[data const slider = document.querySelector(`.action-slider[data-action="${action}-action="${action}"]`);
-                    const count = parseInt(slider.value);
-                    performWork(action, count);
-               "]`);
+                    const slider = document.querySelector(`.action-slider[data-action="${action}"]`);
                     const count = parseInt(slider.value);
                     performWork(action, count);
                 });
             });
 
-            document.querySelectorAll });
-            });
-
-            document.querySelectorAll('.action-slider').forEach('.action-slider').forEach(slider => {
-                slider.addEventListener(slider => {
-                slider.addEventListener('input('input', function() {
-                    updateSliderDisplay(this);
-                });
-           ', function() {
+            document.querySelectorAll('.action-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
                     updateSliderDisplay(this);
                 });
             });
-
-            setInterval(performAutoWork, });
 
             setInterval(performAutoWork, 3000);
             
-            3000);
-            
             setInterval(() => {
                 const now = Date.now();
-                const timeDiff setInterval(() => {
-                const now = Date.now();
-                const timeDiff = now - playerData.last = now - playerData.lastEnergyUpdate;
-                const energyGain = Math.floor(timeEnergyUpdate;
-                const energyGain = Math.floor(timeDiff / (2.5 * 60 *Diff / (2.5 * 60 * 1000)) * 10;
-                
-                if (energyGain >  1000)) * 10;
+                const timeDiff = now - playerData.lastEnergyUpdate;
+                const energyGain = Math.floor(timeDiff / (2.5 * 60 * 1000)) * 10;
                 
                 if (energyGain > 0) {
-                    playerData.energy = Math.min(player0) {
-                    playerData.energy = Math.min(playerData.maxData.maxEnergy, playerData.energy + energyGain);
-                    playerData.lastEnergyUpdate = now - (timeEnergy, playerData.energy + energyGain);
-                    playerData.lastEnergyUpdate = now - (timeDiff % (2.5 * 60Diff % (2.5 * 60 * 1000));
-                    updateEnergyDisplay();
-                    savePlayerData * 1000));
+                    playerData.energy = Math.min(playerData.maxEnergy, playerData.energy + energyGain);
+                    playerData.lastEnergyUpdate = now - (timeDiff % (2.5 * 60 * 1000));
                     updateEnergyDisplay();
                     savePlayerData();
                 }
-            }, ();
-                }
             }, 10000);
-10000);
-        });
-    </script>
-</body>
-</html>
         });
     </script>
 </body>
