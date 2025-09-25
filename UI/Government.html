@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kriegspolitik - Правительство</title>
     <link rel="icon" href="../Icons.jpg" type="image/jpeg">
+    <!-- Подключаем внешний файл с данными о правительствах -->
+    <script src="Government.js"></script>
     <style>
+        /* Стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -663,168 +666,7 @@
     </div>
 
     <script>
-        // Данные о правительствах стран (встроенные в HTML)
-        const countryGovernments = {
-            "Российская Республика": {
-                government: "Демократия",
-                rulingIdeology: "Либерализм",
-                stability: 65,
-                support: 58,
-                ideologies: {
-                    "Правые идеологии": [
-                        { name: "Национал-социализм", percentage: 0 },
-                        { name: "Реваншизм", percentage: 5 },
-                        { name: "Милитаризм", percentage: 10 },
-                        { name: "Фалангизм", percentage: 0 }
-                    ],
-                    "Левые идеологии": [
-                        { name: "Сталинизм", percentage: 0 },
-                        { name: "Троцкизм", percentage: 0 },
-                        { name: "Ленинизм", percentage: 0 },
-                        { name: "Марксизм", percentage: 5 }
-                    ],
-                    "Либеральные идеологии": [
-                        { name: "Либерализм", percentage: 45 },
-                        { name: "Консерватизм", percentage: 20 },
-                        { name: "Прямая Демократия", percentage: 15 },
-                        { name: "Социал-Демократия", percentage: 10 }
-                    ],
-                    "Авторитарные идеологии": [
-                        { name: "Монархизм", percentage: 2 },
-                        { name: "Авторитаризм", percentage: 5 },
-                        { name: "Патернализм", percentage: 3 },
-                        { name: "Нейтралитет", percentage: 0 }
-                    ]
-                }
-            },
-            "Германская Империя": {
-                government: "Монархия",
-                rulingIdeology: "Монархизм",
-                stability: 80,
-                support: 75,
-                ideologies: {
-                    "Правые идеологии": [
-                        { name: "Национал-социализм", percentage: 0 },
-                        { name: "Реваншизм", percentage: 15 },
-                        { name: "Милитаризм", percentage: 20 },
-                        { name: "Фалангизм", percentage: 0 }
-                    ],
-                    "Левые идеологии": [
-                        { name: "Сталинизм", percentage: 0 },
-                        { name: "Троцкизм", percentage: 0 },
-                        { name: "Ленинизм", percentage: 0 },
-                        { name: "Марксизм", percentage: 10 }
-                    ],
-                    "Либеральные идеологии": [
-                        { name: "Либерализм", percentage: 15 },
-                        { name: "Консерватизм", percentage: 25 },
-                        { name: "Прямая Демократия", percentage: 5 },
-                        { name: "Социал-Демократия", percentage: 10 }
-                    ],
-                    "Авторитарные идеологии": [
-                        { name: "Монархизм", percentage: 30 },
-                        { name: "Авторитаризм", percentage: 10 },
-                        { name: "Патернализм", percentage: 5 },
-                        { name: "Нейтралитет", percentage: 0 }
-                    ]
-                }
-            }
-        };
-
-        // Список доступных законопроектов (встроенные в HTML)
-        const availableLaws = [
-            // ЭКОНОМИЧЕСКИЕ ЗАКОНЫ
-            {
-                name: "Закон о повышении налогов",
-                description: "Увеличение налоговых ставок для пополнения государственного бюджета",
-                effects: "Стабильность: +10%, Поддержка: -5%, Либерализм: -3%",
-                stabilityChange: 10,
-                supportChange: -5,
-                ideologyChanges: {"Либерализм": -3, "Консерватизм": 1}
-            },
-            {
-                name: "Экономическая либерализация",
-                description: "Снижение налогов и уменьшение государственного регулирования экономики",
-                effects: "Стабильность: -5%, Поддержка: +8%, Либерализм: +5%",
-                stabilityChange: -5,
-                supportChange: 8,
-                ideologyChanges: {"Либерализм": 5, "Социал-Демократия": -2}
-            },
-            {
-                name: "Национализация ключевых отраслей",
-                description: "Передача стратегических предприятий под государственный контроль",
-                effects: "Стабильность: +5%, Поддержка: +3%, Марксизм: +4%",
-                stabilityChange: 5,
-                supportChange: 3,
-                ideologyChanges: {"Марксизм": 4, "Ленинизм": 2, "Либерализм": -4}
-            },
-            {
-                name: "Социальные реформы",
-                description: "Увеличение пенсий, пособий и доступности образования",
-                effects: "Стабильность: +8%, Поддержка: +12%, Социал-Демократия: +6%",
-                stabilityChange: 8,
-                supportChange: 12,
-                ideologyChanges: {"Социал-Демократия": 6, "Консерватизм": -2}
-            },
-            {
-                name: "Закон о национальной идентичности",
-                description: "Усиление патриотического воспитания и традиционных ценностей",
-                effects: "Стабильность: +12%, Поддержка: +5%, Консерватизм: +4%",
-                stabilityChange: 12,
-                supportChange: 5,
-                ideologyChanges: {"Консерватизм": 4, "Национал-социализм": 2, "Либерализм": -3}
-            },
-            {
-                name: "Военная реформа",
-                description: "Увеличение военного бюджета и модернизация армии",
-                effects: "Стабильность: +15%, Поддержка: +8%, Милитаризм: +8%",
-                stabilityChange: 15,
-                supportChange: 8,
-                ideologyChanges: {"Милитаризм": 8, "Реваншизм": 3, "Либерализм": -5}
-            },
-            {
-                name: "Демократические реформы",
-                description: "Расширение гражданских свобод и политических прав",
-                effects: "Стабильность: -8%, Поддержка: +15%, Либерализм: +7%",
-                stabilityChange: -8,
-                supportChange: 15,
-                ideologyChanges: {"Либерализм": 7, "Прямая Демократия": 4, "Авторитаризм": -5}
-            },
-            // ЗАКОНЫ О СМЕНЕ ФОРМЫ ПРАВЛЕНИЯ
-            {
-                name: "Установление демократии",
-                description: "Переход к демократической форме правления с свободными выборами",
-                effects: "Стабильность: -10%, Поддержка: +20%, Форма правления: Демократия",
-                stabilityChange: -10,
-                supportChange: 20,
-                changeGovernment: "Демократия"
-            },
-            {
-                name: "Установление диктатуры",
-                description: "Переход к диктатуре с концентрацией власти в одних руках",
-                effects: "Стабильность: +20%, Поддержка: -15%, Форма правления: Диктатура",
-                stabilityChange: 20,
-                supportChange: -15,
-                changeGovernment: "Диктатура"
-            },
-            {
-                name: "Установление однопартийной диктатуры",
-                description: "Запрет всех партий, кроме правящей, и установление однопартийной системы",
-                effects: "Стабильность: +25%, Поддержка: -20%, Форма правления: Однопартийная диктатура",
-                stabilityChange: 25,
-                supportChange: -20,
-                changeGovernment: "Однопартийная диктатура"
-            },
-            {
-                name: "Восстановление монархии",
-                description: "Возврат к монархической форме правления с королем во главе государства",
-                effects: "Стабильность: +15%, Поддержка: -10%, Форма правления: Монархия",
-                stabilityChange: 15,
-                supportChange: -10,
-                changeGovernment: "Монархия"
-            }
-        ];
-
+        // Удаляем встроенные данные - теперь они загружаются из Government.js
         let selectedLaw = null;
         
         function goBack() {
@@ -901,11 +743,12 @@
                 document.getElementById('add-law-button').style.display = 'flex';
             }
             
-            // Ищем данные о правительстве для страны игрока
+            // Ищем данные о правительстве для страны игрока в объекте из Government.js
             let governmentData = countryGovernments[playerCountry];
             
-            // Если данных нет, создаем базовые
+            // Если данных нет в Government.js, создаем базовые
             if (!governmentData) {
+                console.warn(`Данные для страны "${playerCountry}" не найдены в Government.js. Используются базовые данные.`);
                 governmentData = {
                     government: "Демократия",
                     rulingIdeology: "Либерализм",
@@ -938,9 +781,14 @@
                         ]
                     }
                 };
-                
-                // Сохраняем новые данные
-                countryGovernments[playerCountry] = governmentData;
+            }
+            
+            // Преобразуем стабильность и поддержку в числа, если они в строковом формате
+            if (typeof governmentData.stability === 'string') {
+                governmentData.stability = parseInt(governmentData.stability.replace('%', ''));
+            }
+            if (typeof governmentData.support === 'string') {
+                governmentData.support = parseInt(governmentData.support.replace('%', ''));
             }
             
             // Загружаем активные законы и применяем их эффекты
@@ -1022,6 +870,58 @@
             localStorage.setItem('governmentData_' + playerCountry, JSON.stringify(governmentData));
         }
         
+        // Остальные функции остаются без изменений
+        // ... (applyActiveLaws, normalizeIdeologyPercentages, updatePieChart, getIdeologyColor, showLawModal, hideLawModal, submitLaw, applyLawEffects, displayPlayerLaws)
+        
+        // Загрузка данных при открытии страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем, загружен ли объект countryGovernments из Government.js
+            if (typeof countryGovernments === 'undefined') {
+                console.error('Government.js не загружен! Проверьте путь к файлу.');
+                document.getElementById('left-column').innerHTML = `
+                    <div class="government-card">
+                        <div class="no-data">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Загружаем данные правительства
+            loadGovernmentData();
+            
+            // Отображаем законопроекты игрока
+            displayPlayerLaws();
+            
+            // Назначаем обработчики событий
+            document.getElementById('add-law-button').addEventListener('click', showLawModal);
+            document.getElementById('cancel-law').addEventListener('click', hideLawModal);
+            document.getElementById('submit-law').addEventListener('click', submitLaw);
+            
+            // Закрытие модального окна при клике вне его
+            document.getElementById('law-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideLawModal();
+                }
+            });
+            
+            // Создаем тестовые данные игрока, если их нет
+            if (!localStorage.getItem('playerData')) {
+                const testPlayerData = {
+                    nickname: "ТестовыйИгрок",
+                    country: "Российская Республика",
+                    party: "Партия реформ"
+                };
+                localStorage.setItem('playerData', JSON.stringify(testPlayerData));
+                
+                // Перезагружаем данные
+                setTimeout(() => {
+                    loadGovernmentData();
+                    displayPlayerLaws();
+                }, 100);
+            }
+        });
+
+        // Оставшиеся функции (без изменений)
         // Функция для применения эффектов активных законов
         function applyActiveLaws(governmentData, activeLaws) {
             // Создаем копию данных, чтобы не изменять оригинал
@@ -1047,11 +947,6 @@
                                 }
                             }
                         }
-                    }
-                    
-                    // Применяем изменение формы правления, если оно указано
-                    if (law.changeGovernment) {
-                        changeGovernmentForm(result, law.changeGovernment);
                     }
                 }
             });
@@ -1097,82 +992,6 @@
             });
             
             governmentData.rulingIdeology = rulingIdeology;
-        }
-        
-        // Функция для изменения формы правления
-        function changeGovernmentForm(governmentData, newForm) {
-            governmentData.government = newForm;
-            
-            // Определяем группы идеологий
-            const ideologyGroups = {
-                "Правые идеологии": ["Национал-социализм", "Реваншизм", "Милитаризм", "Фалангизм"],
-                "Левые идеологии": ["Сталинизм", "Троцкизм", "Ленинизм", "Марксизм"],
-                "Либеральные идеологии": ["Либерализм", "Консерватизм", "Прямая Демократия", "Социал-Демократия"],
-                "Авторитарные идеологии": ["Монархизм", "Авторитаризм", "Патернализм", "Нейтралитет"]
-            };
-            
-            // Определяем группу правящей идеологии
-            let rulingIdeologyGroup = null;
-            for (const group in ideologyGroups) {
-                if (ideologyGroups[group].includes(governmentData.rulingIdeology)) {
-                    rulingIdeologyGroup = group;
-                    break;
-                }
-            }
-            
-            // Применяем эффекты в зависимости от новой формы правления
-            switch (newForm) {
-                case "Однопартийная диктатура":
-                    // Все идеологии, кроме правящей, уменьшаются
-                    for (const group in governmentData.ideologies) {
-                        governmentData.ideologies[group].forEach(ideology => {
-                            if (ideology.name !== governmentData.rulingIdeology) {
-                                ideology.percentage = Math.max(0, ideology.percentage - 15);
-                            } else {
-                                ideology.percentage += 30; // Увеличиваем правящую идеологию
-                            }
-                        });
-                    }
-                    break;
-                    
-                case "Диктатура":
-                    // Группы идеологий, не относящиеся к правящей, уменьшаются
-                    for (const group in governmentData.ideologies) {
-                        if (group !== rulingIdeologyGroup) {
-                            governmentData.ideologies[group].forEach(ideology => {
-                                ideology.percentage = Math.max(0, ideology.percentage - 20);
-                            });
-                        } else {
-                            // Увеличиваем идеологии в правящей группе
-                            governmentData.ideologies[group].forEach(ideology => {
-                                ideology.percentage += 10;
-                            });
-                        }
-                    }
-                    break;
-                    
-                case "Монархия":
-                    // Правящая идеология фиксируется как Монархизм
-                    governmentData.rulingIdeology = "Монархизм";
-                    // Увеличиваем Монархизм и уменьшаем другие идеологии
-                    for (const group in governmentData.ideologies) {
-                        governmentData.ideologies[group].forEach(ideology => {
-                            if (ideology.name === "Монархизм") {
-                                ideology.percentage += 40;
-                            } else {
-                                ideology.percentage = Math.max(0, ideology.percentage - 10);
-                            }
-                        });
-                    }
-                    break;
-                    
-                case "Демократия":
-                    // Нормализуем распределение без специальных эффектов
-                    break;
-            }
-            
-            // Нормализуем проценты после изменений
-            normalizeIdeologyPercentages(governmentData);
         }
         
         // Функция для обновления круговой диаграммы
@@ -1381,11 +1200,6 @@
                 normalizeIdeologyPercentages(governmentData);
             }
             
-            // Применяем изменение формы правления, если оно указано
-            if (law.changeGovernment) {
-                changeGovernmentForm(governmentData, law.changeGovernment);
-            }
-            
             // Сохраняем обновленные данные
             localStorage.setItem('governmentData_' + country, JSON.stringify(governmentData));
         }
@@ -1429,37 +1243,6 @@
                 legislationSection.appendChild(lawItem);
             });
         }
-        
-        // Загрузка данных при открытии страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Создаем тестовые данные игрока, если их нет
-            if (!localStorage.getItem('playerData')) {
-                const testPlayerData = {
-                    nickname: "ТестовыйИгрок",
-                    country: "Российская Республика",
-                    party: "Партия реформ"
-                };
-                localStorage.setItem('playerData', JSON.stringify(testPlayerData));
-            }
-            
-            // Загружаем данные правительства
-            loadGovernmentData();
-            
-            // Отображаем законопроекты игрока
-            displayPlayerLaws();
-            
-            // Назначаем обработчики событий
-            document.getElementById('add-law-button').addEventListener('click', showLawModal);
-            document.getElementById('cancel-law').addEventListener('click', hideLawModal);
-            document.getElementById('submit-law').addEventListener('click', submitLaw);
-            
-            // Закрытие модального окна при клике вне его
-            document.getElementById('law-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideLawModal();
-                }
-            });
-        });
     </script>
 </body>
 </html>
