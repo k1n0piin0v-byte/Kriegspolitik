@@ -182,6 +182,14 @@
             font-weight: bold;
         }
         
+        .reputation-positive {
+            color: #4CAF50;
+        }
+        
+        .reputation-negative {
+            color: #f44336;
+        }
+        
         .reputation-neutral {
             color: #ccc;
         }
@@ -653,10 +661,38 @@
                 document.getElementById('info-party').textContent = playerData.party;
                 document.getElementById('info-army').textContent = playerData.army;
                 
+                // Обновляем должность в зависимости от партии
+                if (playerData.party && playerData.party !== 'Не состоит') {
+                    document.getElementById('info-position').textContent = `Депутат ${playerData.party}`;
+                } else {
+                    document.getElementById('info-position').textContent = 'Гражданин';
+                }
+                
+                // Загружаем репутацию
+                const reputation = localStorage.getItem('playerReputation') || 0;
+                document.getElementById('profile-reputation').textContent = reputation;
+                
+                // Обновляем цвет репутации
+                updateReputationColor(reputation);
+                
                 return true;
             }
             
             return false;
+        }
+        
+        // Функция для обновления цвета репутации
+        function updateReputationColor(reputation) {
+            const repElement = document.getElementById('profile-reputation');
+            repElement.classList.remove('reputation-positive', 'reputation-negative', 'reputation-neutral');
+            
+            if (reputation > 0) {
+                repElement.classList.add('reputation-positive');
+            } else if (reputation < 0) {
+                repElement.classList.add('reputation-negative');
+            } else {
+                repElement.classList.add('reputation-neutral');
+            }
         }
         
         // Функция для сохранения даты последнего входа
@@ -686,6 +722,9 @@
             localStorage.removeItem('playerWorkData');
             localStorage.removeItem('lastLogin');
             localStorage.removeItem('regDate');
+            localStorage.removeItem('playerReputation');
+            localStorage.removeItem('lastRallyTime');
+            localStorage.removeItem('activeLaws');
             
             // Устанавливаем значения по умолчанию
             const defaultData = {
@@ -696,10 +735,12 @@
                 country: 'Российская Республика',
                 region: 'Москва',
                 party: 'Не состоит',
-                army: 'Не служит'
+                army: 'Не служит',
+                position: 'Гражданин'
             };
             
             localStorage.setItem('playerData', JSON.stringify(defaultData));
+            localStorage.setItem('playerReputation', '0');
             
             // Устанавливаем дату регистрации заново
             const now = new Date();
@@ -722,6 +763,35 @@
             });
         }
         
+        // Функция для обновления данных профиля при изменении в других вкладках
+        function updateProfileFromStorage() {
+            const savedData = localStorage.getItem('playerData');
+            
+            if (savedData) {
+                const playerData = JSON.parse(savedData);
+                
+                document.getElementById('profile-nickname').textContent = playerData.nickname;
+                document.getElementById('profile-money').textContent = playerData.money;
+                document.getElementById('profile-gold').textContent = playerData.gold;
+                document.getElementById('info-country').textContent = playerData.country;
+                document.getElementById('info-region').textContent = playerData.region;
+                document.getElementById('info-party').textContent = playerData.party;
+                document.getElementById('info-army').textContent = playerData.army;
+                
+                // Обновляем должность в зависимости от партии
+                if (playerData.party && playerData.party !== 'Не состоит') {
+                    document.getElementById('info-position').textContent = `Депутат ${playerData.party}`;
+                } else {
+                    document.getElementById('info-position').textContent = 'Гражданин';
+                }
+                
+                // Загружаем репутацию
+                const reputation = localStorage.getItem('playerReputation') || 0;
+                document.getElementById('profile-reputation').textContent = reputation;
+                updateReputationColor(reputation);
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Загружаем данные игрока
             const hasSavedData = loadPlayerData();
@@ -735,6 +805,12 @@
                 document.getElementById('info-region').textContent = 'Москва';
                 document.getElementById('info-party').textContent = 'Не состоит';
                 document.getElementById('info-army').textContent = 'Не служит';
+                document.getElementById('info-position').textContent = 'Гражданин';
+                document.getElementById('profile-reputation').textContent = '0';
+                updateReputationColor(0);
+                
+                // Сохраняем данные по умолчанию
+                localStorage.setItem('playerReputation', '0');
             }
             
             // Устанавливаем даты
@@ -769,6 +845,16 @@
                     resetModal.style.display = 'none';
                 }
             });
+            
+            // Слушаем изменения в localStorage для обновления данных в реальном времени
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'playerData' || e.key === 'playerReputation') {
+                    updateProfileFromStorage();
+                }
+            });
+            
+            // Также обновляем при возвращении на страницу
+            window.addEventListener('focus', updateProfileFromStorage);
             
             // Блокировка масштабирования
             document.addEventListener('wheel', function(e) {

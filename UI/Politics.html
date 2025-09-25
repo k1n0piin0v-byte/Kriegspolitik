@@ -245,6 +245,84 @@
             background-color: #3a9a3a;
         }
         
+        /* Экран управления партией */
+        .party-management {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .party-management.active {
+            display: flex;
+        }
+        
+        .party-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #111;
+            border-radius: 3px;
+            border-left: 4px solid;
+        }
+        
+        .party-title {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .leave-party-button {
+            padding: 8px 16px;
+            background-color: #8b0000;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .leave-party-button:hover {
+            background-color: #a00000;
+        }
+        
+        .rally-button {
+            padding: 10px 20px;
+            background-color: #2a2a2a;
+            color: #ccc;
+            border: 1px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+            width: 100%;
+            height: 50px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rally-button:hover:not(:disabled) {
+            background-color: #3a3a3a;
+            border-color: #555;
+        }
+        
+        .rally-button:disabled {
+            background-color: #1a1a1a;
+            color: #666;
+            cursor: not-allowed;
+            border-color: #333;
+        }
+        
+        /* Убираем отдельный элемент для таймера */
+        .rally-timer {
+            display: none;
+        }
+        
         /* Правая панель - навигация */
         .navigation {
             background-color: #0a0a0a;
@@ -404,6 +482,25 @@
                 padding: 5px 10px;
                 font-size: 0.8rem;
             }
+            
+            .party-header {
+                padding: 10px;
+            }
+            
+            .party-title {
+                font-size: 1rem;
+            }
+            
+            .leave-party-button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .rally-button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+                height: 40px;
+            }
         }
         
         /* Адаптация для телефонов (вертикальная ориентация) */
@@ -488,6 +585,25 @@
             .join-button {
                 padding: 6px 10px;
                 font-size: 0.8rem;
+            }
+            
+            .party-header {
+                padding: 12px;
+            }
+            
+            .party-title {
+                font-size: 1.1rem;
+            }
+            
+            .leave-party-button {
+                padding: 7px 14px;
+                font-size: 0.85rem;
+            }
+            
+            .rally-button {
+                padding: 9px 18px;
+                font-size: 0.95rem;
+                height: 45px;
             }
         }
         
@@ -574,7 +690,19 @@
         <div class="politics-content">
             <h2>Политические партии</h2>
             
-            <div class="tabs">
+            <!-- Экран управления партией -->
+            <div class="party-management" id="party-management">
+                <div class="party-header" id="party-header">
+                    <div class="party-title" id="party-title">Название партии</div>
+                    <button class="leave-party-button" id="leave-party-button">Выйти из партии</button>
+                </div>
+                <button class="rally-button" id="rally-button">
+                    <span id="rally-button-text">Устроить митинг</span>
+                </button>
+            </div>
+            
+            <!-- Вкладки с партиями и военными формированиями -->
+            <div class="tabs" id="party-tabs">
                 <div class="tab active" data-tab="parties">Политические партии</div>
                 <div class="tab" data-tab="military">Военные формирования</div>
             </div>
@@ -653,7 +781,7 @@
             "Нейтралитет": "#708090"
         };
         
-        // Список партий (без описаний, только идеологии)
+        // Список партий
         const parties = [
             { name: "Народный Фронт", ideology: "Национал-социализм" },
             { name: "Союз Возрождения", ideology: "Реваншизм" },
@@ -673,10 +801,13 @@
             { name: "Центристский Союз", ideology: "Нейтралитет" }
         ];
         
-        // Военные формирования (пока пустые)
+        // Военные формирования
         const militaryFormations = [
-            // Будут добавлены позже
+            { name: "ТЕСТ", type: "Механика находится в разработке!" }
         ];
+        
+        // Таймер для митинга (10 минут в миллисекундах)
+        const RALLY_COOLDOWN = 10 * 60 * 1000;
         
         // Функция для сохранения данных игрока в localStorage
         function savePlayerData() {
@@ -688,7 +819,10 @@
                 country: document.getElementById('player-country').textContent,
                 region: document.getElementById('player-region').textContent,
                 party: document.getElementById('player-party').textContent,
-                army: document.getElementById('player-army').textContent
+                army: document.getElementById('player-army').textContent,
+                reputation: localStorage.getItem('playerReputation') || 0,
+                position: document.getElementById('player-party').textContent !== 'Не состоит' ? 
+                         `Депутат ${document.getElementById('player-party').textContent}` : 'Гражданин'
             };
             
             localStorage.setItem('playerData', JSON.stringify(playerData));
@@ -716,6 +850,113 @@
             return false;
         }
         
+        // Функция для показа/скрытия экрана управления партией
+        function togglePartyManagement(show) {
+            const partyManagement = document.getElementById('party-management');
+            const partyTabs = document.getElementById('party-tabs');
+            const partiesTab = document.getElementById('parties-tab');
+            const militaryTab = document.getElementById('military-tab');
+            
+            if (show) {
+                partyManagement.classList.add('active');
+                partyTabs.style.display = 'none';
+                partiesTab.style.display = 'none';
+                militaryTab.style.display = 'none';
+                
+                // Обновляем таймер митинга при показе экрана
+                updateRallyTimer();
+            } else {
+                partyManagement.classList.remove('active');
+                partyTabs.style.display = 'flex';
+                partiesTab.style.display = 'block';
+                militaryTab.style.display = 'none';
+            }
+        }
+        
+        // Функция для обновления экрана управления партией
+        function updatePartyManagement(partyName) {
+            const partyTitle = document.getElementById('party-title');
+            const partyHeader = document.getElementById('party-header');
+            
+            partyTitle.textContent = partyName;
+            
+            // Находим идеологию партии для установки цвета
+            const party = parties.find(p => p.name === partyName);
+            if (party && ideologyColors[party.ideology]) {
+                partyHeader.style.borderLeftColor = ideologyColors[party.ideology];
+            }
+        }
+        
+        // Функция для обновления таймера митинга
+        function updateRallyTimer() {
+            const rallyButton = document.getElementById('rally-button');
+            const rallyButtonText = document.getElementById('rally-button-text');
+            const lastRallyTime = localStorage.getItem('lastRallyTime');
+            
+            if (!lastRallyTime) {
+                rallyButton.disabled = false;
+                rallyButtonText.textContent = 'Устроить митинг';
+                return;
+            }
+            
+            const now = Date.now();
+            const timeSinceLastRally = now - parseInt(lastRallyTime);
+            const timeLeft = RALLY_COOLDOWN - timeSinceLastRally;
+            
+            if (timeLeft <= 0) {
+                rallyButton.disabled = false;
+                rallyButtonText.textContent = 'Устроить митинг';
+                localStorage.removeItem('lastRallyTime');
+            } else {
+                rallyButton.disabled = true;
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                rallyButtonText.textContent = `Доступно через: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Обновляем таймер каждую секунду
+                setTimeout(updateRallyTimer, 1000);
+            }
+        }
+        
+        // Функция для организации митинга
+        function organizeRally() {
+            const rallyButton = document.getElementById('rally-button');
+            const rallyButtonText = document.getElementById('rally-button-text');
+            
+            rallyButton.disabled = true;
+            rallyButtonText.textContent = 'Митинг организуется...';
+            
+            // Небольшая задержка для имитации процесса
+            setTimeout(() => {
+                // Сохраняем время последнего митинга
+                localStorage.setItem('lastRallyTime', Date.now().toString());
+                
+                // 50/50 шанс на успех
+                const isSuccess = Math.random() > 0.5;
+                const reputationChange = isSuccess ? 10 : -4;
+                
+                // Получаем текущую репутацию
+                let currentReputation = parseInt(localStorage.getItem('playerReputation') || 0);
+                
+                // Изменяем репутацию
+                currentReputation += reputationChange;
+                localStorage.setItem('playerReputation', currentReputation);
+                
+                // Сообщение об результате
+                const message = isSuccess 
+                    ? "Митинг прошел успешно! Ваша репутация увеличилась на 10."
+                    : "Митинг провалился. Ваша репутация уменьшилась на 4.";
+                
+                alert(message);
+                
+                // Сохраняем данные игрока
+                savePlayerData();
+                
+                // Запускаем таймер
+                updateRallyTimer();
+            }, 1000);
+        }
+        
         // Функция для вступления в партию
         function joinParty(partyName, ideology) {
             // Обновляем информацию о партии игрока
@@ -727,8 +968,30 @@
             // Обновляем кнопки в списке партий
             updatePartyButtons(partyName);
             
+            // Показываем экран управления партией
+            updatePartyManagement(partyName);
+            togglePartyManagement(true);
+            
             // Сообщение об успешном вступлении
             alert(`Вы вступили в партию: ${partyName}`);
+        }
+        
+        // Функция для выхода из партии
+        function leaveParty() {
+            // Обновляем информацию о партии игрока
+            document.getElementById('player-party').textContent = 'Не состоит';
+            
+            // Сохраняем изменения
+            savePlayerData();
+            
+            // Обновляем кнопки в списке партий
+            updatePartyButtons('Не состоит');
+            
+            // Скрываем экран управления партией
+            togglePartyManagement(false);
+            
+            // Сообщение о выходе из партии
+            alert('Вы вышли из партии');
         }
         
         // Функция для обновления кнопки вступления в партию
@@ -776,20 +1039,30 @@
                 document.getElementById('player-money').textContent = '1000';
                 document.getElementById('player-gold').textContent = '50';
                 
+                // Устанавливаем репутацию по умолчанию
+                localStorage.setItem('playerReputation', '0');
+                
                 // Сохраняем данные по умолчанию
                 savePlayerData();
             }
             
+            // Проверяем, состоит ли игрок в партии
+            const playerParty = document.getElementById('player-party').textContent;
+            if (playerParty !== 'Не состоит') {
+                // Показываем экран управления партией
+                updatePartyManagement(playerParty);
+                togglePartyManagement(true);
+            }
+            
             // Заполняем список партий
             const partyList = document.getElementById('party-list');
-            const currentParty = document.getElementById('player-party').textContent;
             
             parties.forEach(party => {
                 const partyItem = document.createElement('div');
                 partyItem.className = 'party-item';
                 partyItem.style.borderLeftColor = ideologyColors[party.ideology];
                 
-                const isCurrentParty = currentParty === party.name;
+                const isCurrentParty = playerParty === party.name;
                 
                 partyItem.innerHTML = `
                     <div>
@@ -812,21 +1085,26 @@
                 partyList.appendChild(partyItem);
             });
             
-            // Заполняем список военных формирований (пока пустой)
+            // Заполняем список военных формирований
             const militaryList = document.getElementById('military-list');
             
-            if (militaryFormations.length === 0) {
-                const emptyMessage = document.createElement('div');
-                emptyMessage.className = 'military-item';
-                emptyMessage.style.borderLeftColor = '#708090';
-                emptyMessage.innerHTML = `
+            militaryFormations.forEach(formation => {
+                const militaryItem = document.createElement('div');
+                militaryItem.className = 'military-item';
+                militaryItem.style.borderLeftColor = '#708090';
+                
+                militaryItem.innerHTML = `
                     <div>
-                        <div class="military-name">Военные формирования</div>
-                        <div class="military-type">Раздел в разработке</div>
+                        <div class="military-name">${formation.name}</div>
+                        <div class="military-type">${formation.type}</div>
                     </div>
+                    <button class="join-button">
+                        Вступить
+                    </button>
                 `;
-                militaryList.appendChild(emptyMessage);
-            }
+                
+                militaryList.appendChild(militaryItem);
+            });
             
             // Обработчики для вкладок
             const tabs = document.querySelectorAll('.tab');
@@ -845,6 +1123,12 @@
                     document.getElementById(`${tabId}-tab`).classList.add('active');
                 });
             });
+            
+            // Обработчик для кнопки выхода из партии
+            document.getElementById('leave-party-button').addEventListener('click', leaveParty);
+            
+            // Обработчик для кнопки организации митинга
+            document.getElementById('rally-button').addEventListener('click', organizeRally);
             
             // Блокировка неактивных кнопок
             disableInactiveButtons();
