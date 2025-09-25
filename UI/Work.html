@@ -184,6 +184,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            width: 100%;
         }
         
         .action-slider {
@@ -212,8 +213,9 @@
         
         .compact-controls {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 5px;
+            width: 100%;
         }
         
         .auto-btn {
@@ -230,7 +232,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            margin-top: 25px;
+            flex-shrink: 0;
         }
         
         .auto-btn.active {
@@ -239,7 +241,7 @@
         }
         
         .work-button {
-            padding: 6px 15px;
+            padding: 6px 12px;
             background-color: #1a4c7a;
             color: #fff;
             border: none;
@@ -248,11 +250,12 @@
             font-size: 0.75rem;
             transition: background-color 0.2s;
             white-space: nowrap;
-            width: 100%;
             height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex: 1;
+            min-width: 0;
         }
         
         .work-button:hover {
@@ -271,14 +274,23 @@
             100% { opacity: 1; }
         }
         
-        .buttons-container {
-            display: flex;
-            gap: 5px;
-            align-items: flex-start;
+        .total-cost-reward {
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px dashed #2a2a2a;
+            font-size: 0.7rem;
         }
         
-        .work-button-container {
-            flex: 1;
+        .total-energy {
+            color: #ff6b6b;
+        }
+        
+        .total-resources {
+            color: #ffd700;
+        }
+        
+        .total-reward {
+            color: #32cd32;
         }
         
         .storage-table {
@@ -341,12 +353,12 @@
             .content { padding: 8px; }
             .work-table { font-size: 0.7rem; }
             .work-table th, .work-table td { padding: 6px; }
-            .work-button { padding: 5px 12px; font-size: 0.7rem; height: 28px; }
+            .work-button { padding: 5px 10px; font-size: 0.7rem; height: 28px; }
             .action-count { font-size: 0.7rem; min-width: 50px; }
             .item-icon { width: 36px; height: 36px; }
             .action-title { font-size: 0.8rem; }
             .action-desc { font-size: 0.7rem; }
-            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; margin-top: 22px; }
+            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; }
         }
         
         @media (max-width: 768px) and (orientation: portrait) {
@@ -359,13 +371,14 @@
             .content { padding: 8px; }
             .work-table { font-size: 0.7rem; }
             .work-table th, .work-table td { padding: 6px; }
-            .work-button { padding: 6px 14px; font-size: 0.7rem; height: 30px; }
+            .work-button { padding: 6px 12px; font-size: 0.7rem; height: 30px; }
             .action-count { font-size: 0.7rem; min-width: 50px; }
             .item-icon { width: 36px; height: 36px; }
             .action-title { font-size: 0.8rem; }
             .action-desc { font-size: 0.65rem; }
             .slider-container { gap: 8px; }
-            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; margin-top: 25px; }
+            .total-cost-reward { font-size: 0.65rem; }
+            .auto-btn { width: 28px; height: 28px; font-size: 0.65rem; }
         }
         
         @media (max-width: 480px) {
@@ -378,8 +391,8 @@
             .work-table th, .work-table td { padding: 4px; }
             .action-title { font-size: 0.75rem; }
             .action-desc { font-size: 0.6rem; }
-            .work-button { padding: 4px 10px; font-size: 0.65rem; height: 26px; }
-            .auto-btn { width: 26px; height: 26px; font-size: 0.6rem; margin-top: 22px; }
+            .work-button { padding: 4px 8px; font-size: 0.65rem; height: 26px; }
+            .auto-btn { width: 26px; height: 26px; font-size: 0.6rem; }
         }
         
         .content {
@@ -462,11 +475,9 @@
                                     <input type="range" class="action-slider" min="1" max="10" value="1" data-action="mine_coal">
                                     <span class="action-count">1 раз</span>
                                 </div>
-                                <div class="buttons-container">
-                                    <div class="work-button-container">
-                                        <button class="work-button" data-action="mine_coal">Работать</button>
-                                    </div>
+                                <div class="compact-controls">
                                     <button class="auto-btn" data-action="mine_coal" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="mine_coal">Работать</button>
                                 </div>
                             </div>
                         </td>
@@ -488,11 +499,9 @@
                                     <input type="range" class="action-slider" min="1" max="6" value="1" data-action="mine_iron">
                                     <span class="action-count">1 раз</span>
                                 </div>
-                                <div class="buttons-container">
-                                    <div class="work-button-container">
-                                        <button class="work-button" data-action="mine_iron">Работать</button>
-                                    </div>
+                                <div class="compact-controls">
                                     <button class="auto-btn" data-action="mine_iron" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="mine_iron">Работать</button>
                                 </div>
                             </div>
                         </td>
@@ -514,11 +523,9 @@
                                     <input type="range" class="action-slider" min="1" max="5" value="1" data-action="mine_bauxite">
                                     <span class="action-count">1 раз</span>
                                 </div>
-                                <div class="buttons-container">
-                                    <div class="work-button-container">
-                                        <button class="work-button" data-action="mine_bauxite">Работать</button>
-                                    </div>
+                                <div class="compact-controls">
                                     <button class="auto-btn" data-action="mine_bauxite" title="Авто-работа">А</button>
+                                    <button class="work-button" data-action="mine_bauxite">Работать</button>
                                 </div>
                             </div>
                         </td>
@@ -527,7 +534,7 @@
             </table>
         </div>
         
-        <!-- Остальные вкладки по аналогии -->
+        <!-- Остальные вкладки остаются без изменений -->
         
     </div>
 
