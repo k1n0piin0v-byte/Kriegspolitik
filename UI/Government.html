@@ -8,7 +8,6 @@
     <!-- Подключаем внешний файл с данными о правительствах -->
     <script src="Government.js"></script>
     <style>
-        /* Стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -622,6 +621,15 @@
             background: #2a2a2a;
             border-radius: 2px;
         }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 1.2rem;
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -633,7 +641,7 @@
     <div class="container" id="government-container">
         <!-- Левая колонка - информация о правительстве и идеологиях -->
         <div class="left-column" id="left-column">
-            <!-- Информация будет загружена через JavaScript -->
+            <div class="loading">Загрузка данных правительства...</div>
         </div>
         
         <!-- Правая колонка - законопроекты -->
@@ -666,9 +674,11 @@
     </div>
 
     <script>
-        // Удаляем встроенные данные - теперь они загружаются из Government.js
+        // Глобальные переменные
         let selectedLaw = null;
+        let availableLaws = []; // Будет заполнен из Government.js
         
+        // Функция для навигации назад
         function goBack() {
             window.history.back();
         }
@@ -721,6 +731,30 @@
             return colorClasses[ideology] || "";
         }
         
+        // Функция для получения цвета для идеологии
+        function getIdeologyColor(ideology) {
+            const colors = {
+                "Национал-социализм": "#8b0000",
+                "Реваншизм": "#9c0000",
+                "Милитаризм": "#8b4513",
+                "Фалангизм": "#800020",
+                "Сталинизм": "#cc0000",
+                "Троцкизм": "#ff4500",
+                "Ленинизм": "#ff0000",
+                "Марксизм": "#dc143c",
+                "Либерализм": "#007fff",
+                "Консерватизм": "#000080",
+                "Прямая Демократия": "#228b22",
+                "Социал-Демократия": "#ff69b4",
+                "Монархизм": "#9370db",
+                "Авторитаризм": "#2f4f4f",
+                "Патернализм": "#2e8b57",
+                "Нейтралитет": "#708090"
+            };
+            
+            return colors[ideology] || "#3a7a3a";
+        }
+        
         // Функция для загрузки данных о правительстве
         function loadGovernmentData() {
             // Загружаем данные игрока из localStorage
@@ -743,10 +777,20 @@
                 document.getElementById('add-law-button').style.display = 'flex';
             }
             
-            // Ищем данные о правительстве для страны игрока в объекте из Government.js
+            // Проверяем, загружены ли данные из Government.js
+            if (typeof countryGovernments === 'undefined') {
+                document.getElementById('left-column').innerHTML = `
+                    <div class="government-card">
+                        <div class="no-data">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ищем данные о правительстве для страны игрока
             let governmentData = countryGovernments[playerCountry];
             
-            // Если данных нет в Government.js, создаем базовые
+            // Если данных нет, создаем базовые
             if (!governmentData) {
                 console.warn(`Данные для страны "${playerCountry}" не найдены в Government.js. Используются базовые данные.`);
                 governmentData = {
@@ -781,14 +825,14 @@
                         ]
                     }
                 };
-            }
-            
-            // Преобразуем стабильность и поддержку в числа, если они в строковом формате
-            if (typeof governmentData.stability === 'string') {
-                governmentData.stability = parseInt(governmentData.stability.replace('%', ''));
-            }
-            if (typeof governmentData.support === 'string') {
-                governmentData.support = parseInt(governmentData.support.replace('%', ''));
+            } else {
+                // Преобразуем стабильность и поддержку в числа, если они в строковом формате
+                if (typeof governmentData.stability === 'string') {
+                    governmentData.stability = parseInt(governmentData.stability.replace('%', ''));
+                }
+                if (typeof governmentData.support === 'string') {
+                    governmentData.support = parseInt(governmentData.support.replace('%', ''));
+                }
             }
             
             // Загружаем активные законы и применяем их эффекты
@@ -870,58 +914,6 @@
             localStorage.setItem('governmentData_' + playerCountry, JSON.stringify(governmentData));
         }
         
-        // Остальные функции остаются без изменений
-        // ... (applyActiveLaws, normalizeIdeologyPercentages, updatePieChart, getIdeologyColor, showLawModal, hideLawModal, submitLaw, applyLawEffects, displayPlayerLaws)
-        
-        // Загрузка данных при открытии страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Проверяем, загружен ли объект countryGovernments из Government.js
-            if (typeof countryGovernments === 'undefined') {
-                console.error('Government.js не загружен! Проверьте путь к файлу.');
-                document.getElementById('left-column').innerHTML = `
-                    <div class="government-card">
-                        <div class="no-data">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Загружаем данные правительства
-            loadGovernmentData();
-            
-            // Отображаем законопроекты игрока
-            displayPlayerLaws();
-            
-            // Назначаем обработчики событий
-            document.getElementById('add-law-button').addEventListener('click', showLawModal);
-            document.getElementById('cancel-law').addEventListener('click', hideLawModal);
-            document.getElementById('submit-law').addEventListener('click', submitLaw);
-            
-            // Закрытие модального окна при клике вне его
-            document.getElementById('law-modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    hideLawModal();
-                }
-            });
-            
-            // Создаем тестовые данные игрока, если их нет
-            if (!localStorage.getItem('playerData')) {
-                const testPlayerData = {
-                    nickname: "ТестовыйИгрок",
-                    country: "Российская Республика",
-                    party: "Партия реформ"
-                };
-                localStorage.setItem('playerData', JSON.stringify(testPlayerData));
-                
-                // Перезагружаем данные
-                setTimeout(() => {
-                    loadGovernmentData();
-                    displayPlayerLaws();
-                }, 100);
-            }
-        });
-
-        // Оставшиеся функции (без изменений)
         // Функция для применения эффектов активных законов
         function applyActiveLaws(governmentData, activeLaws) {
             // Создаем копию данных, чтобы не изменять оригинал
@@ -1028,30 +1020,6 @@
             pieChart.style.backgroundImage = `conic-gradient(${gradientString})`;
         }
         
-        // Функция для получения цвета для идеологии
-        function getIdeologyColor(ideology) {
-            const colors = {
-                "Национал-социализм": "#8b0000",
-                "Реваншизм": "#9c0000",
-                "Милитаризм": "#8b4513",
-                "Фалангизм": "#800020",
-                "Сталинизм": "#cc0000",
-                "Троцкизм": "#ff4500",
-                "Ленинизм": "#ff0000",
-                "Марксизм": "#dc143c",
-                "Либерализм": "#007fff",
-                "Консерватизм": "#000080",
-                "Прямая Демократия": "#228b22",
-                "Социал-Демократия": "#ff69b4",
-                "Монархизм": "#9370db",
-                "Авторитаризм": "#2f4f4f",
-                "Патернализм": "#2e8b57",
-                "Нейтралитет": "#708090"
-            };
-            
-            return colors[ideology] || "#3a7a3a";
-        }
-        
         // Функция для отображения модального окна с законопроектами
         function showLawModal() {
             const modal = document.getElementById('law-modal');
@@ -1061,7 +1029,7 @@
             lawsList.innerHTML = '';
             
             // Проверяем, загружены ли законопроекты
-            if (typeof availableLaws === 'undefined' || !availableLaws.length) {
+            if (!availableLaws || !availableLaws.length) {
                 lawsList.innerHTML = '<div class="no-data">Законопроекты не найдены</div>';
             } else {
                 // Добавляем законопроекты в список
@@ -1243,6 +1211,96 @@
                 legislationSection.appendChild(lawItem);
             });
         }
+        
+        // Функция для загрузки данных из Government.js
+        function loadGovernmentJSData() {
+            // Проверяем, загружен ли объект countryGovernments
+            if (typeof countryGovernments === 'undefined') {
+                console.error('Government.js не загружен! Проверьте путь к файлу.');
+                document.getElementById('left-column').innerHTML = `
+                    <div class="government-card">
+                        <div class="no-data">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
+                    </div>
+                `;
+                return false;
+            }
+            
+            // Проверяем, загружен ли объект availableLaws
+            if (typeof availableLaws !== 'undefined' && availableLaws.length > 0) {
+                // Используем данные из Government.js
+                window.availableLaws = availableLaws;
+            } else {
+                // Создаем базовые законопроекты, если их нет в Government.js
+                window.availableLaws = [
+                    {
+                        name: "Закон о повышении налогов",
+                        description: "Увеличение налоговых ставок для пополнения государственного бюджета",
+                        effects: "Стабильность: +10%, Поддержка: -5%, Либерализм: -3%",
+                        stabilityChange: 10,
+                        supportChange: -5,
+                        ideologyChanges: {"Либерализм": -3, "Консерватизм": 1}
+                    },
+                    {
+                        name: "Экономическая либерализация",
+                        description: "Снижение налогов и уменьшение государственного регулирования экономики",
+                        effects: "Стабильность: -5%, Поддержка: +8%, Либерализм: +5%",
+                        stabilityChange: -5,
+                        supportChange: 8,
+                        ideologyChanges: {"Либерализм": 5, "Социал-Демократия": -2}
+                    },
+                    {
+                        name: "Национализация ключевых отраслей",
+                        description: "Передача стратегических предприятий под государственный контроль",
+                        effects: "Стабильность: +5%, Поддержка: +3%, Марксизм: +4%",
+                        stabilityChange: 5,
+                        supportChange: 3,
+                        ideologyChanges: {"Марксизм": 4, "Ленинизм": 2, "Либерализм": -4}
+                    }
+                ];
+            }
+            
+            return true;
+        }
+        
+        // Загрузка данных при открытии страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Назначаем обработчики событий
+            document.getElementById('add-law-button').addEventListener('click', showLawModal);
+            document.getElementById('cancel-law').addEventListener('click', hideLawModal);
+            document.getElementById('submit-law').addEventListener('click', submitLaw);
+            
+            // Закрытие модального окна при клике вне его
+            document.getElementById('law-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideLawModal();
+                }
+            });
+            
+            // Загружаем данные из Government.js
+            if (loadGovernmentJSData()) {
+                // Загружаем данные правительства
+                loadGovernmentData();
+                
+                // Отображаем законопроекты игрока
+                displayPlayerLaws();
+            }
+            
+            // Создаем тестовые данные игрока, если их нет
+            if (!localStorage.getItem('playerData')) {
+                const testPlayerData = {
+                    nickname: "ТестовыйИгрок",
+                    country: "Российская Республика",
+                    party: "Партия реформ"
+                };
+                localStorage.setItem('playerData', JSON.stringify(testPlayerData));
+                
+                // Перезагружаем данные
+                setTimeout(() => {
+                    loadGovernmentData();
+                    displayPlayerLaws();
+                }, 100);
+            }
+        });
     </script>
 </body>
 </html>
