@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kriegspolitik - Правительство</title>
     <link rel="icon" href="../Icons.jpg" type="image/jpeg">
-    <!-- Подключаем внешний файл с данными о правительствах -->
+    <!-- Подключаем внешние файлы -->
     <script src="Government.js"></script>
+    <script src="../Scripts/AddLaws.js"></script>
     <style>
+        /* Стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -630,6 +632,16 @@
             font-size: 1.2rem;
             color: #999;
         }
+        
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 20px;
+            background-color: #1a0a0a;
+            border: 1px solid #5a1a1a;
+            border-radius: 5px;
+            margin: 10px;
+        }
     </style>
 </head>
 <body>
@@ -676,7 +688,6 @@
     <script>
         // Глобальные переменные
         let selectedLaw = null;
-        let availableLaws = []; // Будет заполнен из Government.js
         
         // Функция для навигации назад
         function goBack() {
@@ -781,7 +792,7 @@
             if (typeof countryGovernments === 'undefined') {
                 document.getElementById('left-column').innerHTML = `
                     <div class="government-card">
-                        <div class="no-data">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
+                        <div class="error-message">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
                     </div>
                 `;
                 return;
@@ -940,6 +951,11 @@
                             }
                         }
                     }
+                    
+                    // Применяем изменение формы правления, если оно указано
+                    if (law.changeGovernment) {
+                        result.government = law.changeGovernment;
+                    }
                 }
             });
             
@@ -1028,41 +1044,42 @@
             // Очищаем список
             lawsList.innerHTML = '';
             
-            // Проверяем, загружены ли законопроекты
-            if (!availableLaws || !availableLaws.length) {
-                lawsList.innerHTML = '<div class="no-data">Законопроекты не найдены</div>';
-            } else {
-                // Добавляем законопроекты в список
-                availableLaws.forEach((law, index) => {
-                    const lawItem = document.createElement('div');
-                    lawItem.className = 'law-item';
-                    lawItem.dataset.index = index;
-                    
-                    lawItem.innerHTML = `
-                        <div class="law-name">${law.name}</div>
-                        <div class="law-description">${law.description}</div>
-                        <div class="law-effects">Влияние: ${law.effects}</div>
-                    `;
-                    
-                    lawItem.addEventListener('click', function() {
-                        // Снимаем выделение со всех элементов
-                        document.querySelectorAll('.law-item').forEach(item => {
-                            item.classList.remove('selected');
-                        });
-                        
-                        // Выделяем выбранный элемент
-                        this.classList.add('selected');
-                        
-                        // Запоминаем выбранный законопроект
-                        selectedLaw = index;
-                        
-                        // Активируем кнопку выдвижения
-                        document.getElementById('submit-law').disabled = false;
+            // Проверяем, загружены ли законопроекты из AddLaws.js
+            if (typeof availableLaws === 'undefined' || !availableLaws.length) {
+                lawsList.innerHTML = '<div class="error-message">Ошибка загрузки законопроектов. Проверьте подключение AddLaws.js</div>';
+                return;
+            }
+            
+            // Добавляем законопроекты в список
+            availableLaws.forEach((law, index) => {
+                const lawItem = document.createElement('div');
+                lawItem.className = 'law-item';
+                lawItem.dataset.index = index;
+                
+                lawItem.innerHTML = `
+                    <div class="law-name">${law.name}</div>
+                    <div class="law-description">${law.description}</div>
+                    <div class="law-effects">Влияние: ${law.effects}</div>
+                `;
+                
+                lawItem.addEventListener('click', function() {
+                    // Снимаем выделение со всех элементов
+                    document.querySelectorAll('.law-item').forEach(item => {
+                        item.classList.remove('selected');
                     });
                     
-                    lawsList.appendChild(lawItem);
+                    // Выделяем выбранный элемент
+                    this.classList.add('selected');
+                    
+                    // Запоминаем выбранный законопроект
+                    selectedLaw = index;
+                    
+                    // Активируем кнопку выдвижения
+                    document.getElementById('submit-law').disabled = false;
                 });
-            }
+                
+                lawsList.appendChild(lawItem);
+            });
             
             // Показываем модальное окно
             modal.style.display = 'flex';
@@ -1084,6 +1101,12 @@
         // Функция для выдвижения законопроекта
         function submitLaw() {
             if (selectedLaw === null) return;
+            
+            // Проверяем, загружены ли законопроекты
+            if (typeof availableLaws === 'undefined' || !availableLaws.length) {
+                alert('Ошибка: законопроекты не загружены!');
+                return;
+            }
             
             const law = availableLaws[selectedLaw];
             
@@ -1138,7 +1161,38 @@
             
             // Если данных нет, используем базовые
             if (!governmentData || Object.keys(governmentData).length === 0) {
-                governmentData = countryGovernments[country] || countryGovernments["Российская Республика"];
+                governmentData = countryGovernments[country] || {
+                    government: "Демократия",
+                    rulingIdeology: "Либерализм",
+                    stability: 50,
+                    support: 50,
+                    ideologies: {
+                        "Правые идеологии": [
+                            { name: "Национал-социализм", percentage: 5 },
+                            { name: "Реваншизм", percentage: 5 },
+                            { name: "Милитаризм", percentage: 10 },
+                            { name: "Фалангизм", percentage: 0 }
+                        ],
+                        "Левые идеологии": [
+                            { name: "Сталинизм", percentage: 5 },
+                            { name: "Троцкизм", percentage: 0 },
+                            { name: "Ленинизм", percentage: 5 },
+                            { name: "Марксизм", percentage: 10 }
+                        ],
+                        "Либеральные идеологии": [
+                            { name: "Либерализм", percentage: 20 },
+                            { name: "Консерватизм", percentage: 15 },
+                            { name: "Прямая Демократия", percentage: 10 },
+                            { name: "Социал-Демократия", percentage: 15 }
+                        ],
+                        "Авторитарные идеологии": [
+                            { name: "Монархизм", percentage: 5 },
+                            { name: "Авторитаризм", percentage: 5 },
+                            { name: "Патернализм", percentage: 5 },
+                            { name: "Нейтралитет", percentage: 0 }
+                        ]
+                    }
+                };
             }
             
             // Применяем изменения к стабильности и поддержке
@@ -1166,6 +1220,11 @@
                 
                 // Нормализуем проценты
                 normalizeIdeologyPercentages(governmentData);
+            }
+            
+            // Применяем изменение формы правления, если оно указано
+            if (law.changeGovernment) {
+                governmentData.government = law.changeGovernment;
             }
             
             // Сохраняем обновленные данные
@@ -1212,51 +1271,32 @@
             });
         }
         
-        // Функция для загрузки данных из Government.js
-        function loadGovernmentJSData() {
-            // Проверяем, загружен ли объект countryGovernments
+        // Функция для проверки загрузки всех необходимых данных
+        function checkDataLoaded() {
+            let errors = [];
+            
+            // Проверяем Government.js
             if (typeof countryGovernments === 'undefined') {
-                console.error('Government.js не загружен! Проверьте путь к файлу.');
+                errors.push("Government.js не загружен");
+            }
+            
+            // Проверяем AddLaws.js
+            if (typeof availableLaws === 'undefined') {
+                errors.push("AddLaws.js не загружен");
+            }
+            
+            if (errors.length > 0) {
                 document.getElementById('left-column').innerHTML = `
                     <div class="government-card">
-                        <div class="no-data">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
+                        <div class="error-message">
+                            Ошибки загрузки:<br>${errors.join('<br>')}<br><br>
+                            Проверьте пути к файлам:<br>
+                            - Government.js (в папке UI)<br>
+                            - AddLaws.js (в папке Scripts)
+                        </div>
                     </div>
                 `;
                 return false;
-            }
-            
-            // Проверяем, загружен ли объект availableLaws
-            if (typeof availableLaws !== 'undefined' && availableLaws.length > 0) {
-                // Используем данные из Government.js
-                window.availableLaws = availableLaws;
-            } else {
-                // Создаем базовые законопроекты, если их нет в Government.js
-                window.availableLaws = [
-                    {
-                        name: "Закон о повышении налогов",
-                        description: "Увеличение налоговых ставок для пополнения государственного бюджета",
-                        effects: "Стабильность: +10%, Поддержка: -5%, Либерализм: -3%",
-                        stabilityChange: 10,
-                        supportChange: -5,
-                        ideologyChanges: {"Либерализм": -3, "Консерватизм": 1}
-                    },
-                    {
-                        name: "Экономическая либерализация",
-                        description: "Снижение налогов и уменьшение государственного регулирования экономики",
-                        effects: "Стабильность: -5%, Поддержка: +8%, Либерализм: +5%",
-                        stabilityChange: -5,
-                        supportChange: 8,
-                        ideologyChanges: {"Либерализм": 5, "Социал-Демократия": -2}
-                    },
-                    {
-                        name: "Национализация ключевых отраслей",
-                        description: "Передача стратегических предприятий под государственный контроль",
-                        effects: "Стабильность: +5%, Поддержка: +3%, Марксизм: +4%",
-                        stabilityChange: 5,
-                        supportChange: 3,
-                        ideologyChanges: {"Марксизм": 4, "Ленинизм": 2, "Либерализм": -4}
-                    }
-                ];
             }
             
             return true;
@@ -1276,8 +1316,8 @@
                 }
             });
             
-            // Загружаем данные из Government.js
-            if (loadGovernmentJSData()) {
+            // Проверяем загрузку данных
+            if (checkDataLoaded()) {
                 // Загружаем данные правительства
                 loadGovernmentData();
                 
@@ -1296,8 +1336,10 @@
                 
                 // Перезагружаем данные
                 setTimeout(() => {
-                    loadGovernmentData();
-                    displayPlayerLaws();
+                    if (checkDataLoaded()) {
+                        loadGovernmentData();
+                        displayPlayerLaws();
+                    }
                 }, 100);
             }
         });
