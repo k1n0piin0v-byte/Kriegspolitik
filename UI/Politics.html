@@ -137,6 +137,8 @@
             padding: 15px;
             border: 1px solid #1a1a1a;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
         .politics-content h2 {
@@ -184,16 +186,20 @@
         
         .tab-content {
             display: none;
+            flex: 1;
+            overflow-y: auto;
         }
         
         .tab-content.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
         
         .party-list, .military-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex: 1;
         }
         
         .party-item, .military-item {
@@ -250,6 +256,7 @@
             display: none;
             flex-direction: column;
             gap: 15px;
+            flex: 1;
         }
         
         .party-management.active {
@@ -287,7 +294,13 @@
             background-color: #a00000;
         }
         
-        .rally-button {
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .rally-button, .recruit-button {
             padding: 10px 20px;
             background-color: #2a2a2a;
             color: #ccc;
@@ -295,7 +308,6 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
-            margin-top: 10px;
             transition: all 0.3s;
             font-weight: bold;
             width: 100%;
@@ -306,21 +318,599 @@
             justify-content: center;
         }
         
-        .rally-button:hover:not(:disabled) {
+        .rally-button:hover:not(:disabled), .recruit-button:hover:not(:disabled) {
             background-color: #3a3a3a;
             border-color: #555;
         }
         
-        .rally-button:disabled {
+        .rally-button:disabled, .recruit-button:disabled {
             background-color: #1a1a1a;
             color: #666;
             cursor: not-allowed;
             border-color: #333;
         }
         
-        /* Убираем отдельный элемент для таймера */
-        .rally-timer {
+        /* Экран управления частным формированием */
+        .private-military-management {
             display: none;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .private-military-management.active {
+            display: flex;
+        }
+        
+        .military-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #111;
+            border-radius: 3px;
+            border-left: 4px solid #8b4513;
+        }
+        
+        .military-title {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .disband-button {
+            padding: 8px 16px;
+            background-color: #8b0000;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .disband-button:hover {
+            background-color: #a00000;
+        }
+        
+        .military-stats {
+            background-color: #111;
+            padding: 15px;
+            border-radius: 3px;
+        }
+        
+        .military-stats h3 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 5px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .stat-value {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .troops-grid-container {
+            background-color: #111;
+            padding: 15px;
+            border-radius: 3px;
+        }
+        
+        .troops-grid-container h3 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 5px;
+        }
+        
+        .level-info {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .troops-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .troop-slot {
+            width: 50px;
+            height: 50px;
+            background-color: #0a0a0a;
+            border: 2px solid #2a2a2a;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .troop-slot:hover {
+            border-color: #555;
+            background-color: #1a1a1a;
+        }
+        
+        .troop-slot.empty {
+            border-style: dashed;
+            border-color: #444;
+        }
+        
+        .troop-slot.empty:hover {
+            border-color: #666;
+        }
+        
+        .troop-slot.filled {
+            border-color: #8b4513;
+        }
+        
+        .troop-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        
+        .troop-count {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background-color: rgba(0,0,0,0.7);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+        
+        /* Контекстное меню для ПК */
+        .context-menu {
+            display: none;
+            position: fixed;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            z-index: 1000;
+            min-width: 250px;
+            max-width: 300px;
+        }
+        
+        .context-menu.active {
+            display: block;
+        }
+        
+        .context-item {
+            padding: 10px 15px;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #2a2a2a;
+            transition: background-color 0.2s;
+        }
+        
+        .context-item:last-child {
+            border-bottom: none;
+        }
+        
+        .context-item:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .context-item.disabled {
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .context-item.disabled:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .context-header {
+            padding: 10px 15px;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #2a2a2a;
+            background-color: #0a0a0a;
+        }
+        
+        .context-requirements {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        /* Мобильное меню выбора войск */
+        .mobile-troop-selection {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1a1a1a;
+            border-top: 1px solid #444;
+            border-radius: 15px 15px 0 0;
+            z-index: 1000;
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-troop-selection.active {
+            display: block;
+            transform: translateY(0);
+        }
+        
+        .mobile-troop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        
+        .mobile-troop-title {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .mobile-troop-close {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .mobile-troop-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .mobile-troop-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #111;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .mobile-troop-option:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .mobile-troop-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+        
+        .mobile-troop-details {
+            flex: 1;
+        }
+        
+        .mobile-troop-name {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .mobile-troop-requirements {
+            color: #999;
+            font-size: 0.8rem;
+        }
+        
+        .create-military-button {
+            padding: 12px 20px;
+            background-color: #1a4c7a;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .create-military-button:hover {
+            background-color: #2a5c8a;
+        }
+        
+        /* Модальное окно для создания формирования */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .modal p {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #2a5c8a;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .modal-button.confirm {
+            background-color: #1a4c7a;
+            color: #fff;
+        }
+        
+        .modal-button.confirm:hover {
+            background-color: #2a5c8a;
+        }
+        
+        .modal-button.cancel {
+            background-color: #444;
+            color: #ccc;
+        }
+        
+        .modal-button.cancel:hover {
+            background-color: #555;
+        }
+        
+        /* Модальное окно для добавления войск */
+        .troop-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .troop-modal.active {
+            display: flex;
+        }
+        
+        .troop-modal-content {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .troop-modal h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .troop-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #111;
+            border-radius: 5px;
+        }
+        
+        .troop-icon-large {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .troop-details {
+            flex: 1;
+        }
+        
+        .troop-name {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .troop-description {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .troop-stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .troop-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .troop-stat-value {
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .troop-stat-label {
+            color: #999;
+            font-size: 0.8rem;
+        }
+        
+        .requirements-list {
+            margin-bottom: 20px;
+        }
+        
+        .requirement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .requirement-label {
+            color: #ccc;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .requirement-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+        
+        .requirement-value {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .requirement-value.insufficient {
+            color: #ff6b6b;
+        }
+        
+        .requirement-value.sufficient {
+            color: #6bff6b;
+        }
+        
+        .troop-modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .troop-modal-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .troop-modal-button.confirm {
+            background-color: #1a4c7a;
+            color: #fff;
+        }
+        
+        .troop-modal-button.confirm:hover:not(:disabled) {
+            background-color: #2a5c8a;
+        }
+        
+        .troop-modal-button.confirm:disabled {
+            background-color: #444;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .troop-modal-button.cancel {
+            background-color: #444;
+            color: #ccc;
+        }
+        
+        .troop-modal-button.cancel:hover {
+            background-color: #555;
         }
         
         /* Правая панель - навигация */
@@ -483,23 +1073,46 @@
                 font-size: 0.8rem;
             }
             
-            .party-header {
+            .party-header, .military-header {
                 padding: 10px;
             }
             
-            .party-title {
+            .party-title, .military-title {
                 font-size: 1rem;
             }
             
-            .leave-party-button {
+            .leave-party-button, .disband-button {
                 padding: 6px 12px;
                 font-size: 0.8rem;
             }
             
-            .rally-button {
+            .rally-button, .recruit-button {
                 padding: 8px 16px;
                 font-size: 0.9rem;
                 height: 40px;
+            }
+            
+            .troops-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+            }
+            
+            .troop-slot {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .troop-icon {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .context-menu {
+                min-width: 220px;
+            }
+            
+            .mobile-troop-selection {
+                max-height: 60vh;
             }
         }
         
@@ -587,23 +1200,42 @@
                 font-size: 0.8rem;
             }
             
-            .party-header {
+            .party-header, .military-header {
                 padding: 12px;
             }
             
-            .party-title {
+            .party-title, .military-title {
                 font-size: 1.1rem;
             }
             
-            .leave-party-button {
+            .leave-party-button, .disband-button {
                 padding: 7px 14px;
                 font-size: 0.85rem;
             }
             
-            .rally-button {
+            .rally-button, .recruit-button {
                 padding: 9px 18px;
                 font-size: 0.95rem;
                 height: 45px;
+            }
+            
+            .troops-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+            }
+            
+            .troop-slot {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .troop-icon {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .context-menu {
+                display: none !important;
             }
         }
         
@@ -613,6 +1245,10 @@
                 right: auto;
                 top: 5px;
                 transform: none;
+            }
+            
+            .context-menu {
+                display: none !important;
             }
         }
         
@@ -690,32 +1326,176 @@
         <div class="politics-content">
             <h2>Политические партии</h2>
             
-            <!-- Экран управления партией -->
-            <div class="party-management" id="party-management">
-                <div class="party-header" id="party-header">
-                    <div class="party-title" id="party-title">Название партии</div>
-                    <button class="leave-party-button" id="leave-party-button">Выйти из партии</button>
-                </div>
-                <button class="rally-button" id="rally-button">
-                    <span id="rally-button-text">Устроить митинг</span>
-                </button>
-            </div>
-            
             <!-- Вкладки с партиями и военными формированиями -->
             <div class="tabs" id="party-tabs">
                 <div class="tab active" data-tab="parties">Политические партии</div>
                 <div class="tab" data-tab="military">Военные формирования</div>
             </div>
             
+            <!-- Вкладка политических партий -->
             <div class="tab-content active" id="parties-tab">
+                <!-- Экран управления партией -->
+                <div class="party-management" id="party-management">
+                    <div class="party-header" id="party-header">
+                        <div class="party-title" id="party-title">Название партии</div>
+                        <button class="leave-party-button" id="leave-party-button">Выйти из партии</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="rally-button" id="rally-button">
+                            <span id="rally-button-text">Устроить митинг</span>
+                        </button>
+                        <button class="recruit-button" id="recruit-button">
+                            <span id="recruit-button-text">Вербовка сторонников (100)</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Список партий -->
                 <div class="party-list" id="party-list">
                     <!-- Партии будут загружены через JavaScript -->
                 </div>
             </div>
             
+            <!-- Вкладка военных формирований -->
             <div class="tab-content" id="military-tab">
+                <!-- Экран управления частным формированием -->
+                <div class="private-military-management" id="private-military-management">
+                    <div class="military-header">
+                        <div class="military-title" id="military-title">Частное военное формирование</div>
+                        <button class="disband-button" id="disband-button">Распустить</button>
+                    </div>
+                    
+                    <div class="military-stats">
+                        <h3>Общие характеристики</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Уровень формирования:</span>
+                            <span class="stat-value" id="military-level">1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Общее HP:</span>
+                            <span class="stat-value" id="total-hp">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Общий урон:</span>
+                            <span class="stat-value" id="total-damage">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Занято ячеек:</span>
+                            <span class="stat-value" id="occupied-slots">0/1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="troops-grid-container">
+                        <h3>Ваши войска</h3>
+                        <div class="level-info">Уровень 1: 1 ячейка доступно (максимум: 30)</div>
+                        <div class="troops-grid" id="troops-grid">
+                            <!-- Ячейки войск будут созданы через JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Список военных формирований -->
                 <div class="military-list" id="military-list">
                     <!-- Военные формирования будут загружены через JavaScript -->
+                </div>
+                <button class="create-military-button" id="create-military-button">Создать частное формирование</button>
+            </div>
+        </div>
+        
+        <!-- Контекстное меню для ПК -->
+        <div class="context-menu" id="context-menu">
+            <div class="context-header" id="context-header">Выберите тип войск</div>
+            <div class="context-item" data-troop-type="infantry">
+                Пехота
+                <div class="context-requirements">Требуется: 100 Сторонников, 100 Автоматов, 100 Униформы</div>
+            </div>
+            <div class="context-item" data-troop-type="tanks">
+                Танки
+                <div class="context-requirements">Требуется: 400 Сторонников, 100 Танков</div>
+            </div>
+            <div class="context-item" data-troop-type="motorized">
+                Моторизованные
+                <div class="context-requirements">Требуется: 800 Сторонников, 800 Униформы, 100 БТР</div>
+            </div>
+        </div>
+        
+        <!-- Мобильное меню выбора войск -->
+        <div class="mobile-troop-selection" id="mobile-troop-selection">
+            <div class="mobile-troop-header">
+                <div class="mobile-troop-title">Выберите тип войск</div>
+                <button class="mobile-troop-close" id="mobile-troop-close">×</button>
+            </div>
+            <div class="mobile-troop-options">
+                <div class="mobile-troop-option" data-troop-type="infantry">
+                    <img src="../Img/Resources/uniform.png" alt="Пехота" class="mobile-troop-icon">
+                    <div class="mobile-troop-details">
+                        <div class="mobile-troop-name">Пехота</div>
+                        <div class="mobile-troop-requirements">100 Сторонников, 100 Автоматов, 100 Униформы</div>
+                    </div>
+                </div>
+                <div class="mobile-troop-option" data-troop-type="tanks">
+                    <img src="../Img/Resources/tanks.png" alt="Танки" class="mobile-troop-icon">
+                    <div class="mobile-troop-details">
+                        <div class="mobile-troop-name">Танки</div>
+                        <div class="mobile-troop-requirements">400 Сторонников, 100 Танков</div>
+                    </div>
+                </div>
+                <div class="mobile-troop-option" data-troop-type="motorized">
+                    <img src="../Img/Resources/apc.png" alt="Моторизованные" class="mobile-troop-icon">
+                    <div class="mobile-troop-details">
+                        <div class="mobile-troop-name">Моторизованные</div>
+                        <div class="mobile-troop-requirements">800 Сторонников, 800 Униформы, 100 БТР</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Модальное окно для создания формирования -->
+        <div class="modal-overlay" id="create-military-modal">
+            <div class="modal">
+                <h3>Создание частного военного формирования</h3>
+                <p>Введите название для вашего формирования. Пример: "1-ая Частная Военная Формирования"</p>
+                <div class="form-group">
+                    <label for="military-name-input">Название формирования:</label>
+                    <input type="text" id="military-name-input" placeholder="Введите название..." maxlength="50">
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-button cancel" id="cancel-create-button">Отмена</button>
+                    <button class="modal-button confirm" id="confirm-create-button">Создать</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Модальное окно для добавления войск -->
+        <div class="troop-modal" id="troop-modal">
+            <div class="troop-modal-content">
+                <h3 id="troop-modal-title">Добавить войска</h3>
+                
+                <div class="troop-info" id="troop-info">
+                    <img src="" alt="" class="troop-icon-large" id="troop-modal-icon">
+                    <div class="troop-details">
+                        <div class="troop-name" id="troop-modal-name">Пехота</div>
+                        <div class="troop-description" id="troop-modal-description">Базовая боевая единица</div>
+                        <div class="troop-stats">
+                            <div class="troop-stat">
+                                <div class="troop-stat-value" id="troop-modal-hp">10</div>
+                                <div class="troop-stat-label">HP</div>
+                            </div>
+                            <div class="troop-stat">
+                                <div class="troop-stat-value" id="troop-modal-damage">5</div>
+                                <div class="troop-stat-label">Урон</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="requirements-list" id="requirements-list">
+                    <!-- Требования будут добавлены через JavaScript -->
+                </div>
+                
+                <div class="troop-modal-buttons">
+                    <button class="troop-modal-button cancel" id="troop-cancel-button">Отмена</button>
+                    <button class="troop-modal-button confirm" id="troop-confirm-button" disabled>Добавить</button>
                 </div>
             </div>
         </div>
@@ -803,11 +1583,54 @@
         
         // Военные формирования
         const militaryFormations = [
-            { name: "ТЕСТ", type: "Механика находится в разработке!" }
+            { name: "Армия Обороны", type: "Государственная армия" },
+            { name: "Национальная Гвардия", type: "Государственное формирование" },
+            { name: "Пограничные Войска", type: "Государственное формирование" }
         ];
         
         // Таймер для митинга (10 минут в миллисекундах)
         const RALLY_COOLDOWN = 10 * 60 * 1000;
+        // Таймер для вербовки (10 минут в миллисекундах)
+        const RECRUIT_COOLDOWN = 10 * 60 * 1000;
+        
+        // Характеристики и требования для войск
+        const troopTypes = {
+            infantry: {
+                name: "Пехота",
+                description: "Базовая боевая единица, эффективная в обороне",
+                hp: 10,
+                damage: 5,
+                requirements: {
+                    supporters: 100,
+                    rifles: 100,
+                    uniform: 100
+                },
+                icon: "../Img/Resources/uniform.png"
+            },
+            tanks: {
+                name: "Танки",
+                description: "Мощная бронированная техника, прорывает оборону",
+                hp: 27,
+                damage: 10,
+                requirements: {
+                    supporters: 400,
+                    tanks: 100
+                },
+                icon: "../Img/Resources/tanks.png"
+            },
+            motorized: {
+                name: "Моторизованные",
+                description: "Мобильные войска с высокой скоростью передвижения",
+                hp: 20,
+                damage: 15,
+                requirements: {
+                    supporters: 800,
+                    uniform: 800,
+                    apc: 100
+                },
+                icon: "../Img/Resources/apc.png"
+            }
+        };
         
         // Функция для сохранения данных игрока в localStorage
         function savePlayerData() {
@@ -850,26 +1673,393 @@
             return false;
         }
         
-        // Функция для показа/скрытия экрана управления партией
+        // Функция для загрузки данных частного формирования
+        function loadPrivateMilitaryData() {
+            const savedData = localStorage.getItem('privateMilitaryData');
+            
+            if (savedData) {
+                const militaryData = JSON.parse(savedData);
+                return militaryData;
+            }
+            
+            // Данные по умолчанию
+            return { 
+                level: 1,
+                name: "",
+                troops: {
+                    infantry: 0,
+                    tanks: 0,
+                    motorized: 0
+                }
+            };
+        }
+        
+        // Функция для сохранения данных частного формирования
+        function savePrivateMilitaryData(militaryData) {
+            localStorage.setItem('privateMilitaryData', JSON.stringify(militaryData));
+        }
+        
+        // Функция для расчета общих характеристик формирования
+        function calculateMilitaryStats(militaryData) {
+            let totalHP = 0;
+            let totalDamage = 0;
+            
+            totalHP += militaryData.troops.infantry * troopTypes.infantry.hp;
+            totalHP += militaryData.troops.tanks * troopTypes.tanks.hp;
+            totalHP += militaryData.troops.motorized * troopTypes.motorized.hp;
+            
+            totalDamage += militaryData.troops.infantry * troopTypes.infantry.damage;
+            totalDamage += militaryData.troops.tanks * troopTypes.tanks.damage;
+            totalDamage += militaryData.troops.motorized * troopTypes.motorized.damage;
+            
+            return { totalHP, totalDamage };
+        }
+        
+        // Функция для проверки наличия ресурсов для создания войск
+        function checkResourcesForTroop(type) {
+            const playerWorkData = JSON.parse(localStorage.getItem('playerWorkData')) || { resources: {} };
+            const requirements = troopTypes[type].requirements;
+            
+            for (const resource in requirements) {
+                if ((playerWorkData.resources[resource] || 0) < requirements[resource]) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Функция для добавления войск в частное формирование
+        function addTroops(type) {
+            if (!checkResourcesForTroop(type)) {
+                alert('Недостаточно ресурсов для создания этих войск!');
+                return;
+            }
+            
+            const playerWorkData = JSON.parse(localStorage.getItem('playerWorkData')) || { resources: {} };
+            const militaryData = loadPrivateMilitaryData();
+            
+            // Проверяем, есть ли свободные ячейки
+            const totalTroops = militaryData.troops.infantry + militaryData.troops.tanks + militaryData.troops.motorized;
+            if (totalTroops >= militaryData.level) {
+                alert('Нет свободных ячеек для новых войск! Повысьте уровень формирования.');
+                return;
+            }
+            
+            // Списываем ресурсы
+            const requirements = troopTypes[type].requirements;
+            for (const resource in requirements) {
+                playerWorkData.resources[resource] = (playerWorkData.resources[resource] || 0) - requirements[resource];
+            }
+            
+            // Добавляем войска
+            militaryData.troops[type] += 1;
+            
+            // Сохраняем изменения
+            localStorage.setItem('playerWorkData', JSON.stringify(playerWorkData));
+            savePrivateMilitaryData(militaryData);
+            
+            // Обновляем отображение
+            updatePrivateMilitaryDisplay();
+            savePlayerData();
+            
+            alert(`${troopTypes[type].name} успешно добавлены в ваше формирование!`);
+        }
+        
+        // Функция для обновления отображения частного формирования
+        function updatePrivateMilitaryDisplay() {
+            const militaryData = loadPrivateMilitaryData();
+            const stats = calculateMilitaryStats(militaryData);
+            
+            // Обновляем общие характеристики
+            document.getElementById('military-level').textContent = militaryData.level;
+            document.getElementById('total-hp').textContent = stats.totalHP;
+            document.getElementById('total-damage').textContent = stats.totalDamage;
+            
+            const totalTroops = militaryData.troops.infantry + militaryData.troops.tanks + militaryData.troops.motorized;
+            document.getElementById('occupied-slots').textContent = `${totalTroops}/${militaryData.level}`;
+            
+            // Обновляем название формирования
+            if (militaryData.name) {
+                document.getElementById('military-title').textContent = militaryData.name;
+            }
+            
+            // Обновляем сетку войск
+            updateTroopsGrid(militaryData);
+        }
+        
+        // Функция для обновления сетки войск
+        function updateTroopsGrid(militaryData) {
+            const troopsGrid = document.getElementById('troops-grid');
+            troopsGrid.innerHTML = '';
+            
+            const totalSlots = militaryData.level;
+            const totalTroops = militaryData.troops.infantry + militaryData.troops.tanks + militaryData.troops.motorized;
+            
+            // Создаем ячейки для пехоты
+            for (let i = 0; i < militaryData.troops.infantry; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'troop-slot filled';
+                slot.innerHTML = `
+                    <img src="${troopTypes.infantry.icon}" alt="${troopTypes.infantry.name}" class="troop-icon">
+                    <div class="troop-count">${militaryData.troops.infantry > 1 ? militaryData.troops.infantry : ''}</div>
+                `;
+                troopsGrid.appendChild(slot);
+            }
+            
+            // Создаем ячейки для танков
+            for (let i = 0; i < militaryData.troops.tanks; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'troop-slot filled';
+                slot.innerHTML = `
+                    <img src="${troopTypes.tanks.icon}" alt="${troopTypes.tanks.name}" class="troop-icon">
+                    <div class="troop-count">${militaryData.troops.tanks > 1 ? militaryData.troops.tanks : ''}</div>
+                `;
+                troopsGrid.appendChild(slot);
+            }
+            
+            // Создаем ячейки для моторизованных
+            for (let i = 0; i < militaryData.troops.motorized; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'troop-slot filled';
+                slot.innerHTML = `
+                    <img src="${troopTypes.motorized.icon}" alt="${troopTypes.motorized.name}" class="troop-icon">
+                    <div class="troop-count">${militaryData.troops.motorized > 1 ? militaryData.troops.motorized : ''}</div>
+                `;
+                troopsGrid.appendChild(slot);
+            }
+            
+            // Создаем пустые ячейки
+            for (let i = 0; i < totalSlots - totalTroops; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'troop-slot empty';
+                slot.dataset.slotIndex = i;
+                troopsGrid.appendChild(slot);
+            }
+            
+            // Добавляем обработчики для ячеек
+            addSlotEventListeners();
+        }
+        
+        // Функция для показа модального окна добавления войск
+        function showTroopModal(troopType) {
+            const modal = document.getElementById('troop-modal');
+            const troopData = troopTypes[troopType];
+            const playerWorkData = JSON.parse(localStorage.getItem('playerWorkData')) || { resources: {} };
+            
+            // Заполняем информацию о войсках
+            document.getElementById('troop-modal-title').textContent = `Добавить ${troopData.name}`;
+            document.getElementById('troop-modal-icon').src = troopData.icon;
+            document.getElementById('troop-modal-name').textContent = troopData.name;
+            document.getElementById('troop-modal-description').textContent = troopData.description;
+            document.getElementById('troop-modal-hp').textContent = troopData.hp;
+            document.getElementById('troop-modal-damage').textContent = troopData.damage;
+            
+            // Заполняем список требований
+            const requirementsList = document.getElementById('requirements-list');
+            requirementsList.innerHTML = '';
+            
+            let allRequirementsMet = true;
+            
+            for (const resource in troopData.requirements) {
+                const requirementItem = document.createElement('div');
+                requirementItem.className = 'requirement-item';
+                
+                const requiredAmount = troopData.requirements[resource];
+                const currentAmount = playerWorkData.resources[resource] || 0;
+                const isSufficient = currentAmount >= requiredAmount;
+                
+                if (!isSufficient) {
+                    allRequirementsMet = false;
+                }
+                
+                // Определяем иконку ресурса
+                let resourceIcon = '';
+                let resourceName = '';
+                
+                switch(resource) {
+                    case 'supporters':
+                        resourceIcon = '../Img/Resources/supporters.png';
+                        resourceName = 'Сторонники';
+                        break;
+                    case 'rifles':
+                        resourceIcon = '../Img/Resources/rifles.png';
+                        resourceName = 'Автоматы';
+                        break;
+                    case 'uniform':
+                        resourceIcon = '../Img/Resources/uniform.png';
+                        resourceName = 'Униформа';
+                        break;
+                    case 'tanks':
+                        resourceIcon = '../Img/Resources/tanks.png';
+                        resourceName = 'Танки';
+                        break;
+                    case 'apc':
+                        resourceIcon = '../Img/Resources/apc.png';
+                        resourceName = 'БТР';
+                        break;
+                }
+                
+                requirementItem.innerHTML = `
+                    <span class="requirement-label">
+                        <img src="${resourceIcon}" alt="${resourceName}" class="requirement-icon">
+                        ${resourceName}:
+                    </span>
+                    <span class="requirement-value ${isSufficient ? 'sufficient' : 'insufficient'}">
+                        ${currentAmount}/${requiredAmount}
+                    </span>
+                `;
+                
+                requirementsList.appendChild(requirementItem);
+            }
+            
+            // Активируем или деактивируем кнопку добавления
+            const confirmButton = document.getElementById('troop-confirm-button');
+            confirmButton.disabled = !allRequirementsMet;
+            
+            // Сохраняем тип войск для использования при подтверждении
+            confirmButton.dataset.troopType = troopType;
+            
+            // Показываем модальное окно
+            modal.classList.add('active');
+        }
+        
+        // Функция для скрытия модального окна добавления войск
+        function hideTroopModal() {
+            const modal = document.getElementById('troop-modal');
+            modal.classList.remove('active');
+        }
+        
+        // Функция для показа контекстного меню (ПК)
+        function showContextMenu(x, y) {
+            const contextMenu = document.getElementById('context-menu');
+            contextMenu.style.left = x + 'px';
+            contextMenu.style.top = y + 'px';
+            contextMenu.classList.add('active');
+            
+            // Добавляем обработчики для пунктов меню
+            contextMenu.querySelectorAll('.context-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const troopType = this.dataset.troopType;
+                    hideContextMenu();
+                    showTroopModal(troopType);
+                });
+            });
+            
+            // Закрытие меню при клике вне его
+            function closeMenu(e) {
+                if (!contextMenu.contains(e.target)) {
+                    hideContextMenu();
+                    document.removeEventListener('click', closeMenu);
+                }
+            }
+            
+            setTimeout(() => {
+                document.addEventListener('click', closeMenu);
+            }, 10);
+        }
+        
+        // Функция для скрытия контекстного меню (ПК)
+        function hideContextMenu() {
+            const contextMenu = document.getElementById('context-menu');
+            contextMenu.classList.remove('active');
+        }
+        
+        // Функция для показа мобильного меню выбора войск
+        function showMobileTroopSelection() {
+            const mobileMenu = document.getElementById('mobile-troop-selection');
+            mobileMenu.classList.add('active');
+            
+            // Добавляем обработчики для опций
+            mobileMenu.querySelectorAll('.mobile-troop-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const troopType = this.dataset.troopType;
+                    hideMobileTroopSelection();
+                    showTroopModal(troopType);
+                });
+            });
+        }
+        
+        // Функция для скрытия мобильного меню выбора войск
+        function hideMobileTroopSelection() {
+            const mobileMenu = document.getElementById('mobile-troop-selection');
+            mobileMenu.classList.remove('active');
+        }
+        
+        // Функция для добавления обработчиков событий для ячеек
+        function addSlotEventListeners() {
+            const emptySlots = document.querySelectorAll('.troop-slot.empty');
+            
+            emptySlots.forEach(slot => {
+                // Обработчик для клика (ПК) и тапа (мобильные)
+                slot.addEventListener('click', function(e) {
+                    // Проверяем, мобильное ли устройство
+                    const isMobile = window.innerWidth <= 768;
+                    
+                    if (isMobile) {
+                        // На мобильных устройствах показываем нижнее меню
+                        showMobileTroopSelection();
+                    } else {
+                        // На ПК показываем контекстное меню
+                        const rect = this.getBoundingClientRect();
+                        // Убеждаемся, что меню не выходит за пределы экрана
+                        const menuHeight = 200; // Примерная высота меню
+                        const menuWidth = 300; // Примерная ширина меню
+                        
+                        let x = rect.left;
+                        let y = rect.bottom;
+                        
+                        // Проверяем, чтобы меню не выходило за правый край
+                        if (x + menuWidth > window.innerWidth) {
+                            x = window.innerWidth - menuWidth - 10;
+                        }
+                        
+                        // Проверяем, чтобы меню не выходило за нижний край
+                        if (y + menuHeight > window.innerHeight) {
+                            y = rect.top - menuHeight;
+                        }
+                        
+                        showContextMenu(x, y);
+                    }
+                });
+            });
+        }
+        
+        // Функция для показа/скрытия экрана управления партией ВНУТРИ вкладки
         function togglePartyManagement(show) {
             const partyManagement = document.getElementById('party-management');
-            const partyTabs = document.getElementById('party-tabs');
-            const partiesTab = document.getElementById('parties-tab');
-            const militaryTab = document.getElementById('military-tab');
+            const partyList = document.getElementById('party-list');
             
             if (show) {
-                partyManagement.classList.add('active');
-                partyTabs.style.display = 'none';
-                partiesTab.style.display = 'none';
-                militaryTab.style.display = 'none';
+                partyManagement.style.display = 'flex';
+                partyList.style.display = 'none';
                 
                 // Обновляем таймер митинга при показе экрана
                 updateRallyTimer();
+                updateRecruitTimer();
             } else {
-                partyManagement.classList.remove('active');
-                partyTabs.style.display = 'flex';
-                partiesTab.style.display = 'block';
-                militaryTab.style.display = 'none';
+                partyManagement.style.display = 'none';
+                partyList.style.display = 'flex';
+            }
+        }
+        
+        // Функция для показа/скрытия экрана управления частным формированием ВНУТРИ вкладки
+        function togglePrivateMilitaryManagement(show) {
+            const militaryManagement = document.getElementById('private-military-management');
+            const militaryList = document.getElementById('military-list');
+            const createButton = document.getElementById('create-military-button');
+            
+            if (show) {
+                militaryManagement.style.display = 'flex';
+                militaryList.style.display = 'none';
+                createButton.style.display = 'none';
+                
+                // Обновляем отображение формирования
+                updatePrivateMilitaryDisplay();
+            } else {
+                militaryManagement.style.display = 'none';
+                militaryList.style.display = 'flex';
+                createButton.style.display = 'block';
             }
         }
         
@@ -918,6 +2108,37 @@
             }
         }
         
+        // Функция для обновления таймера вербовки
+        function updateRecruitTimer() {
+            const recruitButton = document.getElementById('recruit-button');
+            const recruitButtonText = document.getElementById('recruit-button-text');
+            const lastRecruitTime = localStorage.getItem('lastRecruitTime');
+            
+            if (!lastRecruitTime) {
+                recruitButton.disabled = false;
+                recruitButtonText.textContent = 'Вербовка сторонников (100)';
+                return;
+            }
+            
+            const now = Date.now();
+            const timeSinceLastRecruit = now - parseInt(lastRecruitTime);
+            const timeLeft = RECRUIT_COOLDOWN - timeSinceLastRecruit;
+            
+            if (timeLeft <= 0) {
+                recruitButton.disabled = false;
+                recruitButtonText.textContent = 'Вербовка сторонников (100)';
+                localStorage.removeItem('lastRecruitTime');
+            } else {
+                recruitButton.disabled = true;
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                recruitButtonText.textContent = `Вербовка через: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Обновляем таймер каждую секунду
+                setTimeout(updateRecruitTimer, 1000);
+            }
+        }
+        
         // Функция для организации митинга
         function organizeRally() {
             const rallyButton = document.getElementById('rally-button');
@@ -957,10 +2178,44 @@
             }, 1000);
         }
         
+        // Функция для вербовки сторонников
+        function recruitSupporters() {
+            const recruitButton = document.getElementById('recruit-button');
+            const recruitButtonText = document.getElementById('recruit-button-text');
+            
+            recruitButton.disabled = true;
+            recruitButtonText.textContent = 'Вербовка...';
+            
+            // Небольшая задержка для имитации процесса
+            setTimeout(() => {
+                // Сохраняем время последней вербовки
+                localStorage.setItem('lastRecruitTime', Date.now().toString());
+                
+                // Добавляем 100 сторонников в Work данные
+                const playerWorkData = JSON.parse(localStorage.getItem('playerWorkData')) || { resources: {} };
+                playerWorkData.resources.supporters = (playerWorkData.resources.supporters || 0) + 100;
+                localStorage.setItem('playerWorkData', JSON.stringify(playerWorkData));
+                
+                // Сообщение об успехе
+                alert("Вербовка завершена! Вы получили 100 сторонников.");
+                
+                // Сохраняем данные игрока
+                savePlayerData();
+                
+                // Запускаем таймер
+                updateRecruitTimer();
+            }, 1000);
+        }
+        
         // Функция для вступления в партию
         function joinParty(partyName, ideology) {
             // Обновляем информацию о партии игрока
             document.getElementById('player-party').textContent = partyName;
+            
+            // Сохраняем идеологию игрока
+            const playerData = JSON.parse(localStorage.getItem('playerData') || '{}');
+            playerData.ideology = ideology;
+            localStorage.setItem('playerData', JSON.stringify(playerData));
             
             // Сохраняем изменения
             savePlayerData();
@@ -968,7 +2223,7 @@
             // Обновляем кнопки в списке партий
             updatePartyButtons(partyName);
             
-            // Показываем экран управления партией
+            // Показываем экран управления партией ВНУТРИ вкладки
             updatePartyManagement(partyName);
             togglePartyManagement(true);
             
@@ -981,17 +2236,103 @@
             // Обновляем информацию о партии игрока
             document.getElementById('player-party').textContent = 'Не состоит';
             
+            // Удаляем идеологию игрока
+            const playerData = JSON.parse(localStorage.getItem('playerData') || '{}');
+            delete playerData.ideology;
+            localStorage.setItem('playerData', JSON.stringify(playerData));
+            
             // Сохраняем изменения
             savePlayerData();
             
             // Обновляем кнопки в списке партий
             updatePartyButtons('Не состоит');
             
-            // Скрываем экран управления партией
+            // Скрываем экран управления партией ВНУТРИ вкладки
             togglePartyManagement(false);
             
             // Сообщение о выходе из партии
             alert('Вы вышли из партии');
+        }
+        
+        // Функция для показа модального окна создания формирования
+        function showCreateMilitaryModal() {
+            const modal = document.getElementById('create-military-modal');
+            modal.classList.add('active');
+            
+            // Очищаем поле ввода
+            document.getElementById('military-name-input').value = '';
+            
+            // Фокусируемся на поле ввода
+            document.getElementById('military-name-input').focus();
+        }
+        
+        // Функция для скрытия модального окна
+        function hideCreateMilitaryModal() {
+            const modal = document.getElementById('create-military-modal');
+            modal.classList.remove('active');
+        }
+        
+        // Функция для создания частного военного формирования
+        function createPrivateMilitary() {
+            const nameInput = document.getElementById('military-name-input');
+            const formationName = nameInput.value.trim();
+            
+            // Проверяем, что название не пустое
+            if (!formationName) {
+                alert('Пожалуйста, введите название для вашего формирования!');
+                return;
+            }
+            
+            // Проверяем, не состоит ли уже игрок в формировании
+            if (document.getElementById('player-army').textContent !== 'Не служит') {
+                alert('Вы уже состоите в военном формировании!');
+                hideCreateMilitaryModal();
+                return;
+            }
+            
+            // Создаем данные формирования
+            const militaryData = {
+                level: 1,
+                name: formationName,
+                troops: {
+                    infantry: 0,
+                    tanks: 0,
+                    motorized: 0
+                }
+            };
+            
+            // Сохраняем данные формирования
+            savePrivateMilitaryData(militaryData);
+            
+            // Обновляем информацию об армии игрока
+            document.getElementById('player-army').textContent = formationName;
+            
+            // Сохраняем изменения
+            savePlayerData();
+            
+            // Скрываем модальное окно
+            hideCreateMilitaryModal();
+            
+            // Показываем экран управления формированием ВНУТРИ вкладки
+            togglePrivateMilitaryManagement(true);
+            
+            // Сообщение об успешном создании
+            alert(`Вы создали частное военное формирование: ${formationName}!`);
+        }
+        
+        // Функция для роспуска частного военного формирования
+        function disbandPrivateMilitary() {
+            // Обновляем информацию об армии игрока
+            document.getElementById('player-army').textContent = 'Не служит';
+            
+            // Сохраняем изменения
+            savePlayerData();
+            
+            // Скрываем экран управления формированием ВНУТРИ вкладки
+            togglePrivateMilitaryManagement(false);
+            
+            // Сообщение о роспуске
+            alert('Вы распустили свое военное формирование');
         }
         
         // Функция для обновления кнопки вступления в партию
@@ -1049,9 +2390,16 @@
             // Проверяем, состоит ли игрок в партии
             const playerParty = document.getElementById('player-party').textContent;
             if (playerParty !== 'Не состоит') {
-                // Показываем экран управления партией
+                // Показываем экран управления партией ВНУТРИ вкладки
                 updatePartyManagement(playerParty);
                 togglePartyManagement(true);
+            }
+            
+            // Проверяем, есть ли у игрока частное формирование
+            const playerArmy = document.getElementById('player-army').textContent;
+            if (playerArmy !== 'Не служит' && playerArmy !== 'Частное формирование') {
+                // Показываем экран управления формированием ВНУТРИ вкладки
+                togglePrivateMilitaryManagement(true);
             }
             
             // Заполняем список партий
@@ -1129,6 +2477,41 @@
             
             // Обработчик для кнопки организации митинга
             document.getElementById('rally-button').addEventListener('click', organizeRally);
+            
+            // Обработчик для кнопки вербовки
+            document.getElementById('recruit-button').addEventListener('click', recruitSupporters);
+            
+            // Обработчик для кнопки создания частного формирования
+            document.getElementById('create-military-button').addEventListener('click', showCreateMilitaryModal);
+            
+            // Обработчик для кнопки подтверждения создания формирования
+            document.getElementById('confirm-create-button').addEventListener('click', createPrivateMilitary);
+            
+            // Обработчик для кнопки отмены создания формирования
+            document.getElementById('cancel-create-button').addEventListener('click', hideCreateMilitaryModal);
+            
+            // Обработчик для поля ввода названия формирования (создание по нажатию Enter)
+            document.getElementById('military-name-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    createPrivateMilitary();
+                }
+            });
+            
+            // Обработчик для кнопки подтверждения добавления войск
+            document.getElementById('troop-confirm-button').addEventListener('click', function() {
+                const troopType = this.dataset.troopType;
+                addTroops(troopType);
+                hideTroopModal();
+            });
+            
+            // Обработчик для кнопки отмены добавления войск
+            document.getElementById('troop-cancel-button').addEventListener('click', hideTroopModal);
+            
+            // Обработчик для кнопки закрытия мобильного меню
+            document.getElementById('mobile-troop-close').addEventListener('click', hideMobileTroopSelection);
+            
+            // Обработчик для кнопки роспуска формирования
+            document.getElementById('disband-button').addEventListener('click', disbandPrivateMilitary);
             
             // Блокировка неактивных кнопок
             disableInactiveButtons();

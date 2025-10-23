@@ -62,6 +62,40 @@
             height: 32px;
         }
         
+        /* Бонусы регионов */
+        .region-bonuses {
+            background-color: #0a0a0a;
+            padding: 8px 15px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .bonus-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .bonus-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+        
+        .military-bonus { background-color: #ff4444; }
+        .civilian-bonus { background-color: #44ff44; }
+        .medicine-bonus { background-color: #4444ff; }
+        
+        .bonus-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
         .tabs {
             display: flex;
             background-color: #0a0a0a;
@@ -172,6 +206,13 @@
         
         .resource-reward {
             color: #32cd32;
+        }
+        
+        .bonus-reward {
+            color: #ffd700;
+            font-size: 0.7rem;
+            display: block;
+            margin-top: 2px;
         }
         
         .action-controls {
@@ -293,6 +334,11 @@
             color: #32cd32;
         }
         
+        .total-bonus {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
         .storage-table {
             width: 100%;
             border-collapse: collapse;
@@ -345,6 +391,8 @@
         /* Адаптация для мобильных */
         @media (max-width: 768px) and (orientation: landscape) {
             .header { padding: 6px 10px; }
+            .region-bonuses { padding: 6px 10px; font-size: 0.7rem; }
+            .bonus-item { flex-direction: column; gap: 2px; }
             .tabs { padding: 0 5px; }
             .tab { padding: 8px 10px; font-size: 0.7rem; flex: 1; justify-content: center; }
             .tab span { display: none; }
@@ -363,6 +411,8 @@
         
         @media (max-width: 768px) and (orientation: portrait) {
             .header { padding: 6px 10px; }
+            .region-bonuses { padding: 6px 10px; font-size: 0.7rem; }
+            .bonus-item { flex-direction: column; gap: 2px; }
             .tabs { padding: 0 5px; }
             .tab { padding: 8px 10px; font-size: 0.7rem; flex: 1; flex-direction: column; gap: 4px; justify-content: center; align-items: center; }
             .tab span { display: none; }
@@ -384,6 +434,7 @@
         @media (max-width: 480px) {
             .header-title { font-size: 0.9rem; }
             .energy-display { font-size: 0.8rem; }
+            .region-bonuses { font-size: 0.65rem; padding: 4px 8px; }
             .tab { padding: 6px 8px; }
             .tab-icon { width: 28px; height: 28px; }
             .tab span { display: none; }
@@ -416,6 +467,25 @@
         <div class="energy-display">
             <img src="../Img/Electricity.png" alt="Энергия" class="energy-icon">
             <span id="energy-value">100/100</span>
+        </div>
+    </div>
+    
+    <!-- Бонусы от региона -->
+    <div class="region-bonuses" id="region-bonuses">
+        <div class="bonus-item">
+            <div class="bonus-icon military-bonus"></div>
+            <span>Военная пром.:</span>
+            <span class="bonus-value" id="military-bonus">+0%</span>
+        </div>
+        <div class="bonus-item">
+            <div class="bonus-icon civilian-bonus"></div>
+            <span>Гражданская пром.:</span>
+            <span class="bonus-value" id="civilian-bonus">+0%</span>
+        </div>
+        <div class="bonus-item">
+            <div class="bonus-icon medicine-bonus"></div>
+            <span>Восстановление энергии:</span>
+            <span class="bonus-value" id="medicine-bonus">+0</span>
         </div>
     </div>
     
@@ -468,6 +538,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Уголь: 5</span>
+                            <span class="bonus-reward" id="bonus-mine_coal"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -492,6 +563,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Железо: 3</span>
+                            <span class="bonus-reward" id="bonus-mine_iron"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -516,6 +588,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Боксит: 2</span>
+                            <span class="bonus-reward" id="bonus-mine_bauxite"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -555,6 +628,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Нефть: 4</span>
+                            <span class="bonus-reward" id="bonus-oil_drill"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -594,6 +668,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Какао: 6</span>
+                            <span class="bonus-reward" id="bonus-farm_cocoa"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -618,6 +693,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Специи: 5</span>
+                            <span class="bonus-reward" id="bonus-farm_spices"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -642,6 +718,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Конопля: 7</span>
+                            <span class="bonus-reward" id="bonus-farm_hemp"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -666,6 +743,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Краситель: 4</span>
+                            <span class="bonus-reward" id="bonus-farm_dye"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -706,6 +784,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Бумага: 5</span>
+                            <span class="bonus-reward" id="bonus-produce_paper"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -731,6 +810,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Ткань: 4</span>
+                            <span class="bonus-reward" id="bonus-produce_fabric"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -756,6 +836,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Стекло: 3</span>
+                            <span class="bonus-reward" id="bonus-produce_glass"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -781,6 +862,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Пластик: 3</span>
+                            <span class="bonus-reward" id="bonus-produce_plastic"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -806,6 +888,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Кофе: 4</span>
+                            <span class="bonus-reward" id="bonus-produce_coffee"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -831,6 +914,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Табак: 4</span>
+                            <span class="bonus-reward" id="bonus-produce_tobacco"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -871,6 +955,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Униформа: 2</span>
+                            <span class="bonus-reward" id="bonus-produce_uniform"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -896,6 +981,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Боеприпасы: 3</span>
+                            <span class="bonus-reward" id="bonus-produce_ammo"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -921,6 +1007,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Автоматы: 1</span>
+                            <span class="bonus-reward" id="bonus-produce_rifles"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -946,6 +1033,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">Танки: 1</span>
+                            <span class="bonus-reward" id="bonus-produce_tanks"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -971,6 +1059,7 @@
                         </td>
                         <td class="reward">
                             <span class="resource-reward">БТР: 1</span>
+                            <span class="bonus-reward" id="bonus-produce_apc"></span>
                         </td>
                         <td>
                             <div class="action-controls">
@@ -1012,31 +1101,39 @@
             resources: {
                 coal: 0, iron: 0, bauxite: 0, oil: 0, paper: 0, fabric: 0,
                 glass: 0, plastic: 0, cocoa: 0, spices: 0, hemp: 0, dye: 0,
-                uniform: 0, ammo: 0, rifles: 0, tanks: 0, apc: 0, coffee: 0, tobacco: 0
+                uniform: 0, ammo: 0, rifles: 0, tanks: 0, apc: 0, coffee: 0, 
+                tobacco: 0, supporters: 0
             },
             autoWork: null
         };
         
+        // Бонусы от региона
+        let regionBonuses = {
+            military: 0,  // +10% к военному производству за каждый уровень
+            civilian: 0,  // +10% к гражданскому производству за каждый уровень
+            medicine: 0   // +5 к восстановлению энергии за каждый уровень
+        };
+        
         const workDefinitions = {
-            mine_coal: { energy: 10, reward: { coal: 5 } },
-            mine_iron: { energy: 15, reward: { iron: 3 } },
-            mine_bauxite: { energy: 20, reward: { bauxite: 2 } },
-            oil_drill: { energy: 25, reward: { oil: 4 } },
-            farm_cocoa: { energy: 8, reward: { cocoa: 6 } },
-            farm_spices: { energy: 10, reward: { spices: 5 } },
-            farm_hemp: { energy: 12, reward: { hemp: 7 } },
-            farm_dye: { energy: 15, reward: { dye: 4 } },
-            produce_paper: { energy: 10, cost: { hemp: 3 }, reward: { paper: 5 } },
-            produce_fabric: { energy: 12, cost: { hemp: 4 }, reward: { fabric: 4 } },
-            produce_glass: { energy: 15, cost: { coal: 5 }, reward: { glass: 3 } },
-            produce_plastic: { energy: 20, cost: { oil: 4 }, reward: { plastic: 3 } },
-            produce_coffee: { energy: 15, cost: { cocoa: 3, spices: 2 }, reward: { coffee: 4 } },
-            produce_tobacco: { energy: 18, cost: { hemp: 4, spices: 2 }, reward: { tobacco: 4 } },
-            produce_uniform: { energy: 20, cost: { fabric: 5 }, reward: { uniform: 2 } },
-            produce_ammo: { energy: 25, cost: { iron: 4, coal: 3 }, reward: { ammo: 3 } },
-            produce_rifles: { energy: 30, cost: { iron: 8 }, reward: { rifles: 1 } },
-            produce_tanks: { energy: 50, cost: { iron: 15, bauxite: 10 }, reward: { tanks: 1 } },
-            produce_apc: { energy: 40, cost: { iron: 10, plastic: 5 }, reward: { apc: 1 } }
+            mine_coal: { energy: 10, reward: { coal: 5 }, type: 'resource' },
+            mine_iron: { energy: 15, reward: { iron: 3 }, type: 'resource' },
+            mine_bauxite: { energy: 20, reward: { bauxite: 2 }, type: 'resource' },
+            oil_drill: { energy: 25, reward: { oil: 4 }, type: 'resource' },
+            farm_cocoa: { energy: 8, reward: { cocoa: 6 }, type: 'resource' },
+            farm_spices: { energy: 10, reward: { spices: 5 }, type: 'resource' },
+            farm_hemp: { energy: 12, reward: { hemp: 7 }, type: 'resource' },
+            farm_dye: { energy: 15, reward: { dye: 4 }, type: 'resource' },
+            produce_paper: { energy: 10, cost: { hemp: 3 }, reward: { paper: 5 }, type: 'civilian' },
+            produce_fabric: { energy: 12, cost: { hemp: 4 }, reward: { fabric: 4 }, type: 'civilian' },
+            produce_glass: { energy: 15, cost: { coal: 5 }, reward: { glass: 3 }, type: 'civilian' },
+            produce_plastic: { energy: 20, cost: { oil: 4 }, reward: { plastic: 3 }, type: 'civilian' },
+            produce_coffee: { energy: 15, cost: { cocoa: 3, spices: 2 }, reward: { coffee: 4 }, type: 'civilian' },
+            produce_tobacco: { energy: 18, cost: { hemp: 4, spices: 2 }, reward: { tobacco: 4 }, type: 'civilian' },
+            produce_uniform: { energy: 20, cost: { fabric: 5 }, reward: { uniform: 2 }, type: 'military' },
+            produce_ammo: { energy: 25, cost: { iron: 4, coal: 3 }, reward: { ammo: 3 }, type: 'military' },
+            produce_rifles: { energy: 30, cost: { iron: 8 }, reward: { rifles: 1 }, type: 'military' },
+            produce_tanks: { energy: 50, cost: { iron: 15, bauxite: 10 }, reward: { tanks: 1 }, type: 'military' },
+            produce_apc: { energy: 40, cost: { iron: 10, plastic: 5 }, reward: { apc: 1 }, type: 'military' }
         };
         
         const tabNames = {
@@ -1049,8 +1146,108 @@
             paper: 'Бумага', fabric: 'Ткань', glass: 'Стекло', plastic: 'Пластик',
             cocoa: 'Какао', spices: 'Специи', hemp: 'Конопля', dye: 'Краситель',
             uniform: 'Военная униформа', ammo: 'Боеприпасы', rifles: 'Автоматы',
-            tanks: 'Танки', apc: 'Бронетранспортеры', coffee: 'Кофе', tobacco: 'Табак'
+            tanks: 'Танки', apc: 'Бронетранспортеры', coffee: 'Кофе', 
+            tobacco: 'Табак', supporters: 'Сторонники'
         };
+
+        const resourceIcons = {
+            coal: '../Img/Resources/coal.png',
+            iron: '../Img/Resources/iron.png',
+            bauxite: '../Img/Resources/bauxite.png',
+            oil: '../Img/Resources/oil.png',
+            paper: '../Img/Resources/paper.png',
+            fabric: '../Img/Resources/fabric.png',
+            glass: '../Img/Resources/glass.png',
+            plastic: '../Img/Resources/plastic.png',
+            cocoa: '../Img/Resources/cocoa.png',
+            spices: '../Img/Resources/spices.png',
+            hemp: '../Img/Resources/hemp.png',
+            dye: '../Img/Resources/dye.png',
+            uniform: '../Img/Resources/uniform.png',
+            ammo: '../Img/Resources/ammo.png',
+            rifles: '../Img/Resources/rifles.png',
+            tanks: '../Img/Resources/tanks.png',
+            apc: '../Img/Resources/apc.png',
+            coffee: '../Img/Resources/coffee.png',
+            tobacco: '../Img/Resources/tobacco.png',
+            supporters: '../Img/Resources/Citizen3.png'
+        };
+
+        // Функция для загрузки бонусов региона
+        function loadRegionBonuses() {
+            const playerDataStr = localStorage.getItem('playerData');
+            if (playerDataStr) {
+                const playerData = JSON.parse(playerDataStr);
+                const currentRegion = playerData.region;
+                
+                // Загружаем данные регионов
+                if (typeof window.regionsData !== 'undefined') {
+                    const region = window.regionsData.find(r => r.name === currentRegion);
+                    if (region) {
+                        regionBonuses.military = region.militaryIndustry;
+                        regionBonuses.civilian = region.civilianIndustry;
+                        regionBonuses.medicine = region.medicine;
+                        
+                        // Обновляем отображение бонусов
+                        updateBonusesDisplay();
+                        updateBonusRewards();
+                        return;
+                    }
+                }
+            }
+            
+            // Если не удалось загрузить, используем значения по умолчанию
+            regionBonuses = { military: 0, civilian: 0, medicine: 0 };
+            updateBonusesDisplay();
+            updateBonusRewards();
+        }
+
+        // Функция для обновления отображения бонусов
+        function updateBonusesDisplay() {
+            document.getElementById('military-bonus').textContent = `+${regionBonuses.military * 10}%`;
+            document.getElementById('civilian-bonus').textContent = `+${regionBonuses.civilian * 10}%`;
+            document.getElementById('medicine-bonus').textContent = `+${regionBonuses.medicine * 5}`;
+        }
+
+        // Функция для обновления отображения бонусных наград
+        function updateBonusRewards() {
+            for (const [action, workDef] of Object.entries(workDefinitions)) {
+                const bonusElement = document.getElementById(`bonus-${action}`);
+                if (bonusElement) {
+                    let bonusText = '';
+                    
+                    if (workDef.type === 'military' && regionBonuses.military > 0) {
+                        const bonusPercent = regionBonuses.military * 10;
+                        bonusText = `Бонус: +${bonusPercent}%`;
+                    } else if (workDef.type === 'civilian' && regionBonuses.civilian > 0) {
+                        const bonusPercent = regionBonuses.civilian * 10;
+                        bonusText = `Бонус: +${bonusPercent}%`;
+                    }
+                    
+                    bonusElement.textContent = bonusText;
+                    bonusElement.style.display = bonusText ? 'block' : 'none';
+                }
+            }
+        }
+
+        // Функция для расчета бонусной награды
+        function calculateBonusReward(action, baseReward) {
+            const workDef = workDefinitions[action];
+            let bonusMultiplier = 1;
+            
+            if (workDef.type === 'military' && regionBonuses.military > 0) {
+                bonusMultiplier += regionBonuses.military * 0.1; // +10% за каждый уровень
+            } else if (workDef.type === 'civilian' && regionBonuses.civilian > 0) {
+                bonusMultiplier += regionBonuses.civilian * 0.1; // +10% за каждый уровень
+            }
+            
+            return Math.floor(baseReward * bonusMultiplier);
+        }
+
+        // Функция для расчета бонусного восстановления энергии
+        function calculateEnergyRestoration() {
+            return regionBonuses.medicine * 5; // +5 энергии за каждый уровень медицины
+        }
 
         function toggleAutoWork(action) {
             if (playerData.autoWork === action) {
@@ -1157,8 +1354,14 @@
                 }
             }
             
-            for (const [resource, amount] of Object.entries(workDef.reward)) {
-                playerData.resources[resource] += amount * count;
+            // Применяем бонусы к наградам
+            for (const [resource, baseAmount] of Object.entries(workDef.reward)) {
+                const bonusAmount = calculateBonusReward(action, baseAmount * count);
+                playerData.resources[resource] += bonusAmount;
+                
+                if (!isAuto && bonusAmount > baseAmount * count) {
+                    showFeedback(`Бонус региона! Получено ${bonusAmount} ${resourceNames[resource]} вместо ${baseAmount * count}`);
+                }
             }
             
             savePlayerData();
@@ -1184,22 +1387,36 @@
             const storageBody = document.getElementById('storage-body');
             storageBody.innerHTML = '';
             
-            for (const [resource, amount] of Object.entries(playerData.resources)) {
-                if (amount > 0) {
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td>
-                            <div class="item-cell">
-                                <img src="../Img/Resources/${resource}.png" alt="${resourceNames[resource]}" class="item-icon">
-                                <span class="item-name">${resourceNames[resource]}</span>
-                            </div>
-                        </td>
-                        <td class="item-count">${amount}</td>
-                    `;
-                    
-                    storageBody.appendChild(row);
-                }
+            // Сортируем ресурсы для красивого отображения
+            const sortedResources = Object.entries(playerData.resources)
+                .filter(([_, amount]) => amount > 0)
+                .sort(([a], [b]) => resourceNames[a].localeCompare(resourceNames[b]));
+            
+            if (sortedResources.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="2" style="text-align: center; color: #666;">
+                        Склад пуст
+                    </td>
+                `;
+                storageBody.appendChild(emptyRow);
+                return;
+            }
+            
+            for (const [resource, amount] of sortedResources) {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="item-cell">
+                            <img src="${resourceIcons[resource] || '../Img/Resources/default.png'}" alt="${resourceNames[resource]}" class="item-icon" onerror="this.src='../Img/Resources/default.png'">
+                            <span class="item-name">${resourceNames[resource]}</span>
+                        </div>
+                    </td>
+                    <td class="item-count">${amount}</td>
+                `;
+                
+                storageBody.appendChild(row);
             }
         }
 
@@ -1238,6 +1455,47 @@
             const countElement = container.querySelector('.action-count');
             
             countElement.textContent = `${count} раз`;
+            
+            // Обновляем отображение общих затрат/наград с учетом бонусов
+            updateTotalCostReward(container, workDef, count, action);
+        }
+
+        function updateTotalCostReward(container, workDef, count, action) {
+            let totalCostRewardElement = container.querySelector('.total-cost-reward');
+            
+            if (!totalCostRewardElement) {
+                totalCostRewardElement = document.createElement('div');
+                totalCostRewardElement.className = 'total-cost-reward';
+                container.appendChild(totalCostRewardElement);
+            }
+            
+            let html = '';
+            
+            // Затраты энергии
+            const totalEnergy = workDef.energy * count;
+            html += `<div class="total-energy">Энергия: ${totalEnergy}</div>`;
+            
+            // Затраты ресурсов
+            if (workDef.cost) {
+                for (const [resource, amount] of Object.entries(workDef.cost)) {
+                    const totalAmount = amount * count;
+                    html += `<div class="total-resources">${resourceNames[resource]}: ${totalAmount}</div>`;
+                }
+            }
+            
+            // Награды с бонусами
+            for (const [resource, baseAmount] of Object.entries(workDef.reward)) {
+                const baseTotal = baseAmount * count;
+                const bonusTotal = calculateBonusReward(action, baseAmount * count);
+                
+                if (bonusTotal > baseTotal) {
+                    html += `<div class="total-reward">${resourceNames[resource]}: +${baseTotal} → <span class="total-bonus">${bonusTotal}</span></div>`;
+                } else {
+                    html += `<div class="total-reward">${resourceNames[resource]}: +${baseTotal}</div>`;
+                }
+            }
+            
+            totalCostRewardElement.innerHTML = html;
         }
 
         function savePlayerData() {
@@ -1248,21 +1506,64 @@
             const saved = localStorage.getItem('playerWorkData');
             if (saved) {
                 const data = JSON.parse(saved);
-                playerData.energy = data.energy;
-                playerData.maxEnergy = data.maxEnergy;
-                playerData.lastEnergyUpdate = data.lastEnergyUpdate;
-                playerData.resources = data.resources;
-                playerData.autoWork = data.autoWork;
+                // Сохраняем только существующие свойства, чтобы не перезаписать новые ресурсы
+                playerData.energy = data.energy !== undefined ? data.energy : playerData.energy;
+                playerData.maxEnergy = data.maxEnergy !== undefined ? data.maxEnergy : playerData.maxEnergy;
+                playerData.lastEnergyUpdate = data.lastEnergyUpdate !== undefined ? data.lastEnergyUpdate : Date.now();
+                playerData.autoWork = data.autoWork !== undefined ? data.autoWork : null;
+                
+                // Обновляем ресурсы, сохраняя новые
+                if (data.resources) {
+                    for (const [resource, amount] of Object.entries(data.resources)) {
+                        playerData.resources[resource] = amount;
+                    }
+                }
                 
                 updateEnergyDisplay();
                 updateAutoButtons();
                 updateStorageDisplay();
                 updateSlidersMax();
+                return true;
+            }
+            return false;
+        }
+
+        // Функция для восстановления энергии с учетом бонусов
+        function restoreEnergy() {
+            const now = Date.now();
+            const timeDiff = now - playerData.lastEnergyUpdate;
+            
+            // Восстанавливаем 1 энергию каждые 30 секунд + бонус от медицины
+            const baseEnergyGain = Math.floor(timeDiff / (30 * 1000));
+            const bonusEnergy = calculateEnergyRestoration();
+            const totalEnergyGain = baseEnergyGain + bonusEnergy;
+            
+            if (totalEnergyGain > 0) {
+                playerData.energy = Math.min(playerData.maxEnergy, playerData.energy + totalEnergyGain);
+                playerData.lastEnergyUpdate = now - (timeDiff % (30 * 1000));
+                updateEnergyDisplay();
+                updateSlidersMax();
+                savePlayerData();
+                
+                // Показываем сообщение о бонусе, если он есть
+                if (bonusEnergy > 0 && baseEnergyGain > 0) {
+                    console.log(`Бонус медицины: +${bonusEnergy} энергии`);
+                }
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            loadPlayerData();
+            // Загружаем данные
+            if (!loadPlayerData()) {
+                // Если данных нет, сохраняем начальные значения
+                savePlayerData();
+            }
+            
+            // Загружаем бонусы региона
+            loadRegionBonuses();
+            
+            // Восстанавливаем энергию при загрузке
+            restoreEnergy();
             
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -1293,23 +1594,22 @@
                 slider.addEventListener('input', function() {
                     updateSliderDisplay(this);
                 });
+                // Инициализируем отображение для каждого слайдера
+                updateSliderDisplay(slider);
             });
 
-            setInterval(performAutoWork, 3000);
+            // Авто-работа
+            setInterval(performAutoWork, 500);
             
-            setInterval(() => {
-                const now = Date.now();
-                const timeDiff = now - playerData.lastEnergyUpdate;
-                const energyGain = Math.floor(timeDiff / (2.5 * 60 * 1000)) * 10;
-                
-                if (energyGain > 0) {
-                    playerData.energy = Math.min(playerData.maxEnergy, playerData.energy + energyGain);
-                    playerData.lastEnergyUpdate = now - (timeDiff % (2.5 * 60 * 1000));
-                    updateEnergyDisplay();
-                    savePlayerData();
-                }
-            }, 10000);
+            // Восстановление энергии каждую секунду
+            setInterval(restoreEnergy, 60000);
+            
+            // Обновляем бонусы каждые 10 секунд (на случай смены региона)
+            setInterval(loadRegionBonuses, 10000);
         });
     </script>
+
+    <!-- Подключаем данные регионов -->
+    <script src="../Scripts/Regions.js"></script>
 </body>
 </html>

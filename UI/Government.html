@@ -9,7 +9,6 @@
     <script src="Government.js"></script>
     <script src="../Scripts/AddLaws.js"></script>
     <style>
-        /* Стили остаются без изменений */
         * {
             margin: 0;
             padding: 0;
@@ -42,7 +41,7 @@
         
         .header {
             background-color: #0a0a0a;
-            padding: 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid #1a1a1a;
             display: flex;
             justify-content: space-between;
@@ -51,18 +50,19 @@
         }
         
         .header h1 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #fff;
+            font-weight: 600;
         }
         
         .back-button {
             background-color: #1a1a1a;
             color: #fff;
             border: 1px solid #2a2a2a;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: background-color 0.2s;
         }
         
@@ -72,45 +72,54 @@
         
         .container {
             flex: 1;
-            overflow-y: auto;
-            padding: 15px;
+            overflow: hidden;
+            padding: 12px;
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 20px;
+            gap: 15px;
+            min-height: 0;
         }
         
         .left-column {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            overflow: hidden;
+            min-height: 0;
         }
         
         .right-column {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            overflow: hidden;
+            min-height: 0;
         }
         
         .government-card {
             background-color: #0a0a0a;
             border: 1px solid #1a1a1a;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
         
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #1a1a1a;
+            flex-shrink: 0;
         }
         
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #fff;
+            font-weight: 600;
         }
         
         .add-law-button {
@@ -118,14 +127,15 @@
             color: #fff;
             border: 1px solid #444;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1rem;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
         
         .add-law-button:hover {
@@ -136,27 +146,27 @@
         .government-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 10px;
+            flex-shrink: 0;
         }
         
         .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px;
+            padding: 6px;
             background-color: #111;
             border-radius: 3px;
             border: 1px solid #1a1a1a;
+            font-size: 0.85rem;
         }
         
         .info-label {
             color: #999;
-            font-size: 0.9rem;
         }
         
         .info-value {
             color: #fff;
-            font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
         }
         
         .ruling-ideology {
@@ -165,79 +175,82 @@
         
         .ideology-section {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
         }
         
         .pie-chart-container {
-            flex: 1;
+            flex: 0 0 auto;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 300px;
         }
         
         .pie-chart {
-            width: 250px;
-            height: 250px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             position: relative;
+            flex-shrink: 0;
         }
         
         .ideology-legend {
             flex: 1;
-            max-height: 300px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             padding-right: 5px;
+            min-height: 0;
         }
         
         .ideology-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px;
+            padding: 6px;
             border-radius: 3px;
             background-color: #111;
             border: 1px solid #1a1a1a;
+            font-size: 0.8rem;
+            flex-shrink: 0;
         }
         
         .ideology-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
             flex-shrink: 0;
         }
         
         .ideology-name {
-            font-size: 0.85rem;
             flex: 1;
+            font-size: 0.8rem;
         }
         
         .ideology-link {
             color: inherit;
             text-decoration: none;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        
-        .ideology-link:hover {
-            opacity: 0.8;
-            text-decoration: underline;
         }
         
         .ideology-percentage {
-            font-size: 0.85rem;
-            font-weight: bold;
-            min-width: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-width: 35px;
             text-align: right;
         }
         
         .legislation-section {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            max-height: 400px;
         }
         
         .legislation-item {
@@ -245,15 +258,29 @@
             background-color: #111;
             border-radius: 3px;
             border: 1px solid #1a1a1a;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             position: relative;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        
+        .law-player {
+            border-left: 3px solid #1a4c7a;
+        }
+        
+        .law-ideology-player {
+            border-left: 3px solid #228b22;
+        }
+        
+        .law-ideology-other {
+            border-left: 3px solid #8b4513;
         }
         
         .law-status {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.8rem;
+            top: 8px;
+            right: 8px;
+            font-size: 0.75rem;
             padding: 2px 6px;
             border-radius: 3px;
         }
@@ -273,11 +300,17 @@
             color: #fff;
         }
         
+        .status-voting {
+            background-color: #1a5a8a;
+            color: #fff;
+        }
+        
         .no-data {
             text-align: center;
-            color: #999;
-            font-size: 0.9rem;
+            color: #666;
+            font-size: 0.85rem;
             padding: 20px 0;
+            flex-shrink: 0;
         }
         
         /* Модальное окно для создания законопроектов */
@@ -288,7 +321,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -297,38 +330,39 @@
         .modal-content {
             background-color: #0a0a0a;
             border: 1px solid #1a1a1a;
-            border-radius: 5px;
-            padding: 20px;
+            border-radius: 4px;
+            padding: 15px;
             width: 90%;
-            max-width: 600px;
+            max-width: 500px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
         
         .modal-title {
             color: #fff;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
             text-align: center;
             border-bottom: 1px solid #1a1a1a;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            font-weight: 600;
         }
         
         .laws-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
         
         .law-item {
-            padding: 12px;
+            padding: 10px;
             background-color: #111;
             border-radius: 3px;
             border: 1px solid #1a1a1a;
             cursor: pointer;
             transition: background-color 0.2s;
+            font-size: 0.85rem;
         }
         
         .law-item:hover {
@@ -342,34 +376,35 @@
         
         .law-name {
             color: #fff;
-            font-size: 1rem;
-            margin-bottom: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
         
         .law-description {
             color: #999;
-            font-size: 0.85rem;
-            line-height: 1.4;
+            font-size: 0.8rem;
+            line-height: 1.3;
         }
         
         .law-effects {
-            margin-top: 8px;
-            font-size: 0.8rem;
+            margin-top: 6px;
+            font-size: 0.75rem;
             color: #ccc;
         }
         
         .modal-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 8px;
         }
         
         .modal-button {
-            padding: 8px 16px;
+            padding: 6px 12px;
             border: none;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: background-color 0.2s;
         }
         
@@ -391,73 +426,193 @@
             background-color: #2a5c8a;
         }
         
+        /* Стили для голосования */
+        .voting-info {
+            margin-top: 8px;
+            padding: 6px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            border: 1px solid #2a2a2a;
+            font-size: 0.75rem;
+        }
+        
+        .voting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 2px 0;
+        }
+        
+        .voting-toggle {
+            color: #666;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+        
+        .voting-toggle:hover {
+            color: #999;
+        }
+        
+        .voting-details {
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .voting-details.show {
+            display: block;
+        }
+        
+        .voting-progress {
+            margin-top: 4px;
+            height: 4px;
+            background-color: #1a1a1a;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .voting-progress-bar {
+            height: 100%;
+            background-color: #1a5a8a;
+            transition: width 0.3s;
+        }
+        
+        .votes-count {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+        
+        .votes-yes {
+            color: #4CAF50;
+        }
+        
+        .votes-no {
+            color: #F44336;
+        }
+        
+        .votes-abstain {
+            color: #FF9800;
+        }
+        
+        .ideology-votes {
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .vote-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .vote-group-title {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 2px;
+        }
+        
+        .vote-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            padding: 1px 0;
+        }
+        
+        .vote-ideology {
+            color: #ccc;
+        }
+        
+        .vote-count {
+            color: #999;
+        }
+        
+        .time-remaining {
+            margin-top: 4px;
+            font-size: 0.7rem;
+            color: #888;
+            text-align: center;
+        }
+        
         /* Цвета для идеологий */
-        .color-ns { background-color: #8b0000; } /* Национал-социализм */
-        .color-rev { background-color: #9c0000; } /* Реваншизм */
-        .color-mil { background-color: #8b4513; } /* Милитаризм */
-        .color-phal { background-color: #800020; } /* Фалангизм */
-        
-        .color-stal { background-color: #cc0000; } /* Сталинизм */
-        .color-trot { background-color: #ff4500; } /* Троцкизм */
-        .color-len { background-color: #ff0000; } /* Ленинизм */
-        .color-marx { background-color: #dc143c; } /* Марксизм */
-        
-        .color-lib { background-color: #007fff; } /* Либерализм */
-        .color-cons { background-color: #000080; } /* Консерватизм */
-        .color-dd { background-color: #228b22; } /* Прямая Демократия */
-        .color-sd { background-color: #ff69b4; } /* Социал-Демократия */
-        
-        .color-mon { background-color: #9370db; } /* Монархизм */
-        .color-auth { background-color: #2f4f4f; } /* Авторитаризм */
-        .color-pat { background-color: #2e8b57; } /* Патернализм */
-        .color-neut { background-color: #708090; } /* Нейтралитет */
+        .color-ns { background-color: #8b0000; }
+        .color-rev { background-color: #9c0000; }
+        .color-mil { background-color: #8b4513; }
+        .color-phal { background-color: #800020; }
+        .color-stal { background-color: #cc0000; }
+        .color-trot { background-color: #ff4500; }
+        .color-len { background-color: #ff0000; }
+        .color-marx { background-color: #dc143c; }
+        .color-lib { background-color: #007fff; }
+        .color-cons { background-color: #000080; }
+        .color-dd { background-color: #228b22; }
+        .color-sd { background-color: #ff69b4; }
+        .color-mon { background-color: #9370db; }
+        .color-auth { background-color: #2f4f4f; }
+        .color-pat { background-color: #2e8b57; }
+        .color-neut { background-color: #708090; }
         
         /* Стили для скроллбара */
         .ideology-legend::-webkit-scrollbar,
-        .modal-content::-webkit-scrollbar {
-            width: 5px;
+        .modal-content::-webkit-scrollbar,
+        .legislation-section::-webkit-scrollbar {
+            width: 4px;
         }
         
         .ideology-legend::-webkit-scrollbar-track,
-        .modal-content::-webkit-scrollbar-track {
+        .modal-content::-webkit-scrollbar-track,
+        .legislation-section::-webkit-scrollbar-track {
             background: #0a0a0a;
-            border-radius: 3px;
+            border-radius: 2px;
         }
         
         .ideology-legend::-webkit-scrollbar-thumb,
-        .modal-content::-webkit-scrollbar-thumb {
+        .modal-content::-webkit-scrollbar-thumb,
+        .legislation-section::-webkit-scrollbar-thumb {
             background: #2a2a2a;
-            border-radius: 3px;
+            border-radius: 2px;
         }
         
         .ideology-legend::-webkit-scrollbar-thumb:hover,
-        .modal-content::-webkit-scrollbar-thumb:hover {
+        .modal-content::-webkit-scrollbar-thumb:hover,
+        .legislation-section::-webkit-scrollbar-thumb:hover {
             background: #3a3a3a;
         }
         
-        /* Адаптация для телефонов (горизонтальная ориентация) */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .header {
-                padding: 10px;
-            }
-            
-            .header h1 {
-                font-size: 1.1rem;
-            }
-            
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            color: white;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+            font-size: 0.85rem;
+        }
+        
+        .notification-info { background: #1a5a8a; }
+        .notification-success { background: #228b22; }
+        .notification-error { background: #8b0000; }
+        .notification-warning { background: #ffa500; color: black; }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Адаптация для телефонов */
+        @media (max-width: 768px) {
             .container {
+                grid-template-columns: 1fr;
+                gap: 12px;
                 padding: 10px;
-                gap: 15px;
-                grid-template-columns: 1fr;
-            }
-            
-            .government-card {
-                padding: 12px;
-            }
-            
-            .government-info {
-                grid-template-columns: 1fr;
-                gap: 10px;
             }
             
             .ideology-section {
@@ -465,147 +620,20 @@
             }
             
             .pie-chart-container {
-                min-height: 200px;
+                min-height: 150px;
             }
             
             .pie-chart {
-                width: 180px;
-                height: 180px;
-            }
-            
-            .ideology-legend {
-                max-height: 200px;
-            }
-            
-            .info-row {
-                padding: 6px;
-            }
-            
-            .info-label, .info-value {
-                font-size: 0.85rem;
-            }
-            
-            .ideology-item {
-                padding: 6px;
-            }
-            
-            .modal-content {
-                padding: 15px;
-            }
-            
-            .law-item {
-                padding: 10px;
-            }
-        }
-        
-        /* Адаптация для телефонов (вертикальная ориентация) */
-        @media (max-width: 768px) and (orientation: portrait) {
-            .header {
-                padding: 10px;
-            }
-            
-            .header h1 {
-                font-size: 1.1rem;
-            }
-            
-            .container {
-                padding: 10px;
-                gap: 15px;
-                grid-template-columns: 1fr;
-            }
-            
-            .government-card {
-                padding: 12px;
+                width: 140px;
+                height: 140px;
             }
             
             .government-info {
                 grid-template-columns: 1fr;
-                gap: 10px;
             }
             
-            .ideology-section {
-                flex-direction: column;
-            }
-            
-            .pie-chart-container {
-                min-height: 250px;
-            }
-            
-            .pie-chart {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .ideology-legend {
-                max-height: 200px;
-            }
-            
-            .info-row {
-                padding: 8px;
-            }
-            
-            .info-label, .info-value {
-                font-size: 0.85rem;
-            }
-            
-            .ideology-item {
-                padding: 8px;
-            }
-            
-            .modal-content {
-                padding: 15px;
-            }
-            
-            .law-item {
-                padding: 10px;
-            }
-        }
-        
-        /* Адаптация для очень маленьких экранов */
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1rem;
-            }
-            
-            .back-button {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .card-title {
-                font-size: 1rem;
-            }
-            
-            .pie-chart {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .ideology-name {
-                font-size: 0.8rem;
-            }
-            
-            .ideology-percentage {
-                font-size: 0.8rem;
-            }
-            
-            .modal-title {
-                font-size: 1.1rem;
-            }
-            
-            .law-name {
-                font-size: 0.9rem;
-            }
-            
-            .law-description {
-                font-size: 0.8rem;
-            }
-        }
-        
-        /* Полное отключение масштабирования */
-        @media (pointer: coarse) {
-            input, textarea, [contenteditable] {
-                font-size: 16px !important;
+            .legislation-section {
+                max-height: 300px;
             }
         }
         
@@ -616,7 +644,7 @@
         }
         
         .container::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
         
         .container::-webkit-scrollbar-thumb {
@@ -629,34 +657,33 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            font-size: 1.2rem;
-            color: #999;
+            font-size: 1rem;
+            color: #666;
         }
         
         .error-message {
             color: #ff6b6b;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             background-color: #1a0a0a;
             border: 1px solid #5a1a1a;
-            border-radius: 5px;
+            border-radius: 4px;
             margin: 10px;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Правительство страны</h1>
+        <h1 id="header-title">Правительство</h1>
         <button class="back-button" onclick="goBack()">Назад</button>
     </div>
     
     <div class="container" id="government-container">
-        <!-- Левая колонка - информация о правительстве и идеологиях -->
         <div class="left-column" id="left-column">
-            <div class="loading">Загрузка данных правительства...</div>
+            <div class="loading">Загрузка данных...</div>
         </div>
         
-        <!-- Правая колонка - законопроекты -->
         <div class="right-column">
             <div class="government-card">
                 <div class="card-header">
@@ -665,7 +692,7 @@
                 </div>
                 
                 <div class="legislation-section" id="legislation-section">
-                    <div class="no-data">На данный момент нет активных законопроектов</div>
+                    <div class="no-data">Нет активных законопроектов</div>
                 </div>
             </div>
         </div>
@@ -686,63 +713,634 @@
     </div>
 
     <script>
-        // Глобальные переменные
+        // ==============================
+        // МОДУЛЬНАЯ АРХИТЕКТУРА
+        // ==============================
+
+        class GovernmentAPI {
+            static async loadGovernmentData(country) {
+                try {
+                    const savedData = localStorage.getItem(`governmentData_${country}`);
+                    
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        if (this.validateGovernmentData(data)) {
+                            return this.normalizeGovernmentData(data);
+                        }
+                    }
+                    
+                    if (typeof countryGovernments !== 'undefined' && countryGovernments[country]) {
+                        const data = countryGovernments[country];
+                        const normalizedData = this.normalizeGovernmentData(data);
+                        this.saveGovernmentData(country, normalizedData);
+                        return normalizedData;
+                    }
+                    
+                    return this.createDefaultGovernmentData(country);
+                    
+                } catch (error) {
+                    console.error('Ошибка загрузки данных правительства:', error);
+                    throw new Error(`Не удалось загрузить данные правительства для ${country}`);
+                }
+            }
+            
+            static async saveGovernmentData(country, data) {
+                try {
+                    if (!this.validateGovernmentData(data)) {
+                        throw new Error('Некорректные данные правительства');
+                    }
+                    
+                    const normalizedData = this.normalizeGovernmentData(data);
+                    localStorage.setItem(`governmentData_${country}`, JSON.stringify(normalizedData));
+                    return true;
+                } catch (error) {
+                    console.error('Ошибка сохранения данных правительства:', error);
+                    throw new Error('Не удалось сохранить данные правительства');
+                }
+            }
+            
+            static validateGovernmentData(data) {
+                const requiredFields = ['government', 'rulingIdeology', 'stability', 'support', 'ideologies'];
+                return requiredFields.every(field => data.hasOwnProperty(field));
+            }
+            
+            static normalizeGovernmentData(data) {
+                return {
+                    government: data.government || 'Демократия',
+                    rulingIdeology: data.rulingIdeology || 'Либерализм',
+                    stability: Math.max(0, Math.min(100, parseInt(data.stability) || 50)),
+                    support: Math.max(0, Math.min(100, parseInt(data.support) || 50)),
+                    ideologies: this.normalizeIdeologies(data.ideologies),
+                    permanentEffects: data.permanentEffects || [],
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+            
+            static normalizeIdeologies(ideologies) {
+                const defaultStructure = {
+                    "Правые идеологии": [
+                        { name: "Национал-социализм", percentage: 5 },
+                        { name: "Реваншизм", percentage: 5 },
+                        { name: "Милитаризм", percentage: 10 },
+                        { name: "Фалангизм", percentage: 0 }
+                    ],
+                    "Левые идеологии": [
+                        { name: "Сталинизм", percentage: 5 },
+                        { name: "Троцкизм", percentage: 0 },
+                        { name: "Ленинизм", percentage: 5 },
+                        { name: "Марксизм", percentage: 10 }
+                    ],
+                    "Либеральные идеологии": [
+                        { name: "Либерализм", percentage: 20 },
+                        { name: "Консерватизм", percentage: 15 },
+                        { name: "Прямая Демократия", percentage: 10 },
+                        { name: "Социал-Демократия", percentage: 15 }
+                    ],
+                    "Авторитарные идеологии": [
+                        { name: "Монархизм", percentage: 5 },
+                        { name: "Авторитаризм", percentage: 5 },
+                        { name: "Патернализм", percentage: 5 },
+                        { name: "Нейтралитет", percentage: 0 }
+                    ]
+                };
+                
+                if (!ideologies) return defaultStructure;
+                
+                const result = JSON.parse(JSON.stringify(defaultStructure));
+                
+                for (const group in ideologies) {
+                    if (result[group]) {
+                        ideologies[group].forEach(ideology => {
+                            const existing = result[group].find(item => item.name === ideology.name);
+                            if (existing) {
+                                existing.percentage = Math.max(0, Math.min(100, parseInt(ideology.percentage) || 0));
+                            }
+                        });
+                    }
+                }
+                
+                return result;
+            }
+            
+            static createDefaultGovernmentData(country) {
+                return this.normalizeGovernmentData({
+                    government: "Демократия",
+                    rulingIdeology: "Либерализм",
+                    stability: 50,
+                    support: 50,
+                    ideologies: this.normalizeIdeologies(null),
+                    permanentEffects: []
+                });
+            }
+            
+            static async applyPermanentEffect(country, effect) {
+                const data = await this.loadGovernmentData(country);
+                
+                if (data.permanentEffects.some(e => e.id === effect.id)) {
+                    return false;
+                }
+                
+                data.stability += effect.stabilityChange || 0;
+                data.support += effect.supportChange || 0;
+                
+                if (effect.ideologyChanges) {
+                    for (const ideologyName in effect.ideologyChanges) {
+                        const change = effect.ideologyChanges[ideologyName];
+                        this.updateIdeologyPercentage(data, ideologyName, change);
+                    }
+                }
+                
+                if (effect.changeGovernment) {
+                    data.government = effect.changeGovernment;
+                }
+                
+                data.permanentEffects.push({
+                    id: effect.id,
+                    name: effect.name,
+                    appliedAt: new Date().toISOString()
+                });
+                
+                this.normalizeIdeologyPercentages(data);
+                
+                await this.saveGovernmentData(country, data);
+                return true;
+            }
+            
+            static updateIdeologyPercentage(data, ideologyName, change) {
+                for (const group in data.ideologies) {
+                    const ideology = data.ideologies[group].find(item => item.name === ideologyName);
+                    if (ideology) {
+                        ideology.percentage = Math.max(0, ideology.percentage + change);
+                    }
+                }
+            }
+            
+            static normalizeIdeologyPercentages(data) {
+                let totalPercentage = 0;
+                let ideologies = [];
+                
+                for (const group in data.ideologies) {
+                    ideologies = ideologies.concat(data.ideologies[group]);
+                }
+                
+                ideologies.forEach(ideology => {
+                    totalPercentage += Math.max(0, ideology.percentage);
+                });
+                
+                if (totalPercentage !== 100 && totalPercentage > 0) {
+                    const factor = 100 / totalPercentage;
+                    ideologies.forEach(ideology => {
+                        ideology.percentage = Math.round(Math.max(0, ideology.percentage) * factor);
+                    });
+                }
+                
+                let maxPercentage = 0;
+                let rulingIdeology = data.rulingIdeology;
+                
+                ideologies.forEach(ideology => {
+                    if (ideology.percentage > maxPercentage) {
+                        maxPercentage = ideology.percentage;
+                        rulingIdeology = ideology.name;
+                    }
+                });
+                
+                data.rulingIdeology = rulingIdeology;
+            }
+        }
+
+        class EnhancedLegislationManager {
+            constructor() {
+                this.activeLaws = [];
+                this.pendingLaws = [];
+                this.ideologyLaws = new Map();
+                this.loadLaws();
+                this.initializeIdeologyLaws();
+            }
+            
+            loadLaws() {
+                try {
+                    this.activeLaws = JSON.parse(localStorage.getItem('activeLaws') || '[]');
+                    this.pendingLaws = JSON.parse(localStorage.getItem('pendingLaws') || '[]');
+                } catch (error) {
+                    console.error('Ошибка загрузки законов:', error);
+                    this.activeLaws = [];
+                    this.pendingLaws = [];
+                }
+            }
+            
+            saveLaws() {
+                try {
+                    localStorage.setItem('activeLaws', JSON.stringify(this.activeLaws));
+                    localStorage.setItem('pendingLaws', JSON.stringify(this.pendingLaws));
+                } catch (error) {
+                    console.error('Ошибка сохранения законов:', error);
+                }
+            }
+
+            initializeIdeologyLaws() {
+                const ideologyLaws = {
+                    "Национал-социализм": [
+                        {
+                            name: "Усиление национальной безопасности",
+                            description: "Увеличение финансирования силовых структур",
+                            effects: "Стабильность +10, Поддержка -5",
+                            stabilityChange: 10,
+                            supportChange: -5,
+                            ideologyChanges: { "Национал-социализм": 5, "Либерализм": -3 }
+                        }
+                    ],
+                    "Либерализм": [
+                        {
+                            name: "Экономическая либерализация",
+                            description: "Снижение налогов и упрощение ведения бизнеса",
+                            effects: "Экономика +15%, Поддержка +5",
+                            stabilityChange: -5,
+                            supportChange: 5,
+                            ideologyChanges: { "Либерализм": 8, "Консерватизм": 2 }
+                        }
+                    ],
+                    "Социал-Демократия": [
+                        {
+                            name: "Социальные гарантии",
+                            description: "Расширение программ социальной поддержки",
+                            effects: "Поддержка +12, Стабильность +3",
+                            stabilityChange: 3,
+                            supportChange: 12,
+                            ideologyChanges: { "Социал-Демократия": 6, "Марксизм": 2 }
+                        }
+                    ],
+                    "Милитаризм": [
+                        {
+                            name: "Военная реформа",
+                            description: "Увеличение оборонного бюджета",
+                            effects: "Стабильность +8, Поддержка +2",
+                            stabilityChange: 8,
+                            supportChange: 2,
+                            ideologyChanges: { "Милитаризм": 7, "Национал-социализм": 3 }
+                        }
+                    ]
+                };
+
+                this.ideologyLaws = new Map(Object.entries(ideologyLaws));
+            }
+
+            async proposeIdeologyLaws(governmentData) {
+                const newLaws = [];
+                
+                for (const group in governmentData.ideologies) {
+                    for (const ideology of governmentData.ideologies[group]) {
+                        if (ideology.percentage >= 10) {
+                            const laws = this.ideologyLaws.get(ideology.name) || [];
+                            if (laws.length > 0) {
+                                const randomLaw = laws[Math.floor(Math.random() * laws.length)];
+                                
+                                if (randomLaw && !this.hasSimilarLaw(randomLaw.name)) {
+                                    const ideologyLaw = {
+                                        ...randomLaw,
+                                        id: this.generateLawId(),
+                                        author: `Фракция "${ideology.name}"`,
+                                        ideology: ideology.name,
+                                        country: "Российская Республика",
+                                        date: new Date().toLocaleDateString('ru-RU'),
+                                        timestamp: Date.now(),
+                                        status: 'voting',
+                                        votingData: this.createVotingDataForIdeology(ideology, governmentData),
+                                        votingStartTime: Date.now(),
+                                        votingEndTime: Date.now() + (10 * 60 * 1000),
+                                        displayEndTime: Date.now() + (4 * 60 * 60 * 1000)
+                                    };
+                                    
+                                    newLaws.push(ideologyLaw);
+                                    this.activeLaws.push(ideologyLaw);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (newLaws.length > 0) {
+                    this.saveLaws();
+                }
+                
+                return newLaws;
+            }
+
+            createVotingDataForIdeology(proposingIdeology, governmentData) {
+                const votingData = {
+                    votesFor: 0,
+                    votesAgainst: 0,
+                    votesAbstain: 0,
+                    totalVotes: 0,
+                    ideologyVotes: {},
+                    ideologyOpinions: {}
+                };
+
+                for (const group in governmentData.ideologies) {
+                    governmentData.ideologies[group].forEach(ideology => {
+                        if (ideology.percentage > 0) {
+                            const votes = Math.floor(ideology.percentage / 8);
+                            votingData.totalVotes += votes;
+                            votingData.ideologyVotes[ideology.name] = votes;
+                        }
+                    });
+                }
+
+                return votingData;
+            }
+            
+            async proposeLaw(lawData, playerData) {
+                if (!this.canProposeLaw(playerData)) {
+                    throw new Error('Вы не можете предложить более 3 законов одновременно');
+                }
+                
+                const country = playerData.country || "Российская Республика";
+                const governmentData = await GovernmentAPI.loadGovernmentData(country);
+                
+                const votingData = {
+                    votesFor: 0,
+                    votesAgainst: 0,
+                    votesAbstain: 0,
+                    totalVotes: 0,
+                    ideologyVotes: {},
+                    ideologyOpinions: {}
+                };
+                
+                for (const group in governmentData.ideologies) {
+                    governmentData.ideologies[group].forEach(ideology => {
+                        if (ideology.percentage > 0) {
+                            const votes = Math.floor(ideology.percentage / 10);
+                            votingData.totalVotes += votes;
+                            votingData.ideologyVotes[ideology.name] = votes;
+                        }
+                    });
+                }
+                
+                const newLaw = {
+                    ...lawData,
+                    id: this.generateLawId(),
+                    author: playerData.nickname || "Игрок",
+                    party: playerData.party,
+                    country: country,
+                    date: new Date().toLocaleDateString('ru-RU'),
+                    timestamp: Date.now(),
+                    status: 'voting',
+                    votingData: votingData,
+                    votingStartTime: Date.now(),
+                    votingEndTime: Date.now() + (10 * 60 * 1000),
+                    displayEndTime: Date.now() + (2 * 60 * 60 * 1000)
+                };
+                
+                this.activeLaws.push(newLaw);
+                this.saveLaws();
+                
+                return newLaw;
+            }
+            
+            canProposeLaw(playerData) {
+                const playerLaws = this.activeLaws.filter(law => 
+                    law.author === playerData.nickname && 
+                    law.status === 'voting'
+                );
+                return playerLaws.length < 3;
+            }
+            
+            generateLawId() {
+                return 'law_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            simulateVoting(law, governmentData, playerData = null) {
+                const ideologyOpinions = this.calculateEnhancedIdeologyOpinions(law, governmentData, playerData);
+                
+                let votesFor = 0;
+                let votesAgainst = 0;
+                let votesAbstain = 0;
+
+                // Сохраняем мнения для отображения
+                law.votingData.ideologyOpinions = ideologyOpinions;
+
+                for (const ideologyName in law.votingData.ideologyVotes) {
+                    const votes = law.votingData.ideologyVotes[ideologyName];
+                    const opinion = ideologyOpinions[ideologyName];
+                    
+                    if (opinion === 'for') {
+                        votesFor += votes;
+                    } else if (opinion === 'against') {
+                        votesAgainst += votes;
+                    } else {
+                        votesAbstain += votes;
+                    }
+                }
+
+                law.votingData.votesFor = votesFor;
+                law.votingData.votesAgainst = votesAgainst;
+                law.votingData.votesAbstain = votesAbstain;
+
+                this.saveLaws();
+            }
+
+            calculateEnhancedIdeologyOpinions(law, governmentData, playerData) {
+                const opinions = {};
+
+                if (playerData && playerData.party && playerData.party !== 'Не состоит') {
+                    const playerIdeology = this.getPlayerIdeology(playerData);
+                    
+                    if (law.author === playerData.nickname && playerIdeology) {
+                        opinions[playerIdeology] = 'for';
+                    }
+                }
+
+                for (const group in governmentData.ideologies) {
+                    governmentData.ideologies[group].forEach(ideology => {
+                        if (ideology.percentage > 0 && !opinions[ideology.name]) {
+                            opinions[ideology.name] = this.getIdeologyVote(ideology.name, law, governmentData);
+                        }
+                    });
+                }
+
+                return opinions;
+            }
+
+            getPlayerIdeology(playerData) {
+                const parties = {
+                    "Народный Фронт": "Национал-социализм",
+                    "Союз Возрождения": "Реваншизм",
+                    "Военная Лига": "Милитаризм",
+                    "Национальный Синдикат": "Фалангизм",
+                    "Сталинский Блок": "Сталинизм",
+                    "Революционный Авангард": "Троцкизм",
+                    "Большевистская Партия": "Ленинизм",
+                    "Рабочий Союз": "Марксизм",
+                    "Демократический Альянс": "Либерализм",
+                    "Консервативная Коалиция": "Консерватизм",
+                    "Народное Собрание": "Прямая Демократия",
+                    "Социал-Реформаторы": "Социал-Демократия",
+                    "Монархическое Движение": "Монархизм",
+                    "Сильная Власть": "Авторитаризм",
+                    "Отечество": "Патернализм",
+                    "Центристский Союз": "Нейтралитет"
+                };
+                
+                return parties[playerData.party] || null;
+            }
+
+            getIdeologyVote(ideologyName, law, governmentData) {
+                const random = Math.random();
+                
+                if (law.ideology === ideologyName) {
+                    return 'for';
+                }
+
+                const compatibility = this.calculateIdeologyCompatibility(ideologyName, law.ideology || law.author);
+                
+                if (compatibility >= 0.7) return random < 0.8 ? 'for' : (random < 0.9 ? 'abstain' : 'against');
+                if (compatibility >= 0.4) return random < 0.5 ? 'for' : (random < 0.8 ? 'against' : 'abstain');
+                return random < 0.2 ? 'for' : (random < 0.7 ? 'against' : 'abstain');
+            }
+
+            calculateIdeologyCompatibility(ideology1, ideology2) {
+                const compatibilityMatrix = {
+                    "Национал-социализм": {
+                        "Реваншизм": 0.9, "Милитаризм": 0.8, "Фалангизм": 0.7,
+                        "Либерализм": 0.1, "Социал-Демократия": 0.2, "Марксизм": 0.1
+                    },
+                    "Либерализм": {
+                        "Консерватизм": 0.6, "Социал-Демократия": 0.5, "Прямая Демократия": 0.8,
+                        "Национал-социализм": 0.1, "Милитаризм": 0.2, "Авторитаризм": 0.1
+                    },
+                    "Социал-Демократия": {
+                        "Либерализм": 0.5, "Марксизм": 0.6, "Прямая Демократия": 0.7,
+                        "Национал-социализм": 0.2, "Милитаризм": 0.3, "Авторитаризм": 0.2
+                    }
+                };
+
+                return compatibilityMatrix[ideology1]?.[ideology2] || 0.3;
+            }
+
+            hasSimilarLaw(lawName) {
+                return this.activeLaws.some(law => 
+                    law.name === lawName && 
+                    (law.status === 'voting' || law.status === 'active')
+                );
+            }
+
+            startIdeologyLawTimer() {
+                setInterval(async () => {
+                    const governmentData = await GovernmentAPI.loadGovernmentData("Российская Республика");
+                    const newLaws = await this.proposeIdeologyLaws(governmentData);
+                    
+                    if (newLaws.length > 0) {
+                        newLaws.forEach(law => {
+                            this.simulateVoting(law, governmentData);
+                            NotificationSystem.show(
+                                `Фракция "${law.ideology}" предложила закон: "${law.name}"`,
+                                'info',
+                                5000
+                            );
+                        });
+                        displayPlayerLaws();
+                    }
+                }, 300000);
+            }
+            
+            async updateLawsStatus() {
+                const currentTime = Date.now();
+                let updated = false;
+                
+                for (let i = 0; i < this.activeLaws.length; i++) {
+                    const law = this.activeLaws[i];
+                    
+                    if (law.status === 'voting' && currentTime >= law.votingEndTime) {
+                        await this.finalizeVoting(law);
+                        updated = true;
+                    }
+                    
+                    if (law.status === 'active' && currentTime >= law.displayEndTime) {
+                        this.activeLaws.splice(i, 1);
+                        i--;
+                        updated = true;
+                    }
+                }
+                
+                if (updated) {
+                    this.saveLaws();
+                }
+                
+                return updated;
+            }
+            
+            async finalizeVoting(law) {
+                const totalVoted = law.votingData.votesFor + law.votingData.votesAgainst;
+                
+                if (totalVoted > 0) {
+                    const forPercentage = (law.votingData.votesFor / totalVoted) * 100;
+                    
+                    if (forPercentage >= 50) {
+                        law.status = 'active';
+                        await this.applyLawEffects(law);
+                    } else {
+                        law.status = 'rejected';
+                    }
+                } else {
+                    law.status = 'rejected';
+                }
+            }
+            
+            async applyLawEffects(law) {
+                try {
+                    const effect = {
+                        id: law.id,
+                        name: law.name,
+                        stabilityChange: law.stabilityChange || 0,
+                        supportChange: law.supportChange || 0,
+                        ideologyChanges: law.ideologyChanges || {},
+                        changeGovernment: law.changeGovernment
+                    };
+                    
+                    await GovernmentAPI.applyPermanentEffect(law.country, effect);
+                    return true;
+                } catch (error) {
+                    console.error('Ошибка применения эффектов закона:', error);
+                    return false;
+                }
+            }
+            
+            getAllLaws() {
+                return this.activeLaws;
+            }
+        }
+
+        class NotificationSystem {
+            static show(message, type = 'info', duration = 5000) {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                if (duration > 0) {
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, duration);
+                }
+                
+                return notification;
+            }
+        }
+
+        // ==============================
+        // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И ФУНКЦИИ
+        // ==============================
+
+        let legislationManager;
         let selectedLaw = null;
+        let votingInterval = null;
         
-        // Функция для навигации назад
         function goBack() {
             window.history.back();
         }
         
-        // Функция для получения ссылки на Wikipedia для идеологии
-        function getWikipediaLink(ideology) {
-            const links = {
-                "Национал-социализм": "https://ru.wikipedia.org/wiki/Национал-социализм",
-                "Реваншизм": "https://ru.wikipedia.org/wiki/Реваншизм",
-                "Милитаризм": "https://ru.wikipedia.org/wiki/Милитаризм",
-                "Фалангизм": "https://ru.wikipedia.org/wiki/Фалангизм",
-                "Сталинизм": "https://ru.wikipedia.org/wiki/Сталинизм",
-                "Троцкизм": "https://ru.wikipedia.org/wiki/Троцкизм",
-                "Ленинизм": "https://ru.wikipedia.org/wiki/Ленинизм",
-                "Марксизм": "https://ru.wikipedia.org/wiki/Марксизм",
-                "Либерализм": "https://ru.wikipedia.org/wiki/Либерализм",
-                "Консерватизм": "https://ru.wikipedia.org/wiki/Консерватизм",
-                "Прямая Демократия": "https://ru.wikipedia.org/wiki/Прямая_демократия",
-                "Социал-Демократия": "https://ru.wikipedia.org/wiki/Социал-демократия",
-                "Монархизм": "https://ru.wikipedia.org/wiki/Монархизм",
-                "Авторитаризм": "https://ru.wikipedia.org/wiki/Авторитаризм",
-                "Патернализм": "https://ru.wikipedia.org/wiki/Патернализм",
-                "Нейтралитет": "https://ru.wikipedia.org/wiki/Нейтралитет"
-            };
-            
-            return links[ideology] || "https://ru.wikipedia.org";
-        }
-        
-        // Функция для получения класса цвета для идеологии
-        function getIdeologyColorClass(ideology) {
-            const colorClasses = {
-                "Национал-социализм": "color-ns",
-                "Реваншизм": "color-rev",
-                "Милитаризм": "color-mil",
-                "Фалангизм": "color-phal",
-                "Сталинизм": "color-stal",
-                "Троцкизм": "color-trot",
-                "Ленинизм": "color-len",
-                "Марксизм": "color-marx",
-                "Либерализм": "color-lib",
-                "Консерватизм": "color-cons",
-                "Прямая Демократия": "color-dd",
-                "Социал-Демократия": "color-sd",
-                "Монархизм": "color-mon",
-                "Авторитаризм": "color-auth",
-                "Патернализм": "color-pat",
-                "Нейтралитет": "color-neut"
-            };
-            
-            return colorClasses[ideology] || "";
-        }
-        
-        // Функция для получения цвета для идеологии
         function getIdeologyColor(ideology) {
             const colors = {
                 "Национал-социализм": "#8b0000",
@@ -766,291 +1364,332 @@
             return colors[ideology] || "#3a7a3a";
         }
         
-        // Функция для загрузки данных о правительстве
-        function loadGovernmentData() {
-            // Загружаем данные игрока из localStorage
-            const savedData = localStorage.getItem('playerData');
+        function getIdeologyColorClass(ideology) {
+            const colorClasses = {
+                "Национал-социализм": "color-ns",
+                "Реваншизм": "color-rev",
+                "Милитаризм": "color-mil",
+                "Фалангизм": "color-phal",
+                "Сталинизм": "color-stal",
+                "Троцкизм": "color-trot",
+                "Ленинизм": "color-len",
+                "Марксизм": "color-marx",
+                "Либерализм": "color-lib",
+                "Консерватизм": "color-cons",
+                "Прямая Демократия": "color-dd",
+                "Социал-Демократия": "color-sd",
+                "Монархизм": "color-mon",
+                "Авторитаризм": "color-auth",
+                "Патернализм": "color-pat",
+                "Нейтралитет": "color-neut"
+            };
             
-            if (!savedData) {
-                document.getElementById('left-column').innerHTML = `
-                    <div class="government-card">
-                        <div class="no-data">Данные игрока не найдены. Сначала создайте персонажа.</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            const playerData = JSON.parse(savedData);
-            const playerCountry = playerData.country || "Российская Республика";
-            
-            // Проверяем, состоит ли игрок в партии
-            if (playerData.party && playerData.party !== 'Не состоит') {
-                document.getElementById('add-law-button').style.display = 'flex';
-            }
-            
-            // Проверяем, загружены ли данные из Government.js
-            if (typeof countryGovernments === 'undefined') {
-                document.getElementById('left-column').innerHTML = `
-                    <div class="government-card">
-                        <div class="error-message">Ошибка загрузки данных правительства. Проверьте подключение Government.js</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Ищем данные о правительстве для страны игрока
-            let governmentData = countryGovernments[playerCountry];
-            
-            // Если данных нет, создаем базовые
-            if (!governmentData) {
-                console.warn(`Данные для страны "${playerCountry}" не найдены в Government.js. Используются базовые данные.`);
-                governmentData = {
-                    government: "Демократия",
-                    rulingIdeology: "Либерализм",
-                    stability: 50,
-                    support: 50,
-                    ideologies: {
-                        "Правые идеологии": [
-                            { name: "Национал-социализм", percentage: 5 },
-                            { name: "Реваншизм", percentage: 5 },
-                            { name: "Милитаризм", percentage: 10 },
-                            { name: "Фалангизм", percentage: 0 }
-                        ],
-                        "Левые идеологии": [
-                            { name: "Сталинизм", percentage: 5 },
-                            { name: "Троцкизм", percentage: 0 },
-                            { name: "Ленинизм", percentage: 5 },
-                            { name: "Марксизм", percentage: 10 }
-                        ],
-                        "Либеральные идеологии": [
-                            { name: "Либерализм", percentage: 20 },
-                            { name: "Консерватизм", percentage: 15 },
-                            { name: "Прямая Демократия", percentage: 10 },
-                            { name: "Социал-Демократия", percentage: 15 }
-                        ],
-                        "Авторитарные идеологии": [
-                            { name: "Монархизм", percentage: 5 },
-                            { name: "Авторитаризм", percentage: 5 },
-                            { name: "Патернализм", percentage: 5 },
-                            { name: "Нейтралитет", percentage: 0 }
-                        ]
-                    }
-                };
-            } else {
-                // Преобразуем стабильность и поддержку в числа, если они в строковом формате
-                if (typeof governmentData.stability === 'string') {
-                    governmentData.stability = parseInt(governmentData.stability.replace('%', ''));
-                }
-                if (typeof governmentData.support === 'string') {
-                    governmentData.support = parseInt(governmentData.support.replace('%', ''));
-                }
-            }
-            
-            // Загружаем активные законы и применяем их эффекты
-            const activeLaws = JSON.parse(localStorage.getItem('activeLaws') || '[]');
-            governmentData = applyActiveLaws(governmentData, activeLaws);
-            
-            // Формируем HTML для отображения информации о правительстве
-            let html = `
-                <div class="government-card">
-                    <div class="card-header">
-                        <h2 class="card-title">${playerCountry}</h2>
-                    </div>
-                    
-                    <div class="government-info">
-                        <div class="info-row">
-                            <span class="info-label">Форма правления:</span>
-                            <span class="info-value">${governmentData.government}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Правящая идеология:</span>
-                            <span class="info-value ruling-ideology">${governmentData.rulingIdeology}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Стабильность:</span>
-                            <span class="info-value">${Math.max(0, Math.min(100, governmentData.stability))}%</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Поддержка населения:</span>
-                            <span class="info-value">${Math.max(0, Math.min(100, governmentData.support))}%</span>
-                        </div>
-                    </div>
-                </div>
+            return colorClasses[ideology] || "";
+        }
+        
+        async function loadGovernmentData() {
+            try {
+                const savedData = localStorage.getItem('playerData');
                 
-                <div class="government-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Идеологии в правительстве</h2>
-                    </div>
-                    
-                    <div class="ideology-section">
-                        <div class="pie-chart-container">
-                            <div class="pie-chart" id="ideology-pie-chart"></div>
+                if (!savedData) {
+                    document.getElementById('left-column').innerHTML = `
+                        <div class="government-card">
+                            <div class="no-data">Данные игрока не найдены</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const playerData = JSON.parse(savedData);
+                const playerCountry = playerData.country || "Российская Республика";
+                
+                if (playerData.party && playerData.party !== 'Не состоит') {
+                    document.getElementById('add-law-button').style.display = 'flex';
+                }
+                
+                const governmentData = await GovernmentAPI.loadGovernmentData(playerCountry);
+                
+                let html = `
+                    <div class="government-card">
+                        <div class="card-header">
+                            <h2 class="card-title">${playerCountry}</h2>
                         </div>
                         
-                        <div class="ideology-legend">
-            `;
-            
-            // Добавляем информацию об идеологиях в легенду
-            for (const group in governmentData.ideologies) {
-                governmentData.ideologies[group].forEach(ideology => {
-                    if (ideology.percentage > 0) {
-                        const colorClass = getIdeologyColorClass(ideology.name);
-                        const wikiLink = getWikipediaLink(ideology.name);
-                        
-                        html += `
-                            <div class="ideology-item">
-                                <div class="ideology-color ${colorClass}"></div>
-                                <span class="ideology-name">
-                                    <a href="${wikiLink}" target="_blank" class="ideology-link">${ideology.name}</a>
-                                </span>
-                                <span class="ideology-percentage">${Math.max(0, ideology.percentage)}%</span>
+                        <div class="government-info">
+                            <div class="info-row">
+                                <span class="info-label">Форма правления:</span>
+                                <span class="info-value">${governmentData.government}</span>
                             </div>
-                        `;
-                    }
-                });
-            }
-            
-            html += `
+                            <div class="info-row">
+                                <span class="info-label">Правящая идеология:</span>
+                                <span class="info-value ruling-ideology">${governmentData.rulingIdeology}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Стабильность:</span>
+                                <span class="info-value">${governmentData.stability}%</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Поддержка:</span>
+                                <span class="info-value">${governmentData.support}%</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-            
-            document.getElementById('left-column').innerHTML = html;
-            
-            // Обновляем круговую диаграмму с реальными данными
-            updatePieChart(governmentData);
-            
-            // Сохраняем обновленные данные
-            localStorage.setItem('governmentData_' + playerCountry, JSON.stringify(governmentData));
-        }
-        
-        // Функция для применения эффектов активных законов
-        function applyActiveLaws(governmentData, activeLaws) {
-            // Создаем копию данных, чтобы не изменять оригинал
-            const result = JSON.parse(JSON.stringify(governmentData));
-            
-            // Применяем эффекты каждого активного закона
-            activeLaws.forEach(law => {
-                if (law.status === 'active') {
-                    // Применяем изменения к стабильности и поддержке
-                    result.stability += law.stabilityChange || 0;
-                    result.support += law.supportChange || 0;
                     
-                    // Применяем изменения к идеологиям
-                    if (law.ideologyChanges) {
-                        for (const ideologyName in law.ideologyChanges) {
-                            const change = law.ideologyChanges[ideologyName];
+                    <div class="government-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Идеологии</h2>
+                        </div>
+                        
+                        <div class="ideology-section">
+                            <div class="pie-chart-container">
+                                <div class="pie-chart" id="ideology-pie-chart"></div>
+                            </div>
                             
-                            // Ищем идеологию во всех группах
-                            for (const group in result.ideologies) {
-                                const ideology = result.ideologies[group].find(item => item.name === ideologyName);
-                                if (ideology) {
-                                    ideology.percentage += change;
-                                }
-                            }
+                            <div class="ideology-legend">
+                `;
+                
+                for (const group in governmentData.ideologies) {
+                    governmentData.ideologies[group].forEach(ideology => {
+                        if (ideology.percentage > 0) {
+                            const colorClass = getIdeologyColorClass(ideology.name);
+                            const isRuling = ideology.name === governmentData.rulingIdeology;
+                            
+                            html += `
+                                <div class="ideology-item" style="${isRuling ? 'border-left: 2px solid #ff6b6b;' : ''}">
+                                    <div class="ideology-color ${colorClass}"></div>
+                                    <span class="ideology-name">${ideology.name}</span>
+                                    <span class="ideology-percentage">${ideology.percentage}%</span>
+                                </div>
+                            `;
                         }
-                    }
-                    
-                    // Применяем изменение формы правления, если оно указано
-                    if (law.changeGovernment) {
-                        result.government = law.changeGovernment;
-                    }
+                    });
                 }
-            });
-            
-            // Нормализуем проценты идеологий
-            normalizeIdeologyPercentages(result);
-            
-            return result;
+                
+                html += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('left-column').innerHTML = html;
+                updatePieChart(governmentData);
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных правительства:', error);
+                document.getElementById('left-column').innerHTML = `
+                    <div class="government-card">
+                        <div class="error-message">Ошибка загрузки данных</div>
+                    </div>
+                `;
+            }
         }
         
-        // Функция для нормализации процентных соотношений идеологий
-        function normalizeIdeologyPercentages(governmentData) {
-            let totalPercentage = 0;
-            let ideologies = [];
-            
-            // Собираем все идеологии в один массив
-            for (const group in governmentData.ideologies) {
-                ideologies = ideologies.concat(governmentData.ideologies[group]);
-            }
-            
-            // Считаем общую сумму
-            ideologies.forEach(ideology => {
-                totalPercentage += Math.max(0, ideology.percentage);
-            });
-            
-            // Нормализуем проценты, если сумма не равна 100
-            if (totalPercentage !== 100 && totalPercentage > 0) {
-                const factor = 100 / totalPercentage;
-                ideologies.forEach(ideology => {
-                    ideology.percentage = Math.round(Math.max(0, ideology.percentage) * factor);
-                });
-            }
-            
-            // Определяем правящую идеологию (с наибольшим процентом)
-            let maxPercentage = 0;
-            let rulingIdeology = governmentData.rulingIdeology;
-            
-            ideologies.forEach(ideology => {
-                if (ideology.percentage > maxPercentage) {
-                    maxPercentage = ideology.percentage;
-                    rulingIdeology = ideology.name;
-                }
-            });
-            
-            governmentData.rulingIdeology = rulingIdeology;
-        }
-        
-        // Функция для обновления круговой диаграммы
         function updatePieChart(governmentData) {
             const pieChart = document.getElementById('ideology-pie-chart');
             if (!pieChart) return;
             
-            // Собираем все идеологии в один массив
             let allIdeologies = [];
             for (const group in governmentData.ideologies) {
                 allIdeologies = allIdeologies.concat(governmentData.ideologies[group]);
             }
             
-            // Фильтруем идеологии с нулевым процентом
             allIdeologies = allIdeologies.filter(ideology => ideology.percentage > 0);
             
-            // Создаем градиент для круговой диаграммы
             let gradientString = "";
             let currentPercent = 0;
             
             for (const ideology of allIdeologies) {
                 const color = getIdeologyColor(ideology.name);
-                const nextPercent = currentPercent + ideology.percentage * 3.6; // Convert percentage to degrees (100% = 360deg)
+                const nextPercent = currentPercent + ideology.percentage * 3.6;
                 gradientString += `${color} ${currentPercent}deg ${nextPercent}deg, `;
                 currentPercent = nextPercent;
             }
             
-            // Убираем последнюю запятую и пробел
             if (gradientString.length > 0) {
                 gradientString = gradientString.slice(0, -2);
             }
             
-            // Применяем градиент к диаграмме
             pieChart.style.backgroundImage = `conic-gradient(${gradientString})`;
         }
+
+        function displayPlayerLaws() {
+            const legislationSection = document.getElementById('legislation-section');
+            const laws = legislationManager.getAllLaws();
+            
+            if (laws.length === 0) {
+                legislationSection.innerHTML = '<div class="no-data">Нет активных законопроектов</div>';
+                return;
+            }
+            
+            legislationSection.innerHTML = '';
+            
+            const playerData = JSON.parse(localStorage.getItem('playerData') || '{}');
+            const playerIdeology = legislationManager.getPlayerIdeology(playerData);
+            
+            const sortedLaws = laws.sort((a, b) => {
+                const isPlayerLawA = a.author === playerData.nickname;
+                const isPlayerLawB = b.author === playerData.nickname;
+                const isPlayerIdeologyLawA = a.ideology === playerIdeology;
+                const isPlayerIdeologyLawB = b.ideology === playerIdeology;
+                
+                if (isPlayerLawA && !isPlayerLawB) return -1;
+                if (!isPlayerLawA && isPlayerLawB) return 1;
+                if (isPlayerIdeologyLawA && !isPlayerIdeologyLawB) return -1;
+                if (!isPlayerIdeologyLawA && isPlayerIdeologyLawB) return 1;
+                return b.timestamp - a.timestamp;
+            });
+            
+            sortedLaws.forEach((law) => {
+                const lawItem = document.createElement('div');
+                
+                const isPlayerLaw = law.author === playerData.nickname;
+                const isPlayerIdeologyLaw = law.ideology === playerIdeology;
+                
+                let lawClass = 'legislation-item';
+                if (isPlayerLaw) lawClass += ' law-player';
+                else if (isPlayerIdeologyLaw) lawClass += ' law-ideology-player';
+                else lawClass += ' law-ideology-other';
+                
+                lawItem.className = lawClass;
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                if (law.status === 'active') {
+                    statusClass = 'status-active';
+                    statusText = 'Активен';
+                } else if (law.status === 'rejected') {
+                    statusClass = 'status-rejected';
+                    statusText = 'Отклонен';
+                } else if (law.status === 'voting') {
+                    statusClass = 'status-voting';
+                    statusText = 'Голосование';
+                } else {
+                    statusClass = 'status-pending';
+                    statusText = 'На рассмотрении';
+                }
+                
+                const playerIcon = isPlayerLaw ? ' 👤' : '';
+                const ideologyIcon = isPlayerIdeologyLaw && !isPlayerLaw ? ' 🎯' : '';
+                
+                lawItem.innerHTML = `
+                    <div style="font-weight: 600; margin-bottom: 4px;">
+                        ${law.name}${playerIcon}${ideologyIcon}
+                    </div>
+                    <div style="color: #999; margin-bottom: 4px; font-size: 0.8rem;">
+                        ${law.description}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #ccc; font-size: 0.75rem;">
+                        <span>${law.author}</span>
+                        <span class="law-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div style="color: #999; margin-top: 4px; font-size: 0.75rem;">${law.effects}</div>
+                `;
+                
+                if (law.status === 'voting' && law.votingData) {
+                    const totalVotes = law.votingData.votesFor + law.votingData.votesAgainst + law.votingData.votesAbstain;
+                    const forPercentage = totalVotes > 0 ? (law.votingData.votesFor / totalVotes) * 100 : 0;
+                    const remainingTime = Math.max(0, law.votingEndTime - Date.now());
+                    const remainingMinutes = Math.ceil(remainingTime / (60 * 1000));
+                    
+                    // Группируем идеологии по голосам
+                    const votesFor = [];
+                    const votesAgainst = [];
+                    const votesAbstain = [];
+                    
+                    if (law.votingData.ideologyOpinions) {
+                        for (const ideologyName in law.votingData.ideologyOpinions) {
+                            const vote = law.votingData.ideologyOpinions[ideologyName];
+                            const votes = law.votingData.ideologyVotes[ideologyName] || 0;
+                            
+                            if (vote === 'for') votesFor.push({name: ideologyName, votes: votes});
+                            else if (vote === 'against') votesAgainst.push({name: ideologyName, votes: votes});
+                            else votesAbstain.push({name: ideologyName, votes: votes});
+                        }
+                    }
+                    
+                    lawItem.innerHTML += `
+                        <div class="voting-info">
+                            <div class="voting-header">
+                                <span>Голосование</span>
+                                <span class="voting-toggle">▼</span>
+                            </div>
+                            <div class="voting-progress">
+                                <div class="voting-progress-bar" style="width: ${forPercentage}%"></div>
+                            </div>
+                            <div class="votes-count">
+                                <span class="votes-yes">За: ${law.votingData.votesFor}</span>
+                                <span class="votes-no">Против: ${law.votingData.votesAgainst}</span>
+                                <span class="votes-abstain">Возд: ${law.votingData.votesAbstain}</span>
+                            </div>
+                            <div class="voting-details">
+                                <div class="ideology-votes">
+                                    ${votesFor.length > 0 ? `
+                                        <div class="vote-group">
+                                            <div class="vote-group-title">За:</div>
+                                            ${votesFor.map(item => `
+                                                <div class="vote-item">
+                                                    <span class="vote-ideology">${item.name}</span>
+                                                    <span class="vote-count">${item.votes}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                    ${votesAgainst.length > 0 ? `
+                                        <div class="vote-group">
+                                            <div class="vote-group-title">Против:</div>
+                                            ${votesAgainst.map(item => `
+                                                <div class="vote-item">
+                                                    <span class="vote-ideology">${item.name}</span>
+                                                    <span class="vote-count">${item.votes}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                    ${votesAbstain.length > 0 ? `
+                                        <div class="vote-group">
+                                            <div class="vote-group-title">Воздержались:</div>
+                                            ${votesAbstain.map(item => `
+                                                <div class="vote-item">
+                                                    <span class="vote-ideology">${item.name}</span>
+                                                    <span class="vote-count">${item.votes}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <div class="time-remaining">Осталось: ${remainingMinutes} мин.</div>
+                        </div>
+                    `;
+                }
+                
+                legislationSection.appendChild(lawItem);
+            });
+            
+            // Добавляем обработчики для сворачивания/разворачивания
+            document.querySelectorAll('.voting-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const details = this.parentElement.querySelector('.voting-details');
+                    const toggle = this.querySelector('.voting-toggle');
+                    
+                    details.classList.toggle('show');
+                    toggle.textContent = details.classList.contains('show') ? '▲' : '▼';
+                });
+            });
+        }
         
-        // Функция для отображения модального окна с законопроектами
         function showLawModal() {
             const modal = document.getElementById('law-modal');
             const lawsList = document.getElementById('laws-list');
             
-            // Очищаем список
             lawsList.innerHTML = '';
             
-            // Проверяем, загружены ли законопроекты из AddLaws.js
             if (typeof availableLaws === 'undefined' || !availableLaws.length) {
-                lawsList.innerHTML = '<div class="error-message">Ошибка загрузки законопроектов. Проверьте подключение AddLaws.js</div>';
+                lawsList.innerHTML = '<div class="error-message">Ошибка загрузки законопроектов</div>';
                 return;
             }
             
-            // Добавляем законопроекты в список
             availableLaws.forEach((law, index) => {
                 const lawItem = document.createElement('div');
                 lawItem.className = 'law-item';
@@ -1059,228 +1698,82 @@
                 lawItem.innerHTML = `
                     <div class="law-name">${law.name}</div>
                     <div class="law-description">${law.description}</div>
-                    <div class="law-effects">Влияние: ${law.effects}</div>
+                    <div class="law-effects">${law.effects}</div>
                 `;
                 
                 lawItem.addEventListener('click', function() {
-                    // Снимаем выделение со всех элементов
                     document.querySelectorAll('.law-item').forEach(item => {
                         item.classList.remove('selected');
                     });
                     
-                    // Выделяем выбранный элемент
                     this.classList.add('selected');
-                    
-                    // Запоминаем выбранный законопроект
                     selectedLaw = index;
-                    
-                    // Активируем кнопку выдвижения
                     document.getElementById('submit-law').disabled = false;
                 });
                 
                 lawsList.appendChild(lawItem);
             });
             
-            // Показываем модальное окно
             modal.style.display = 'flex';
         }
         
-        // Функция для скрытия модального окна
         function hideLawModal() {
             const modal = document.getElementById('law-modal');
             modal.style.display = 'none';
             selectedLaw = null;
             document.getElementById('submit-law').disabled = true;
             
-            // Снимаем выделение со всех элементов
             document.querySelectorAll('.law-item').forEach(item => {
                 item.classList.remove('selected');
             });
         }
         
-        // Функция для выдвижения законопроекта
-        function submitLaw() {
+        async function submitLaw() {
             if (selectedLaw === null) return;
             
-            // Проверяем, загружены ли законопроекты
             if (typeof availableLaws === 'undefined' || !availableLaws.length) {
-                alert('Ошибка: законопроекты не загружены!');
+                NotificationSystem.show('Ошибка: законопроекты не загружены!', 'error');
                 return;
             }
             
             const law = availableLaws[selectedLaw];
-            
-            // Получаем данные игрока
             const savedData = localStorage.getItem('playerData');
-            if (!savedData) return;
+            
+            if (!savedData) {
+                NotificationSystem.show('Ошибка: данные игрока не найдены!', 'error');
+                return;
+            }
             
             const playerData = JSON.parse(savedData);
-            const playerCountry = playerData.country || "Российская Республика";
             
-            // Проверяем, состоит ли игрок в партии
             if (!playerData.party || playerData.party === 'Не состоит') {
-                alert('Вы должны состоять в партии, чтобы выдвигать законопроекты!');
+                NotificationSystem.show('Вы должны состоять в партии!', 'warning');
                 return;
             }
             
-            // Сохраняем законопроект в localStorage
-            let activeLaws = JSON.parse(localStorage.getItem('activeLaws') || '[]');
-            
-            // Добавляем законопроект с информацией об авторе
-            const newLaw = {
-                ...law,
-                author: playerData.nickname || "Игрок",
-                party: playerData.party,
-                date: new Date().toLocaleDateString('ru-RU'),
-                status: 'active'
-            };
-            
-            activeLaws.push(newLaw);
-            localStorage.setItem('activeLaws', JSON.stringify(activeLaws));
-            
-            // Применяем эффекты закона к данным правительства
-            applyLawEffects(newLaw, playerCountry);
-            
-            // Обновляем отображение законопроектов
-            displayPlayerLaws();
-            
-            // Перезагружаем данные правительства для отображения изменений
-            loadGovernmentData();
-            
-            // Скрываем модальное окно
-            hideLawModal();
-            
-            // Показываем сообщение об успехе
-            alert(`Законопроект "${law.name}" успешно принят!`);
+            try {
+                const governmentData = await GovernmentAPI.loadGovernmentData(playerData.country);
+                const proposedLaw = await legislationManager.proposeLaw(law, playerData);
+                
+                legislationManager.simulateVoting(proposedLaw, governmentData, playerData);
+                
+                displayPlayerLaws();
+                hideLawModal();
+                
+                NotificationSystem.show(`Законопроект "${law.name}" выдвинут`, 'success');
+                
+            } catch (error) {
+                NotificationSystem.show(error.message, 'error');
+            }
         }
         
-        // Функция для применения эффектов законопроекта
-        function applyLawEffects(law, country) {
-            // Загружаем текущие данные правительства
-            let governmentData = JSON.parse(localStorage.getItem('governmentData_' + country) || '{}');
-            
-            // Если данных нет, используем базовые
-            if (!governmentData || Object.keys(governmentData).length === 0) {
-                governmentData = countryGovernments[country] || {
-                    government: "Демократия",
-                    rulingIdeology: "Либерализм",
-                    stability: 50,
-                    support: 50,
-                    ideologies: {
-                        "Правые идеологии": [
-                            { name: "Национал-социализм", percentage: 5 },
-                            { name: "Реваншизм", percentage: 5 },
-                            { name: "Милитаризм", percentage: 10 },
-                            { name: "Фалангизм", percentage: 0 }
-                        ],
-                        "Левые идеологии": [
-                            { name: "Сталинизм", percentage: 5 },
-                            { name: "Троцкизм", percentage: 0 },
-                            { name: "Ленинизм", percentage: 5 },
-                            { name: "Марксизм", percentage: 10 }
-                        ],
-                        "Либеральные идеологии": [
-                            { name: "Либерализм", percentage: 20 },
-                            { name: "Консерватизм", percentage: 15 },
-                            { name: "Прямая Демократия", percentage: 10 },
-                            { name: "Социал-Демократия", percentage: 15 }
-                        ],
-                        "Авторитарные идеологии": [
-                            { name: "Монархизм", percentage: 5 },
-                            { name: "Авторитаризм", percentage: 5 },
-                            { name: "Патернализм", percentage: 5 },
-                            { name: "Нейтралитет", percentage: 0 }
-                        ]
-                    }
-                };
-            }
-            
-            // Применяем изменения к стабильности и поддержке
-            governmentData.stability += law.stabilityChange || 0;
-            governmentData.support += law.supportChange || 0;
-            
-            // Ограничиваем значения от 0 до 100
-            governmentData.stability = Math.max(0, Math.min(100, governmentData.stability));
-            governmentData.support = Math.max(0, Math.min(100, governmentData.support));
-            
-            // Применяем изменения к идеологиям
-            if (law.ideologyChanges) {
-                for (const ideologyName in law.ideologyChanges) {
-                    const change = law.ideologyChanges[ideologyName];
-                    
-                    // Ищем идеологию во всех группах
-                    for (const group in governmentData.ideologies) {
-                        const ideology = governmentData.ideologies[group].find(item => item.name === ideologyName);
-                        if (ideology) {
-                            ideology.percentage += change;
-                            ideology.percentage = Math.max(0, ideology.percentage);
-                        }
-                    }
-                }
-                
-                // Нормализуем проценты
-                normalizeIdeologyPercentages(governmentData);
-            }
-            
-            // Применяем изменение формы правления, если оно указано
-            if (law.changeGovernment) {
-                governmentData.government = law.changeGovernment;
-            }
-            
-            // Сохраняем обновленные данные
-            localStorage.setItem('governmentData_' + country, JSON.stringify(governmentData));
-        }
-        
-        // Функция для отображения законопроектов игрока
-        function displayPlayerLaws() {
-            const legislationSection = document.getElementById('legislation-section');
-            
-            // Получаем законопроекты из localStorage
-            const activeLaws = JSON.parse(localStorage.getItem('activeLaws') || '[]');
-            
-            if (activeLaws.length === 0) {
-                legislationSection.innerHTML = '<div class="no-data">На данный момент нет активных законопроектов</div>';
-                return;
-            }
-            
-            // Очищаем секцию
-            legislationSection.innerHTML = '';
-            
-            // Добавляем законопроекты
-            activeLaws.forEach((law, index) => {
-                const lawItem = document.createElement('div');
-                lawItem.className = 'legislation-item';
-                
-                // Определяем класс статуса
-                const statusClass = law.status === 'active' ? 'status-active' : 
-                                  law.status === 'rejected' ? 'status-rejected' : 'status-pending';
-                
-                lawItem.innerHTML = `
-                    <div style="font-weight: bold; margin-bottom: 5px;">${law.name}</div>
-                    <div style="font-size: 0.85rem; color: #999; margin-bottom: 5px;">${law.description}</div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #ccc;">
-                        <span>Автор: ${law.author} (${law.party})</span>
-                        <span class="law-status ${statusClass}">${law.status === 'active' ? 'Активен' : 
-                                                                 law.status === 'rejected' ? 'Отклонен' : 'На рассмотрении'}</span>
-                    </div>
-                    <div style="font-size: 0.8rem; color: #ccc; margin-top: 5px;">Дата: ${law.date}</div>
-                    <div style="font-size: 0.8rem; color: #ccc; margin-top: 3px;">Влияние: ${law.effects}</div>
-                `;
-                
-                legislationSection.appendChild(lawItem);
-            });
-        }
-        
-        // Функция для проверки загрузки всех необходимых данных
         function checkDataLoaded() {
             let errors = [];
             
-            // Проверяем Government.js
             if (typeof countryGovernments === 'undefined') {
                 errors.push("Government.js не загружен");
             }
             
-            // Проверяем AddLaws.js
             if (typeof availableLaws === 'undefined') {
                 errors.push("AddLaws.js не загружен");
             }
@@ -1289,10 +1782,7 @@
                 document.getElementById('left-column').innerHTML = `
                     <div class="government-card">
                         <div class="error-message">
-                            Ошибки загрузки:<br>${errors.join('<br>')}<br><br>
-                            Проверьте пути к файлам:<br>
-                            - Government.js (в папке UI)<br>
-                            - AddLaws.js (в папке Scripts)
+                            Ошибки загрузки:<br>${errors.join('<br>')}
                         </div>
                     </div>
                 `;
@@ -1302,45 +1792,57 @@
             return true;
         }
         
-        // Загрузка данных при открытии страницы
+        // ==============================
+        // ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ
+        // ==============================
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Назначаем обработчики событий
+            legislationManager = new EnhancedLegislationManager();
+            legislationManager.startIdeologyLawTimer();
+            
             document.getElementById('add-law-button').addEventListener('click', showLawModal);
             document.getElementById('cancel-law').addEventListener('click', hideLawModal);
             document.getElementById('submit-law').addEventListener('click', submitLaw);
             
-            // Закрытие модального окна при клике вне его
             document.getElementById('law-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     hideLawModal();
                 }
             });
             
-            // Проверяем загрузку данных
             if (checkDataLoaded()) {
-                // Загружаем данные правительства
                 loadGovernmentData();
-                
-                // Отображаем законопроекты игрока
                 displayPlayerLaws();
+                
+                votingInterval = setInterval(async () => {
+                    const updated = await legislationManager.updateLawsStatus();
+                    if (updated) {
+                        displayPlayerLaws();
+                        loadGovernmentData();
+                    }
+                }, 5000);
             }
             
-            // Создаем тестовые данные игрока, если их нет
             if (!localStorage.getItem('playerData')) {
                 const testPlayerData = {
                     nickname: "ТестовыйИгрок",
                     country: "Российская Республика",
-                    party: "Партия реформ"
+                    party: "Демократический Альянс"
                 };
                 localStorage.setItem('playerData', JSON.stringify(testPlayerData));
                 
-                // Перезагружаем данные
                 setTimeout(() => {
                     if (checkDataLoaded()) {
                         loadGovernmentData();
                         displayPlayerLaws();
                     }
                 }, 100);
+            }
+        });
+        
+        window.addEventListener('beforeunload', function() {
+            if (votingInterval) {
+                clearInterval(votingInterval);
             }
         });
     </script>

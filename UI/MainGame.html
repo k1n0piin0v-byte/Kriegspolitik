@@ -153,36 +153,141 @@
             z-index: 10;
         }
         
-        .region-list {
+        /* Фильтры отображения */
+        .view-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #111;
+            border-radius: 5px;
+            border: 1px solid #1a1a1a;
+        }
+        
+        .filter-button {
+            flex: 1;
+            padding: 8px 12px;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 3px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        
+        .filter-button:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .filter-button.active {
+            background-color: #1a4c7a;
+            border-color: #2a5c8a;
+            color: #fff;
+        }
+        
+        /* Навигационная цепочка */
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #111;
+            border-radius: 5px;
+            border: 1px solid #1a1a1a;
+            font-size: 0.85rem;
+        }
+        
+        .breadcrumb {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb:hover {
+            color: #fff;
+        }
+        
+        .breadcrumb.active {
+            color: #1a4c7a;
+            font-weight: bold;
+        }
+        
+        .breadcrumb-separator {
+            color: #666;
+        }
+        
+        /* Списки */
+        .country-list, .country-regions-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
         
-        .region-item {
+        .country-item, .country-region-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px;
+            align-items: center;
+            padding: 12px;
             background-color: #111;
-            border-radius: 2px;
-            border-left: 3px solid #2a2a2a;
+            border-radius: 3px;
+            border-left: 4px solid #2a2a2a;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
         }
         
-        .region-item:hover {
+        .country-item:hover, .country-region-item:hover {
             background-color: #1a1a1a;
+            transform: translateX(2px);
         }
         
-        .region-name {
+        .country-name {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+        
+        .country-regions {
+            color: #ffd700;
+            font-size: 0.8rem;
+            background-color: #2a2a2a;
+            padding: 2px 8px;
+            border-radius: 12px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .country-region-name {
             color: #fff;
             font-size: 0.9rem;
+            font-weight: bold;
         }
         
-        .region-country {
-            color: #999;
-            font-size: 0.8rem;
+        .country-region-stats {
+            display: flex;
+            gap: 10px;
         }
+        
+        .region-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: #999;
+        }
+        
+        .stat-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .military-stat { background-color: #ff4444; }
+        .civilian-stat { background-color: #44ff44; }
+        .medicine-stat { background-color: #4444ff; }
+        .defense-stat { background-color: #ffff44; }
         
         /* Правая панель - навигация */
         .navigation {
@@ -242,7 +347,7 @@
             flex: 1;
         }
         
-        /* Модальное окно региона */
+        /* Стили для улучшенного модального окна региона */
         .region-modal {
             display: none;
             position: fixed;
@@ -254,23 +359,74 @@
             border-radius: 5px;
             padding: 20px;
             z-index: 1000;
-            width: 300px;
+            width: 380px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
         
-        .region-modal h3 {
-            color: #fff;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            text-align: center;
+        .modal-content {
+            margin: 15px 0;
+        }
+        
+        .modal-info-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
+            padding: 8px 0;
             border-bottom: 1px solid #1a1a1a;
-            padding-bottom: 10px;
+        }
+        
+        .modal-label {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .modal-value {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .index-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .index-bar {
+            flex: 1;
+            height: 8px;
+            background-color: #1a1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .index-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .military-fill { background: linear-gradient(90deg, #ff4444, #ff6666); }
+        .civilian-fill { background: linear-gradient(90deg, #44ff44, #66ff66); }
+        .medicine-fill { background: linear-gradient(90deg, #4444ff, #6666ff); }
+        .defense-fill { background: linear-gradient(90deg, #ffff44, #ffff66); }
+        
+        .index-value {
+            color: #fff;
+            font-size: 0.8rem;
+            min-width: 30px;
+            text-align: right;
         }
         
         .modal-buttons {
             display: flex;
             justify-content: space-between;
             gap: 10px;
+            margin-top: 15px;
         }
         
         .modal-button {
@@ -312,6 +468,40 @@
             z-index: 999;
         }
         
+        /* Контекстное меню для стран */
+        .context-menu {
+            display: none;
+            position: fixed;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 5px 0;
+            z-index: 1001;
+            min-width: 180px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .context-menu-item {
+            padding: 8px 15px;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        
+        .context-menu-item:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .context-menu-item.disabled {
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .context-menu-item.disabled:hover {
+            background-color: transparent;
+        }
+        
         /* Стили для неактивных кнопок */
         .nav-button.disabled {
             opacity: 0.6;
@@ -336,8 +526,24 @@
             color: #666;
         }
         
-        /* Адаптация для телефонов (горизонтальная ориентация) */
-        @media (max-width: 768px) and (orientation: landscape) {
+        /* Стили для правителя */
+        .ruler-indicator {
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .ruler-text {
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        
+        /* Адаптация для телефонов */
+        @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr auto;
@@ -392,63 +598,76 @@
                 margin-bottom: 8px;
             }
             
-            .region-item {
-                padding: 6px;
+            .view-filters {
+                flex-direction: column;
+                gap: 5px;
             }
             
-            .region-name {
+            .filter-button {
+                padding: 10px;
+                font-size: 0.8rem;
+            }
+            
+            .breadcrumbs {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+            
+            .country-item, .country-region-item {
+                padding: 10px;
+            }
+            
+            .country-name, .country-region-name {
                 font-size: 0.85rem;
             }
             
-            .region-country {
+            .country-regions {
                 font-size: 0.75rem;
             }
             
+            .country-region-stats {
+                gap: 5px;
+            }
+            
+            .region-stat {
+                font-size: 0.7rem;
+            }
+            
             .region-modal {
-                width: 250px;
+                width: 320px;
                 padding: 15px;
+            }
+            
+            .nav-button.disabled::after {
+                right: auto;
+                top: 5px;
+                transform: none;
+            }
+            
+            .context-menu {
+                min-width: 160px;
             }
         }
         
         /* Адаптация для телефонов (вертикальная ориентация) */
         @media (max-width: 768px) and (orientation: portrait) {
             .container {
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr auto;
                 gap: 0;
                 padding: 0;
             }
             
-            .player-info {
-                display: none;
-            }
-            
             .navigation {
-                grid-row: 2;
                 padding: 10px 5px;
-                border-top: 2px solid #1a1a1a;
-            }
-            
-            .navigation h2 {
-                display: none;
             }
             
             .nav-buttons-container {
                 flex-direction: row;
                 justify-content: space-around;
                 gap: 5px;
-                overflow-x: auto;
             }
             
             .nav-button {
-                flex-direction: column;
-                padding: 8px 5px;
-                gap: 5px;
                 min-width: 60px;
-            }
-            
-            .nav-text {
-                display: none;
             }
             
             .nav-icon {
@@ -457,42 +676,17 @@
             }
             
             .world-map {
-                padding: 15px 10px;
-                grid-row: 1;
                 border: none;
                 border-bottom: 1px solid #1a1a1a;
             }
             
-            .world-map h2 {
-                font-size: 1rem;
-                position: static;
-            }
-            
-            .region-item {
-                padding: 10px;
-            }
-            
-            .region-name {
-                font-size: 0.9rem;
-            }
-            
-            .region-country {
-                font-size: 0.8rem;
-            }
-            
             .region-modal {
                 width: 90%;
-                max-width: 300px;
-                padding: 15px;
+                max-width: 340px;
             }
-        }
-        
-        /* Общие стили для мобильных устройств */
-        @media (max-width: 768px) {
-            .nav-button.disabled::after {
-                right: auto;
-                top: 5px;
-                transform: none;
+            
+            .context-menu {
+                min-width: 150px;
             }
         }
         
@@ -564,13 +758,37 @@
                 <span class="info-label">Армия:</span>
                 <span class="info-value" id="player-army">Загрузка...</span>
             </div>
+            
+            <!-- Индикатор правителя -->
+            <div class="ruler-indicator" id="ruler-indicator" style="display: none;">
+                <div class="ruler-text">Вы - правитель <span id="ruler-country-name">страны</span></div>
+            </div>
         </div>
         
         <!-- Центральная панель - карта мира -->
         <div class="world-map">
             <h2>Карта мира</h2>
-            <div class="region-list" id="region-list">
-                <!-- Регионы будут загружены через JavaScript -->
+            
+            <!-- Фильтры отображения -->
+            <div class="view-filters">
+                <button class="filter-button active" id="filter-countries">Государства</button>
+            </div>
+            
+            <!-- Навигационная цепочка -->
+            <div class="breadcrumbs" id="breadcrumbs" style="display: none;">
+                <span class="breadcrumb" id="breadcrumb-world">Карта мира</span>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb active" id="breadcrumb-current">Текущий уровень</span>
+            </div>
+            
+            <!-- Список государств -->
+            <div class="country-list" id="country-list">
+                <!-- Государства будут загружены через JavaScript -->
+            </div>
+            
+            <!-- Список регионов выбранной страны -->
+            <div class="country-regions-list" id="country-regions-list" style="display: none;">
+                <!-- Регионы страны будут загружены через JavaScript -->
             </div>
         </div>
         
@@ -618,270 +836,95 @@
     <div class="overlay" id="region-overlay"></div>
     <div class="region-modal" id="region-modal">
         <h3 id="modal-region-name">Название региона</h3>
+        
+        <div class="modal-content">
+            <div class="modal-info-item">
+                <span class="modal-label">Государство:</span>
+                <span class="modal-value" id="modal-region-country">Загрузка...</span>
+            </div>
+            
+            <div class="modal-info-item">
+                <span class="modal-label">Индекс Военной Промышленности:</span>
+                <div class="index-bar-container">
+                    <div class="index-bar">
+                        <div class="index-bar-fill military-fill" id="military-industry-bar"></div>
+                    </div>
+                    <span class="index-value" id="military-industry-value">0/10</span>
+                </div>
+            </div>
+            
+            <div class="modal-info-item">
+                <span class="modal-label">Индекс Гражданской Промышленности:</span>
+                <div class="index-bar-container">
+                    <div class="index-bar">
+                        <div class="index-bar-fill civilian-fill" id="civilian-industry-bar"></div>
+                    </div>
+                    <span class="index-value" id="civilian-industry-value">0/10</span>
+                </div>
+            </div>
+            
+            <div class="modal-info-item">
+                <span class="modal-label">Индекс Медицины:</span>
+                <div class="index-bar-container">
+                    <div class="index-bar">
+                        <div class="index-bar-fill medicine-fill" id="medicine-bar"></div>
+                    </div>
+                    <span class="index-value" id="medicine-value">0/10</span>
+                </div>
+            </div>
+            
+            <div class="modal-info-item">
+                <span class="modal-label">Индекс Обороны:</span>
+                <div class="index-bar-container">
+                    <div class="index-bar">
+                        <div class="index-bar-fill defense-fill" id="defense-bar"></div>
+                    </div>
+                    <span class="index-value" id="defense-value">0/10</span>
+                </div>
+            </div>
+            
+            <div class="modal-info-item">
+                <span class="modal-label">Территориальная претензия от:</span>
+                <span class="modal-value" id="modal-territorial-claim">Пусто</span>
+            </div>
+        </div>
+        
         <div class="modal-buttons">
             <button class="modal-button info-button" id="info-button">Информация</button>
             <button class="modal-button move-button" id="move-button">Переехать</button>
         </div>
     </div>
 
-    <script>
-        // Данные о регионах (вместо внешнего файла)
-        const regions = [
-            { name: 'Москва', country: 'Российская Республика' },
-            { name: 'Санкт-Петербург', country: 'Российская Республика' },
-            { name: 'Московская область', country: 'Российская Республика' },
-            { name: 'Ленинградская область', country: 'Российская Республика' },
-            { name: 'Нижегородская область', country: 'Российская Республика' },
-            { name: 'Ростовская область', country: 'Российская Республика' },
-            { name: 'Воронежская область', country: 'Российская Республика' },
-            { name: 'Татарстан', country: 'Российская Республика' },
-            { name: 'Башкортостан', country: 'Российская Республика' },
-            { name: 'Самарская область', country: 'Российская Республика' },
-            { name: 'Свердловская область', country: 'Российская Республика' },
-            { name: 'Челябинская область', country: 'Российская Республика' },
-            { name: 'Севастополь', country: 'Российская Республика' },
-            { name: 'Краснодарский край', country: 'Кубанская Республика' },
-            { name: 'Адыгея', country: 'Кубанская Республика' },
-            { name: 'Ставропольский край', country: 'Северо-Кавказская Социалистическая Республика' },
-            { name: 'Калмыкия', country: 'Северо-Кавказская Социалистическая Республика' },
-            { name: 'Астраханская область', country: 'Северо-Кавказская Социалистическая Республика' },
-            { name: 'Чеченская Республика', country: 'Кавказский Халифат' },
-            { name: 'Дагестан', country: 'Кавказский Халифат' },
-            { name: 'Ингушетия', country: 'Кавказский Халифат' },
-            { name: 'Кабардино-Балкария', country: 'Горская Конфедерация' },
-            { name: 'Карачаево-Черкесия', country: 'Горская Конфедерация' },
-            { name: 'Северная Осетия', country: 'Осетинское Княжество' },
-            { name: 'Абхазия', country: 'Абхазское Царство' },
-            { name: 'Южная Осетия', country: 'Южно-Осетинское Княжество' },
-            { name: 'Тбилиси', country: 'Грузия' },
-            { name: 'Кутаиси', country: 'Грузия' },
-            { name: 'Батуми', country: 'Грузия' },
-            { name: 'Ереван', country: 'Армения' },
-            { name: 'Гюмри', country: 'Армения' },
-            { name: 'Баку', country: 'Азербайджан' },
-            { name: 'Гянджа', country: 'Азербайджан' },
-            { name: 'Киев', country: 'Республика Украина' },
-            { name: 'Харьков', country: 'Республика Украина' },
-            { name: 'Одесса', country: 'Республика Украина' },
-            { name: 'Днепр', country: 'Республика Украина' },
-            { name: 'Донецк', country: 'Республика Украина' },
-            { name: 'Луганск', country: 'Республика Украина' },
-            { name: 'Чернигов', country: 'Республика Украина' },
-            { name: 'Сумы', country: 'Республика Украина' },
-            { name: 'Полтава', country: 'Республика Украина' },
-            { name: 'Черкассы', country: 'Республика Украина' },
-            { name: 'Кировоград', country: 'Республика Украина' },
-            { name: 'Николаев', country: 'Республика Украина' },
-            { name: 'Херсон', country: 'Республика Украина' },
-            { name: 'Крым', country: 'Республика Украина' },
-            { name: 'Курская область', country: 'Республика Украина' },
-            { name: 'Белгородская область', country: 'Республика Украина' },
-            { name: 'Запорожье', country: 'Азовская Зона Оккупации' },
-            { name: 'Мариуполь', country: 'Азовская Зона Оккупации' },
-            { name: 'Бердянск', country: 'Азовская Зона Оккупации' },
-            { name: 'Мелитополь', country: 'Азовская Зона Оккупации' },
-            { name: 'Львов', country: 'Вольная Галиция' },
-            { name: 'Ивано-Франковск', country: 'Вольная Галиция' },
-            { name: 'Тернополь', country: 'Вольная Галиция' },
-            { name: 'Черновцы', country: 'Вольная Галиция' },
-            { name: 'Ужгород', country: 'Вольная Галиция' },
-            { name: 'Луцк', country: 'Вольная Галиция' },
-            { name: 'Ровно', country: 'Вольная Галиция' },
-            { name: 'Хмельницкий', country: 'Вольная Галиция' },
-            { name: 'Винница', country: 'Вольная Галиция' },
-            { name: 'Житомир', country: 'Вольная Галиция' },
-            { name: 'Минск', country: 'Беларусь' },
-            { name: 'Гомель', country: 'Беларусь' },
-            { name: 'Могилев', country: 'Беларусь' },
-            { name: 'Витебск', country: 'Беларусь' },
-            { name: 'Гродно', country: 'Беларусь' },
-            { name: 'Брест', country: 'Беларусь' },
-            { name: 'Бобруйск', country: 'Беларусь' },
-            { name: 'Барановичи', country: 'Беларусь' },
-            { name: 'Вильнюс', country: 'Литва' },
-            { name: 'Каунас', country: 'Литва' },
-            { name: 'Клайпеда', country: 'Литва' },
-            { name: 'Шяуляй', country: 'Литва' },
-            { name: 'Паневежис', country: 'Литва' },
-            { name: 'Алитус', country: 'Литва' },
-            { name: 'Рига', country: 'Курляндия' },
-            { name: 'Юрмала', country: 'Курляндия' },
-            { name: 'Вентспилс', country: 'Курляндия' },
-            { name: 'Лиепая', country: 'Курляндия' },
-            { name: 'Елгава', country: 'Курляндия' },
-            { name: 'Тукумс', country: 'Курляндия' },
-            { name: 'Кулдига', country: 'Курляндия' },
-            { name: 'Даугавпилс', country: 'Латгалия' },
-            { name: 'Резекне', country: 'Латгалия' },
-            { name: 'Прейли', country: 'Латгалия' },
-            { name: 'Лудза', country: 'Латгалия' },
-            { name: 'Краслава', country: 'Латгалия' },
-            { name: 'Балви', country: 'Латгалия' },
-            { name: 'Таллин', country: 'Эстония' },
-            { name: 'Тарту', country: 'Эстония' },
-            { name: 'Нарва', country: 'Эстония' },
-            { name: 'Пярну', country: 'Эстония' },
-            { name: 'Кохтla-Ярве', country: 'Эстония' },
-            { name: 'Вильянди', country: 'Эстония' },
-            { name: 'Раквере', country: 'Эстония' },
-            { name: 'Новосибирск', country: 'Сибирская Федерация' },
-            { name: 'Омск', country: 'Сибирская Федерация' },
-            { name: 'Томск', country: 'Сибирская Федерация' },
-            { name: 'Кемерово', country: 'Сибирская Федерация' },
-            { name: 'Новокузнецк', country: 'Сибирская Федерация' },
-            { name: 'Барнаул', country: 'Сибирская Федерация' },
-            { name: 'Красноярск', country: 'Сибирская Федерация' },
-            { name: 'Тюмень', country: 'Сибирская Федерация' },
-            { name: 'Сургут', country: 'Сибирская Федерация' },
-            { name: 'Нижневартовск', country: 'Сибирская Федерация' },
-            { name: 'Ханты-Мансийск', country: 'Сибирская Федерация' },
-            { name: 'Ямало-Ненецкий автономный округ', country: 'Сибирская Федерация' },
-            { name: 'Хабаровск', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Владивосток', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Находка', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Уссурийск', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Артем', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Комсомольск-на-Амуре', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Биробиджан', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Амурская область', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Еврейская автономная область', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Приморский край', country: 'Хабаровская Социалистическая Хунта' },
-            { name: 'Иркутск', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Улан-Удэ', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Чита', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Ангарск', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Братск', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Усолье-Сибирское', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Красноярск (восточная часть)', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Забайкальский край', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Республика Бурятия', country: 'Иркутская Социалистическая Хунта' },
-            { name: 'Кызыл', country: 'Республика Тыва' },
-            { name: 'Ак-Довурак', country: 'Республика Тыва' },
-            { name: 'Туран', country: 'Республика Тыва' },
-            { name: 'Шагонар', country: 'Республика Тыва' },
-            { name: 'Чадан', country: 'Республика Тыва' },
-            { name: 'Мазовецкое воеводство', country: 'Польша' },
-            { name: 'Малопольское воеводство', country: 'Польша' },
-            { name: 'Лодзинское воеводство', country: 'Польша' },
-            { name: 'Великопольское воеводство', country: 'Польша' },
-            { name: 'Силезское воеводство', country: 'Польша' },
-            { name: 'Нижнесилезское воеводство', country: 'Польша' },
-            { name: 'Куявско-Поморское воеводство', country: 'Польша' },
-            { name: 'Поморское воеводство', country: 'Польша' },
-            { name: 'Любельское воеводство', country: 'Польша' },
-            { name: 'Подкарпатское воеводство', country: 'Польша' },
-            { name: 'Подляское воеводство', country: 'Польша' },
-            { name: 'Западно-Поморское воеводство', country: 'Польша' },
-            { name: 'Свентокшиское воеводство', country: 'Польша' },
-            { name: 'Варминьско-Мазурское воеводство', country: 'Польша' },
-            { name: 'Опольское воеводство', country: 'Польша' },
-            { name: 'Любушское воеводство', country: 'Польша' },
-            { name: 'Калининградская область', country: 'Польша' },
-            { name: 'Баден-Вюртемберг', country: 'Германский Рейх' },
-            { name: 'Бавария', country: 'Германский Рейх' },
-            { name: 'Берлин', country: 'Германский Рейх' },
-            { name: 'Бранденбург', country: 'Германский Рейх' },
-            { name: 'Бремен', country: 'Германский Рейх' },
-            { name: 'Гамбург', country: 'Германский Рейх' },
-            { name: 'Гессен', country: 'Германский Рейх' },
-            { name: 'Мекленбург-Передняя Померания', country: 'Германский Рейх' },
-            { name: 'Нижняя Саксония', country: 'Германский Рейх' },
-            { name: 'Северный Рейн-Вестфалия', country: 'Германский Рейх' },
-            { name: 'Рейнланд-Пфальц', country: 'Германский Рейх' },
-            { name: 'Саар', country: 'Германский Рейх' },
-            { name: 'Саксония', country: 'Германский Рейх' },
-            { name: 'Саксония-Анхальт', country: 'Германский Рейх' },
-            { name: 'Шлезвиг-Гольштейн', country: 'Германский Рейх' },
-            { name: 'Тюрингия', country: 'Германский Рейх' },
-            { name: 'Верхняя Бавария', country: 'Республика Бавария' },
-            { name: 'Нижняя Бавария', country: 'Республика Бавария' },
-            { name: 'Верхний Пфальц', country: 'Республика Бавария' },
-            { name: 'Верхняя Франкония', country: 'Республика Бавария' },
-            { name: 'Средняя Франкония', country: 'Республика Бавария' },
-            { name: 'Нижняя Франкония', country: 'Республика Бавария' },
-            { name: 'Швабия', country: 'Республика Бавария' },
-            { name: 'Прага', country: 'Чехия' },
-            { name: 'Среднечешский край', country: 'Чехия' },
-            { name: 'Южночешский край', country: 'Чехия' },
-            { name: 'Пльзенский край', country: 'Чехия' },
-            { name: 'Карловарский край', country: 'Чехия' },
-            { name: 'Устецкий край', country: 'Чехия' },
-            { name: 'Либерецкий край', country: 'Чехия' },
-            { name: 'Краловеградецкий край', country: 'Чехия' },
-            { name: 'Пардубицкий край', country: 'Чехия' },
-            { name: 'Высочина', country: 'Чехия' },
-            { name: 'Южно-Моравский край', country: 'Чехия' },
-            { name: 'Оломоуцкий край', country: 'Чехия' },
-            { name: 'Моравскосилезский край', country: 'Чехия' },
-            { name: 'Злинский край', country: 'Чехия' },
-            { name: 'Братиславский край', country: 'Словакия' },
-            { name: 'Трнавский край', country: 'Словакия' },
-            { name: 'Тренчинский край', country: 'Словакия' },
-            { name: 'Нитранский край', country: 'Словакия' },
-            { name: 'Жилинский край', country: 'Словакия' },
-            { name: 'Банскобистрицкий край', country: 'Словакия' },
-            { name: 'Прешовский край', country: 'Словакия' },
-            { name: 'Кошицкий край', country: 'Словакия' },
-            { name: 'Ховедстаден', country: 'Дания' },
-            { name: 'Зеландия', country: 'Дания' },
-            { name: 'Северная Ютландия', country: 'Дания' },
-            { name: 'Центральная Ютландия', country: 'Дания' },
-            { name: 'Южная Дания', country: 'Дания' },
-            { name: 'Дренте', country: 'Нидерланды' },
-            { name: 'Флеволанд', country: 'Нидерланды' },
-            { name: 'Фрисландия', country: 'Нидерланды' },
-            { name: 'Гелдерланд', country: 'Нидерланды' },
-            { name: 'Гронинген', country: 'Нидерланды' },
-            { name: 'Лимбург', country: 'Нидерланды' },
-            { name: 'Северный Брабант', country: 'Нидерланды' },
-            { name: 'Северная Голландия', country: 'Нидерланды' },
-            { name: 'Оверэйссел', country: 'Нидерланды' },
-            { name: 'Южная Голландия', country: 'Нидерланды' },
-            { name: 'Утрехт', country: 'Нидерланды' },
-            { name: 'Зеландия', country: 'Нидерланды' },
-            { name: 'Люксембург', country: 'Люксембург' },
-            { name: 'О-де-Франс', country: 'Франция' },
-            { name: 'Нормандия', country: 'Франция' },
-            { name: 'Иль-де-Франс', country: 'Франция' },
-            { name: 'Центр — Долина Луары', country: 'Франция' },
-            { name: 'Пеи-де-ла-Луар', country: 'Франция' },
-            { name: 'Бретань', country: 'Франция' },
-            { name: 'Новая Аквитания', country: 'Франция' },
-            { name: 'Окситания', country: 'Франция' },
-            { name: 'Прованс — Альпы — Лазурный Берег', country: 'Франция' },
-            { name: 'Корсика', country: 'Франция' },
-            { name: 'Гранд-Эст', country: 'Франция' },
-            { name: 'Бургундия — Франш-Конте', country: 'Франция' },
-            { name: 'Овернь — Рона — Альпы', country: 'Франция' },
-            { name: 'Большой Лондон', country: 'Великобритания' },
-            { name: 'Северо-Восточная Англия', country: 'Великобритания' },
-            { name: 'Северо-Западная Англия', country: 'Великобритания' },
-            { name: 'Йоркшир и Хамбер', country: 'Великобритания' },
-            { name: 'Восточный Мидлендс', country: 'Великобритания' },
-            { name: 'Западный Мидлендс', country: 'Великобритания' },
-            { name: 'Восточная Англия', country: 'Великобритания' },
-            { name: 'Юго-Восточная Англия', country: 'Великобритания' },
-            { name: 'Юго-Западная Англия', country: 'Великобритания' },
-            { name: 'Уэльс', country: 'Великобритания' },
-            { name: 'Шотландия', country: 'Великобритания' },
-        ];
+    <!-- Контекстное меню для стран -->
+    <div class="context-menu" id="context-menu">
+        <div class="context-menu-item" id="context-view-info">Информация о стране</div>
+        <div class="context-menu-item" id="context-manage-country" style="display: none;">Управление страной</div>
+    </div>
 
-        // Текущий выбранный регион
+    <div class="overlay" id="context-overlay" style="display: none;"></div>
+
+    <!-- Подключаем внешние скрипты -->
+    <script src="../Scripts/Regions.js"></script>
+    <script>
+        // Глобальные переменные
+        let regions = [];
+        let countries = [];
         let selectedRegion = null;
+        let selectedCountry = null;
+        let currentView = 'countries'; // 'countries', 'country-regions'
+        let navigationHistory = [];
+        let contextMenuCountry = null;
         
         // Функция для синхронизации энергии с Work.html
         function syncEnergyWithWork() {
-            // Загружаем данные из Work.html
             const workData = localStorage.getItem('playerWorkData');
             
             if (workData) {
                 const playerWorkData = JSON.parse(workData);
                 
-                // Обновляем энергию на этой странице
                 document.getElementById('player-energy').textContent = 
                     `${playerWorkData.energy}/${playerWorkData.maxEnergy}`;
                 
-                // Обновляем данные игрока
                 const playerData = {
                     nickname: document.getElementById('player-nickname').textContent,
                     energy: `${playerWorkData.energy}/${playerWorkData.maxEnergy}`,
@@ -898,21 +941,6 @@
                 
                 localStorage.setItem('playerData', JSON.stringify(playerData));
             }
-        }
-        
-        // Функция для получения текущей энергии
-        function getCurrentEnergy() {
-            const workData = localStorage.getItem('playerWorkData');
-            
-            if (workData) {
-                const playerWorkData = JSON.parse(workData);
-                return {
-                    current: playerWorkData.energy,
-                    max: playerWorkData.maxEnergy
-                };
-            }
-            
-            return { current: 100, max: 100 }; // Значения по умолчанию
         }
         
         // Функция для сохранения данных игрока в localStorage
@@ -950,15 +978,31 @@
                 document.getElementById('player-party').textContent = playerData.party;
                 document.getElementById('player-army').textContent = playerData.army;
                 
+                // Проверяем, является ли игрок правителем
+                checkIfPlayerIsRuler();
+                
                 return true;
             }
             
             return false;
         }
         
+        // Функция для проверки, является ли игрок правителем
+        function checkIfPlayerIsRuler() {
+            const isRuler = localStorage.getItem('playerIsRuler') === 'true';
+            const playerCountry = document.getElementById('player-country').textContent;
+            const playerRulingCountry = localStorage.getItem('playerRulingCountry');
+            
+            if (isRuler && playerCountry === playerRulingCountry) {
+                document.getElementById('ruler-indicator').style.display = 'block';
+                document.getElementById('ruler-country-name').textContent = playerCountry;
+            } else {
+                document.getElementById('ruler-indicator').style.display = 'none';
+            }
+        }
+        
         // Функция для переезда в новый регион
         function moveToRegion(regionName, countryName) {
-            // Проверяем, состоит ли игрок в партии
             const playerParty = document.getElementById('player-party').textContent;
             
             if (playerParty !== 'Не состоит') {
@@ -966,18 +1010,14 @@
                 return;
             }
             
-            // Обновляем информацию о местоположении игрока
             document.getElementById('player-region').textContent = regionName;
             document.getElementById('player-country').textContent = countryName;
             
-            // Сохраняем изменения
             savePlayerData();
             
-            // Закрываем модальное окно
             document.getElementById('region-modal').style.display = 'none';
             document.getElementById('region-overlay').style.display = 'none';
             
-            // Сообщение об успешном переезде
             alert(`Вы переехали в регион: ${regionName}`);
         }
         
@@ -993,12 +1033,278 @@
             });
         }
         
-        // Загрузка данных игрока через LocalScript
+        // Функция для открытия модального окна с информацией о регионе
+        function openRegionModal(region) {
+            selectedRegion = region;
+            
+            document.getElementById('modal-region-name').textContent = region.name;
+            document.getElementById('modal-region-country').textContent = region.country;
+            
+            updateIndexBar('military-industry', region.militaryIndustry);
+            updateIndexBar('civilian-industry', region.civilianIndustry);
+            updateIndexBar('medicine', region.medicine);
+            updateIndexBar('defense', region.defense);
+            
+            const claimElement = document.getElementById('modal-territorial-claim');
+            if (region.territorialClaim && region.territorialClaim !== "") {
+                claimElement.textContent = region.territorialClaim;
+                claimElement.style.color = '#ff4444';
+            } else {
+                claimElement.textContent = 'Пусто';
+                claimElement.style.color = '#ccc';
+            }
+            
+            document.getElementById('region-modal').style.display = 'block';
+            document.getElementById('region-overlay').style.display = 'block';
+        }
+        
+        // Функция для обновления прогресс-баров индексов
+        function updateIndexBar(indexName, value) {
+            const bar = document.getElementById(`${indexName}-bar`);
+            const valueElement = document.getElementById(`${indexName}-value`);
+            
+            if (bar && valueElement) {
+                bar.style.width = `${value * 10}%`;
+                valueElement.textContent = `${value}/10`;
+            }
+        }
+        
+        // Функция для загрузки регионов и стран
+        function loadRegionsAndCountries() {
+            if (typeof window.regionsData !== 'undefined') {
+                regions = window.regionsData;
+                
+                // Создаем список уникальных стран
+                const countryMap = new Map();
+                regions.forEach(region => {
+                    if (!countryMap.has(region.country)) {
+                        countryMap.set(region.country, {
+                            name: region.country,
+                            regions: []
+                        });
+                    }
+                    countryMap.get(region.country).regions.push(region);
+                });
+                
+                countries = Array.from(countryMap.values());
+                
+                populateCountryList();
+                
+                // Устанавливаем начальное представление
+                switchView('countries');
+            } else {
+                console.error('Данные регионов не загружены');
+                setTimeout(loadRegionsAndCountries, 100);
+            }
+        }
+        
+        // Функция для заполнения списка государств
+        function populateCountryList() {
+            const countryList = document.getElementById('country-list');
+            countryList.innerHTML = '';
+            
+            countries.forEach(country => {
+                const countryItem = document.createElement('div');
+                countryItem.className = 'country-item';
+                
+                countryItem.innerHTML = `
+                    <div class="country-name">${country.name}</div>
+                    <div class="country-regions">${country.regions.length}</div>
+                `;
+                
+                // Левое нажатие - обычное действие
+                countryItem.addEventListener('click', function() {
+                    showCountryRegions(country);
+                });
+                
+                // Правое нажатие - контекстное меню
+                countryItem.addEventListener('contextmenu', function(e) {
+                    showContextMenu(e, country);
+                });
+                
+                // Для мобильных устройств - долгое нажатие
+                let pressTimer;
+                countryItem.addEventListener('touchstart', function(e) {
+                    pressTimer = setTimeout(function() {
+                        showContextMenu({
+                            preventDefault: function() {},
+                            pageX: e.touches[0].pageX,
+                            pageY: e.touches[0].pageY
+                        }, country);
+                    }, 500); // 500ms задержка для долгого нажатия
+                });
+                
+                countryItem.addEventListener('touchend', function() {
+                    clearTimeout(pressTimer);
+                });
+                
+                countryItem.addEventListener('touchmove', function() {
+                    clearTimeout(pressTimer);
+                });
+                
+                countryList.appendChild(countryItem);
+            });
+        }
+        
+        // Функция для показа регионов выбранной страны
+        function showCountryRegions(country) {
+            selectedCountry = country;
+            
+            // Добавляем в историю навигации
+            navigationHistory.push({
+                view: currentView,
+                country: selectedCountry
+            });
+            
+            // Переключаемся на вид регионов страны
+            switchView('country-regions');
+            
+            // Обновляем хлебные крошки
+            updateBreadcrumbs(country.name);
+            
+            // Заполняем список регионов страны
+            populateCountryRegionsList(country);
+        }
+        
+        // Функция для заполнения списка регионов страны
+        function populateCountryRegionsList(country) {
+            const countryRegionsList = document.getElementById('country-regions-list');
+            countryRegionsList.innerHTML = '';
+            
+            country.regions.forEach(region => {
+                const regionItem = document.createElement('div');
+                regionItem.className = 'country-region-item';
+                
+                regionItem.innerHTML = `
+                    <div class="country-region-name">${region.name}</div>
+                    <div class="country-region-stats">
+                        <div class="region-stat">
+                            <div class="stat-icon military-stat"></div>
+                            ${region.militaryIndustry}
+                        </div>
+                        <div class="region-stat">
+                            <div class="stat-icon civilian-stat"></div>
+                            ${region.civilianIndustry}
+                        </div>
+                        <div class="region-stat">
+                            <div class="stat-icon medicine-stat"></div>
+                            ${region.medicine}
+                        </div>
+                        <div class="region-stat">
+                            <div class="stat-icon defense-stat"></div>
+                            ${region.defense}
+                        </div>
+                    </div>
+                `;
+                
+                regionItem.addEventListener('click', function() {
+                    openRegionModal(region);
+                });
+                
+                countryRegionsList.appendChild(regionItem);
+            });
+        }
+        
+        // Функция для обновления хлебных крошек
+        function updateBreadcrumbs(currentLevel) {
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+            
+            breadcrumbCurrent.textContent = currentLevel;
+            breadcrumbs.style.display = 'flex';
+            
+            // Обработчик для возврата к карте мира
+            document.getElementById('breadcrumb-world').addEventListener('click', function() {
+                navigateBackToWorld();
+            });
+        }
+        
+        // Функция для возврата к карте мира
+        function navigateBackToWorld() {
+            if (navigationHistory.length > 0) {
+                const previousState = navigationHistory.pop();
+                if (previousState.view === 'countries') {
+                    switchView('countries');
+                }
+                document.getElementById('breadcrumbs').style.display = 'none';
+            } else {
+                switchView('countries');
+                document.getElementById('breadcrumbs').style.display = 'none';
+            }
+        }
+        
+        // Функция для переключения между видами
+        function switchView(viewType) {
+            currentView = viewType;
+            const countryList = document.getElementById('country-list');
+            const countryRegionsList = document.getElementById('country-regions-list');
+            const countriesButton = document.getElementById('filter-countries');
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            
+            // Скрываем все списки
+            countryList.style.display = 'none';
+            countryRegionsList.style.display = 'none';
+            
+            // Обновляем активные кнопки фильтров
+            countriesButton.classList.remove('active');
+            
+            if (viewType === 'countries') {
+                countryList.style.display = 'flex';
+                countriesButton.classList.add('active');
+                breadcrumbs.style.display = 'none';
+                navigationHistory = [];
+            } else if (viewType === 'country-regions') {
+                countryRegionsList.style.display = 'flex';
+                // В режиме просмотра регионов страны кнопки фильтров не активны
+            }
+        }
+        
+        // Функция для показа контекстного меню
+        function showContextMenu(event, country) {
+            event.preventDefault();
+            contextMenuCountry = country;
+            
+            const contextMenu = document.getElementById('context-menu');
+            const manageButton = document.getElementById('context-manage-country');
+            
+            // Проверяем, является ли игрок правителем этой страны
+            const isRuler = localStorage.getItem('playerIsRuler') === 'true';
+            const playerRulingCountry = localStorage.getItem('playerRulingCountry');
+            
+            if (isRuler && playerRulingCountry === country.name) {
+                manageButton.style.display = 'block';
+            } else {
+                manageButton.style.display = 'none';
+            }
+            
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = event.pageX + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+            
+            document.getElementById('context-overlay').style.display = 'block';
+        }
+        
+        // Функция для скрытия контекстного меню
+        function hideContextMenu() {
+            document.getElementById('context-menu').style.display = 'none';
+            document.getElementById('context-overlay').style.display = 'none';
+            contextMenuCountry = null;
+        }
+        
+        // Функция для показа информации о стране
+        function showCountryInfo(country) {
+            alert(`Информация о стране: ${country.name}\n\nКоличество регионов: ${country.regions.length}\n\nЗдесь будет подробная информация о государстве, его экономике, армии и политической системе.`);
+        }
+        
+        // Функция для перехода к управлению страной
+        function manageCountry(country) {
+            window.location.href = '../UI/Politicals/PoliticalState.html';
+        }
+        
+        // Загрузка данных игрока при загрузке DOM
         document.addEventListener('DOMContentLoaded', function() {
-            // Пытаемся загрузить сохраненные данные
             const hasSavedData = loadPlayerData();
             
-            // Если сохраненных данных нет, используем значения по умолчанию
             if (!hasSavedData) {
                 document.getElementById('player-country').textContent = 'Российская Республика';
                 document.getElementById('player-region').textContent = 'Москва';
@@ -1008,64 +1314,48 @@
                 document.getElementById('player-money').textContent = '1000';
                 document.getElementById('player-gold').textContent = '50';
                 
-                // Устанавливаем репутацию по умолчанию
                 localStorage.setItem('playerReputation', '0');
-                
-                // Сохраняем данные по умолчанию
                 savePlayerData();
             }
             
-            // Синхронизируем энергию с Work.html
             syncEnergyWithWork();
+            loadRegionsAndCountries();
             
-            // Заполняем список регионов
-            const regionList = document.getElementById('region-list');
-            
-            regions.forEach(region => {
-                const regionItem = document.createElement('div');
-                regionItem.className = 'region-item';
-                regionItem.dataset.region = region.name;
-                regionItem.dataset.country = region.country;
-                
-                regionItem.innerHTML = `
-                    <span class="region-name">${region.name}</span>
-                    <span class="region-country">${region.country}</span>
-                `;
-                
-                // Добавляем обработчик клика на регион
-                regionItem.addEventListener('click', function() {
-                    selectedRegion = {
-                        name: this.dataset.region,
-                        country: this.dataset.country
-                    };
-                    
-                    // Показываем модальное окно
-                    document.getElementById('modal-region-name').textContent = selectedRegion.name;
-                    document.getElementById('region-modal').style.display = 'block';
-                    document.getElementById('region-overlay').style.display = 'block';
-                });
-                
-                regionList.appendChild(regionItem);
+            // Обработчики для кнопок фильтров
+            document.getElementById('filter-countries').addEventListener('click', function() {
+                switchView('countries');
             });
             
-            // Обработчики для кнопок модального окна
+            // Обработчики для модального окна региона
             document.getElementById('info-button').addEventListener('click', function() {
-                // Здесь будет функционал для кнопки "Информация"
-                alert(`Информация о регионе: ${selectedRegion.name}\nСтрана: ${selectedRegion.country}`);
+                alert(`Информация о регионе: ${selectedRegion.name}\nСтрана: ${selectedRegion.country}\n\nЗдесь может быть расширенное описание региона, его особенности, население и другие характеристики.`);
             });
             
             document.getElementById('move-button').addEventListener('click', function() {
-                // Переезжаем в выбранный регион
                 moveToRegion(selectedRegion.name, selectedRegion.country);
             });
             
-            // Закрытие модального окна при клике на overlay
             document.getElementById('region-overlay').addEventListener('click', function() {
                 document.getElementById('region-modal').style.display = 'none';
                 this.style.display = 'none';
             });
             
-            // Блокировка неактивных кнопок
+            // Обработчики для контекстного меню
+            document.getElementById('context-overlay').addEventListener('click', hideContextMenu);
+            document.getElementById('context-view-info').addEventListener('click', function() {
+                if (contextMenuCountry) {
+                    showCountryInfo(contextMenuCountry);
+                }
+                hideContextMenu();
+            });
+            
+            document.getElementById('context-manage-country').addEventListener('click', function() {
+                if (contextMenuCountry) {
+                    manageCountry(contextMenuCountry);
+                }
+                hideContextMenu();
+            });
+            
             disableInactiveButtons();
             
             // Блокировка масштабирования
@@ -1092,12 +1382,10 @@
             
             function preventPageScroll(element) {
                 element.addEventListener('wheel', function(e) {
-                    // Если достигнута верхняя граница и прокрутка вверх
                     if (this.scrollTop === 0 && e.deltaY < 0) {
                         e.preventDefault();
                     }
                     
-                    // Если достигнута нижняя граница и прокрутка вниз
                     if (this.scrollTop + this.clientHeight >= this.scrollHeight && e.deltaY > 0) {
                         e.preventDefault();
                     }
@@ -1108,19 +1396,16 @@
             preventPageScroll(worldMap);
             preventPageScroll(navigation);
             
-            // Слушаем изменения в localStorage (для синхронизации между вкладками)
             window.addEventListener('storage', function(e) {
                 if (e.key === 'playerWorkData' || e.key === 'playerData') {
                     if (window.location.pathname.includes('MainGame.html')) {
                         syncEnergyWithWork();
+                        loadPlayerData();
                     }
                 }
             });
             
-            // Обновляем энергию каждые 30 секунд
             setInterval(syncEnergyWithWork, 30000);
-            
-            // Также обновляем при возвращении на страницу (например, из Work.html)
             window.addEventListener('focus', syncEnergyWithWork);
         });
     </script>

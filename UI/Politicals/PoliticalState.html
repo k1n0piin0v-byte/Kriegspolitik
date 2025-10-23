@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimum-scale=0.75">
+    <title>Kriegspolitik - Управление государством</title>
+    <link rel="icon" href="../../Icons.jpg" type="image/jpeg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            color: #ccc;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            min-width: 320px;
+            transform: scale(1);
+            transform-origin: top left;
+        }
+        
+        .header {
+            background-color: #0a0a0a;
+            padding: 12px 15px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .header h1 {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #2a2a2a;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+        }
+        
+        .back-button:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 300px 1fr 280px;
+            gap: 12px;
+            padding: 12px;
+            height: calc(100% - 56px);
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        /* Левая колонка */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        /* Верхняя левая часть - Политика государства */
+        .politics-card {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .dominant-ideology {
+            border-left: 3px solid #3a7a3a;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, rgba(58, 122, 58, 0.1), transparent);
+        }
+        
+        /* Центральная часть - Обзорная */
+        .center-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .overview-card {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .empty-center {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 40px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Верхняя часть центрального окна - основная информация о стране */
+        .country-header {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .country-header-item {
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 3px;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .header-label {
+            color: #999;
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+        }
+        
+        .header-value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        /* Центральная часть центрального окна - две колонки */
+        .country-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            height: calc(100% - 70px);
+            min-height: 0;
+        }
+        
+        .ideologies-column {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .diplomacy-column {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .ideology-item-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.8rem;
+        }
+        
+        .ideology-item-compact:last-child {
+            border-bottom: none;
+        }
+        
+        .diplomacy-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 8px;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        .diplomacy-button {
+            padding: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 3px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.8rem;
+            flex: 1;
+            position: relative;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .diplomacy-button:hover:not(.disabled):not(.beta) {
+            background-color: #2a2a2a;
+            border-color: #3a3a3a;
+        }
+        
+        .diplomacy-button.war {
+            background-color: #8b0000;
+            border-color: #a00;
+            color: #fff;
+        }
+        
+        .diplomacy-button.war:hover:not(.disabled) {
+            background-color: #a00;
+            border-color: #b00;
+        }
+        
+        .diplomacy-button.peace {
+            background-color: #006400;
+            border-color: #008000;
+            color: #fff;
+        }
+        
+        .diplomacy-button.peace:hover:not(.disabled) {
+            background-color: #008000;
+            border-color: #009000;
+        }
+        
+        .diplomacy-button.beta {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .diplomacy-button.beta::after {
+            content: "BETA";
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            background: #444;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+        
+        .diplomacy-button.beta:hover {
+            background-color: #1a1a1a;
+        }
+        
+        /* Правая колонка - Государства и регионы */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .countries-card {
+            background-color: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 12px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .country-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 3px;
+            margin-bottom: 2px;
+        }
+        
+        .country-row:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .country-row.active {
+            background-color: #1a2a2a;
+            border-left: 3px solid #3a7a7a;
+        }
+        
+        .country-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .country-regions-count {
+            font-size: 0.75rem;
+            color: #999;
+        }
+        
+        .regions-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: #111;
+            margin: 2px 0;
+            border-radius: 3px;
+        }
+        
+        .regions-list.expanded {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .region-item {
+            padding: 6px 12px;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.8rem;
+        }
+        
+        .region-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ruler-badge {
+            background-color: #8b0000;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 6px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .error-message {
+            text-align: center;
+            color: #ff6b6b;
+            padding: 15px;
+            background-color: #1a0a0a;
+            border: 1px solid #5a1a1a;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 0.85rem;
+        }
+
+        /* Стили для круговой диаграммы */
+        .pie-chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 12px 0;
+        }
+        
+        .pie-chart {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .ideology-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 12px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        
+        .ideology-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px;
+            border-radius: 3px;
+            background-color: #111;
+            border: 1px solid #1a1a1a;
+            font-size: 0.75rem;
+            transition: background-color 0.2s;
+        }
+        
+        .ideology-legend-item:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .ideology-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        
+        .ideology-legend-name {
+            flex: 1;
+            font-size: 0.75rem;
+        }
+        
+        .ideology-legend-percentage {
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: right;
+        }
+        
+        /* Новые стили для законопроектов */
+        .bill-item {
+            padding: 10px;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            background-color: #111;
+        }
+        
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .bill-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+        
+        .bill-status {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: #2a2a2a;
+        }
+        
+        .bill-status.voting {
+            background-color: #3a5a7a;
+            color: #fff;
+        }
+        
+        .bill-description {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .bill-votes {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+        
+        .votes-for {
+            color: #3a7a3a;
+        }
+        
+        .votes-against {
+            color: #7a3a3a;
+        }
+        
+        .votes-abstained {
+            color: #7a7a3a;
+        }
+        
+        .internal-policy-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 8px;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        .internal-policy-button {
+            padding: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 3px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.8rem;
+            flex: 1;
+            position: relative;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .internal-policy-button:hover:not(.disabled) {
+            background-color: #2a2a2a;
+            border-color: #3a3a3a;
+        }
+        
+        .internal-policy-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .internal-policy-button.disabled::after {
+            content: "🔒";
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+        }
+        
+        .no-bills {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Цвета для идеологий */
+        .color-ns { background-color: #8b0000; }
+        .color-rev { background-color: #9c0000; }
+        .color-mil { background-color: #8b4513; }
+        .color-phal { background-color: #800020; }
+        .color-stal { background-color: #cc0000; }
+        .color-trot { background-color: #ff4500; }
+        .color-len { background-color: #ff0000; }
+        .color-marx { background-color: #dc143c; }
+        .color-lib { background-color: #007fff; }
+        .color-cons { background-color: #000080; }
+        .color-dd { background-color: #228b22; }
+        .color-sd { background-color: #ff69b4; }
+        .color-mon { background-color: #9370db; }
+        .color-auth { background-color: #2f4f4f; }
+        .color-pat { background-color: #2e8b57; }
+        .color-neut { background-color: #708090; }
+        
+        /* Стили для скроллбара */
+        .politics-card::-webkit-scrollbar,
+        .overview-card::-webkit-scrollbar,
+        .countries-card::-webkit-scrollbar,
+        .ideologies-column::-webkit-scrollbar,
+        .ideology-legend::-webkit-scrollbar,
+        .regions-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .politics-card::-webkit-scrollbar-track,
+        .overview-card::-webkit-scrollbar-track,
+        .countries-card::-webkit-scrollbar-track,
+        .ideologies-column::-webkit-scrollbar-track,
+        .ideology-legend::-webkit-scrollbar-track,
+        .regions-list::-webkit-scrollbar-track {
+            background: #0a0a0a;
+            border-radius: 2px;
+        }
+        
+        .politics-card::-webkit-scrollbar-thumb,
+        .overview-card::-webkit-scrollbar-thumb,
+        .countries-card::-webkit-scrollbar-thumb,
+        .ideologies-column::-webkit-scrollbar-thumb,
+        .ideology-legend::-webkit-scrollbar-thumb,
+        .regions-list::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+        
+        .politics-card::-webkit-scrollbar-thumb:hover,
+        .overview-card::-webkit-scrollbar-thumb:hover,
+        .countries-card::-webkit-scrollbar-thumb:hover,
+        .ideologies-column::-webkit-scrollbar-thumb:hover,
+        .ideology-legend::-webkit-scrollbar-thumb:hover,
+        .regions-list::-webkit-scrollbar-thumb:hover {
+            background: #3a3a3a;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 280px 1fr 260px;
+                gap: 10px;
+                padding: 10px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 10px;
+            }
+            
+            .country-header {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .country-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .pie-chart {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1rem;
+            }
+            
+            .back-button {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .container {
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .card-title {
+                font-size: 0.9rem;
+            }
+            
+            .pie-chart {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        /* Запрет масштабирования */
+        @media (pointer: coarse) {
+            input, textarea, [contenteditable] {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Улучшение для очень маленьких экранов */
+        @media (max-height: 600px) {
+            .pie-chart {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .ideology-legend {
+                max-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Управление государством</h1>
+        <button class="back-button" onclick="goBack()">Назад</button>
+    </div>
+    
+    <div class="container" id="container">
+        <div class="loading">Загрузка данных управления...</div>
+    </div>
+
+    <script>
+        // Данные регионов по умолчанию (если Regions.js не загрузился)
+        const defaultRegionsData = [
+            {
+                name: 'Москва',
+                country: 'Российская Республика',
+                militaryIndustry: 8,
+                civilianIndustry: 9,
+                medicine: 7,
+                defense: 6,
+                territorialClaim: ""
+            },
+            {
+                name: 'Санкт-Петербург',
+                country: 'Российская Республика',
+                militaryIndustry: 6,
+                civilianIndustry: 8,
+                medicine: 7,
+                defense: 5,
+                territorialClaim: ""
+            },
+            {
+                name: 'Берлин',
+                country: 'Германская Империя',
+                militaryIndustry: 9,
+                civilianIndustry: 8,
+                medicine: 6,
+                defense: 7,
+                territorialClaim: ""
+            },
+            {
+                name: 'Париж',
+                country: 'Французская Республика',
+                militaryIndustry: 7,
+                civilianIndustry: 9,
+                medicine: 8,
+                defense: 6,
+                territorialClaim: ""
+            },
+            {
+                name: 'Лондон',
+                country: 'Британская Империя',
+                militaryIndustry: 8,
+                civilianIndustry: 8,
+                medicine: 7,
+                defense: 7,
+                territorialClaim: ""
+            },
+            {
+                name: 'Нью-Йорк',
+                country: 'Соединенные Штаты',
+                militaryIndustry: 7,
+                civilianIndustry: 10,
+                medicine: 8,
+                defense: 6,
+                territorialClaim: ""
+            }
+        ];
+
+        // Глобальные переменные
+        let selectedCountry = null;
+        let wars = JSON.parse(localStorage.getItem('wars') || '{}');
+
+        // Класс для работы с API правительства (из Government.html)
+        class GovernmentAPI {
+            static async loadGovernmentData(country) {
+                try {
+                    // Проверяем localStorage
+                    const savedData = localStorage.getItem(`governmentData_${country}`);
+                    
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        if (this.validateGovernmentData(data)) {
+                            return this.normalizeGovernmentData(data);
+                        }
+                    }
+                    
+                    // Если данных нет или они невалидны, загружаем из Government.js
+                    if (typeof countryGovernments !== 'undefined' && countryGovernments[country]) {
+                        const data = countryGovernments[country];
+                        const normalizedData = this.normalizeGovernmentData(data);
+                        this.saveGovernmentData(country, normalizedData);
+                        return normalizedData;
+                    }
+                    
+                    // Если данных вообще нет, создаем базовые
+                    return this.createDefaultGovernmentData(country);
+                    
+                } catch (error) {
+                    console.error('Ошибка загрузки данных правительства:', error);
+                    throw new Error(`Не удалось загрузить данные правительства для ${country}`);
+                }
+            }
+            
+            static async saveGovernmentData(country, data) {
+                try {
+                    if (!this.validateGovernmentData(data)) {
+                        throw new Error('Некорректные данные правительства');
+                    }
+                    
+                    const normalizedData = this.normalizeGovernmentData(data);
+                    localStorage.setItem(`governmentData_${country}`, JSON.stringify(normalizedData));
+                    return true;
+                } catch (error) {
+                    console.error('Ошибка сохранения данных правительства:', error);
+                    throw new Error('Не удалось сохранить данные правительства');
+                }
+            }
+            
+            static validateGovernmentData(data) {
+                const requiredFields = ['government', 'rulingIdeology', 'stability', 'support', 'ideologies'];
+                return requiredFields.every(field => data.hasOwnProperty(field));
+            }
+            
+            static normalizeGovernmentData(data) {
+                return {
+                    government: data.government || 'Демократия',
+                    rulingIdeology: data.rulingIdeology || 'Либерализм',
+                    stability: Math.max(0, Math.min(100, parseInt(data.stability) || 50)),
+                    support: Math.max(0, Math.min(100, parseInt(data.support) || 50)),
+                    ideologies: this.normalizeIdeologies(data.ideologies),
+                    bills: data.bills || [],
+                    permanentEffects: data.permanentEffects || [],
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+            
+            static normalizeIdeologies(ideologies) {
+                const defaultStructure = {
+                    "Правые идеологии": [
+                        { name: "Национал-социализм", percentage: 5 },
+                        { name: "Реваншизм", percentage: 5 },
+                        { name: "Милитаризм", percentage: 10 },
+                        { name: "Фалангизм", percentage: 0 }
+                    ],
+                    "Левые идеологии": [
+                        { name: "Сталинизм", percentage: 5 },
+                        { name: "Троцкизм", percentage: 0 },
+                        { name: "Ленинизм", percentage: 5 },
+                        { name: "Марксизм", percentage: 10 }
+                    ],
+                    "Либеральные идеологии": [
+                        { name: "Либерализм", percentage: 20 },
+                        { name: "Консерватизм", percentage: 15 },
+                        { name: "Прямая Демократия", percentage: 10 },
+                        { name: "Социал-Демократия", percentage: 15 }
+                    ],
+                    "Авторитарные идеологии": [
+                        { name: "Монархизм", percentage: 5 },
+                        { name: "Авторитаризм", percentage: 5 },
+                        { name: "Патернализм", percentage: 5 },
+                        { name: "Нейтралитет", percentage: 0 }
+                    ]
+                };
+                
+                if (!ideologies) return defaultStructure;
+                
+                // Объединяем с дефолтными значениями
+                const result = JSON.parse(JSON.stringify(defaultStructure));
+                
+                for (const group in ideologies) {
+                    if (result[group]) {
+                        ideologies[group].forEach(ideology => {
+                            const existing = result[group].find(item => item.name === ideology.name);
+                            if (existing) {
+                                existing.percentage = Math.max(0, Math.min(100, parseInt(ideology.percentage) || 0));
+                            }
+                        });
+                    }
+                }
+                
+                return result;
+            }
+            
+            static createDefaultGovernmentData(country) {
+                return this.normalizeGovernmentData({
+                    government: "Демократия",
+                    rulingIdeology: "Либерализм",
+                    stability: 50,
+                    support: 50,
+                    ideologies: this.normalizeIdeologies(null),
+                    permanentEffects: []
+                });
+            }
+        }
+
+        // Функция для получения цвета для идеологии
+        function getIdeologyColor(ideology) {
+            const colors = {
+                "Национал-социализм": "#8b0000",
+                "Реваншизм": "#9c0000",
+                "Милитаризм": "#8b4513",
+                "Фалангизм": "#800020",
+                "Сталинизм": "#cc0000",
+                "Троцкизм": "#ff4500",
+                "Ленинизм": "#ff0000",
+                "Марксизм": "#dc143c",
+                "Либерализм": "#007fff",
+                "Консерватизм": "#000080",
+                "Прямая Демократия": "#228b22",
+                "Социал-Демократия": "#ff69b4",
+                "Монархизм": "#9370db",
+                "Авторитаризм": "#2f4f4f",
+                "Патернализм": "#2e8b57",
+                "Нейтралитет": "#708090"
+            };
+            
+            return colors[ideology] || "#3a7a3a";
+        }
+
+        function getIdeologyColorClass(ideology) {
+            const colorClasses = {
+                "Национал-социализм": "color-ns",
+                "Реваншизм": "color-rev",
+                "Милитаризм": "color-mil",
+                "Фалангизм": "color-phal",
+                "Сталинизм": "color-stal",
+                "Троцкизм": "color-trot",
+                "Ленинизм": "color-len",
+                "Марксизм": "color-marx",
+                "Либерализм": "color-lib",
+                "Консерватизм": "color-cons",
+                "Прямая Демократия": "color-dd",
+                "Социал-Демократия": "color-sd",
+                "Монархизм": "color-mon",
+                "Авторитаризм": "color-auth",
+                "Патернализм": "color-pat",
+                "Нейтралитет": "color-neut"
+            };
+            
+            return colorClasses[ideology] || "";
+        }
+
+        // Функция для получения законопроектов страны
+        async function getCountryBills(countryName) {
+            try {
+                // Проверяем, есть ли данные о законопроектах в Government.js
+                if (typeof countryGovernments !== 'undefined' && countryGovernments[countryName] && countryGovernments[countryName].bills) {
+                    return countryGovernments[countryName].bills.filter(bill => bill.status === 'voting');
+                }
+                
+                // Если нет, проверяем localStorage
+                const savedData = localStorage.getItem(`governmentData_${countryName}`);
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    if (data.bills) {
+                        return data.bills.filter(bill => bill.status === 'voting');
+                    }
+                }
+                
+                // Возвращаем пустой массив, если данных нет
+                return [];
+            } catch (error) {
+                console.error('Ошибка загрузки законопроектов:', error);
+                return [];
+            }
+        }
+
+        // Функция для генерации HTML законопроектов
+        function generateBillsList(bills) {
+            if (!bills || bills.length === 0) {
+                return '<div class="no-bills">Нет законопроектов на голосовании</div>';
+            }
+            
+            let html = '';
+            bills.forEach(bill => {
+                html += `
+                    <div class="bill-item">
+                        <div class="bill-header">
+                            <div class="bill-name">${bill.name}</div>
+                            <div class="bill-status voting">На голосовании</div>
+                        </div>
+                        <div class="bill-description">${bill.description}</div>
+                        <div class="bill-votes">
+                            <span class="votes-for">За: ${bill.votesFor || 0}%</span>
+                            <span class="votes-against">Против: ${bill.votesAgainst || 0}%</span>
+                            <span class="votes-abstained">Воздержались: ${bill.votesAbstained || 0}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        // Функция для генерации кнопок внутренней политики
+        function generateInternalPolicyButtons() {
+            return `
+                <button class="internal-policy-button" onclick="window.location.href='../../UI/Government.html'">Правительство</button>
+                <button class="internal-policy-button disabled">Законодательство</button>
+                <button class="internal-policy-button disabled">Древо решений</button>
+                <button class="internal-policy-button disabled">Строительство</button>
+                <button class="internal-policy-button disabled">Производство</button>
+                <button class="internal-policy-button disabled">Армия</button>
+            `;
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+        
+        function toggleRegions(countryElement, country) {
+            const regionsList = countryElement.nextElementSibling;
+            const isExpanding = !regionsList.classList.contains('expanded');
+            
+            // Сначала свернем все остальные списки
+            document.querySelectorAll('.regions-list.expanded').forEach(list => {
+                if (list !== regionsList) {
+                    list.classList.remove('expanded');
+                }
+            });
+            
+            // Уберем активный класс со всех стран
+            document.querySelectorAll('.country-row.active').forEach(row => {
+                row.classList.remove('active');
+            });
+            
+            // Переключим текущий список
+            regionsList.classList.toggle('expanded');
+            
+            if (isExpanding) {
+                // Добавляем активный класс к выбранной стране
+                countryElement.classList.add('active');
+                // Показываем информацию о стране в центральном окне
+                showCountryInfo(country);
+            } else {
+                // Убираем активный класс
+                countryElement.classList.remove('active');
+                // Очищаем центральное окно
+                clearCountryInfo();
+            }
+        }
+        
+        // Функция для получения данных правительства страны
+        async function getGovernmentData(countryName) {
+            try {
+                return await GovernmentAPI.loadGovernmentData(countryName);
+            } catch (error) {
+                console.error('Ошибка загрузки данных правительства:', error);
+                // Возвращаем базовые данные в случае ошибки
+                return GovernmentAPI.createDefaultGovernmentData(countryName);
+            }
+        }
+        
+        // Функция для обновления круговой диаграммы
+        function updatePieChart(governmentData, containerId) {
+            const pieChart = document.getElementById(containerId);
+            if (!pieChart) return;
+            
+            let allIdeologies = [];
+            for (const group in governmentData.ideologies) {
+                allIdeologies = allIdeologies.concat(governmentData.ideologies[group]);
+            }
+            
+            allIdeologies = allIdeologies.filter(ideology => ideology.percentage > 0);
+            
+            let gradientString = "";
+            let currentPercent = 0;
+            
+            for (const ideology of allIdeologies) {
+                const color = getIdeologyColor(ideology.name);
+                const nextPercent = currentPercent + ideology.percentage * 3.6;
+                gradientString += `${color} ${currentPercent}deg ${nextPercent}deg, `;
+                currentPercent = nextPercent;
+            }
+            
+            if (gradientString.length > 0) {
+                gradientString = gradientString.slice(0, -2);
+            }
+            
+            pieChart.style.backgroundImage = `conic-gradient(${gradientString})`;
+        }
+
+        // Функция для создания легенды идеологий
+        function generateIdeologyLegend(ideologies) {
+            let allIdeologies = [];
+            for (const group in ideologies) {
+                allIdeologies = allIdeologies.concat(ideologies[group]);
+            }
+            
+            // Сортируем по проценту (по убыванию)
+            allIdeologies.sort((a, b) => b.percentage - a.percentage);
+            
+            let html = '';
+            allIdeologies.forEach(ideology => {
+                if (ideology.percentage > 0) {
+                    const colorClass = getIdeologyColorClass(ideology.name);
+                    html += `
+                        <div class="ideology-legend-item">
+                            <div class="ideology-color ${colorClass}"></div>
+                            <span class="ideology-legend-name">${ideology.name}</span>
+                            <span class="ideology-legend-percentage">${ideology.percentage}%</span>
+                        </div>
+                    `;
+                }
+            });
+            
+            return html;
+        }
+        
+        async function loadPoliticalState() {
+            const isRuler = localStorage.getItem('playerIsRuler') === 'true';
+            const playerCountry = localStorage.getItem('playerRulingCountry');
+            const playerData = JSON.parse(localStorage.getItem('playerData') || '{}');
+            
+            if (!isRuler || !playerCountry) {
+                document.getElementById('container').innerHTML = `
+                    <div class="error-message">
+                        <h3>Доступ запрещен</h3>
+                        <p>Вы не являетесь правителем этой страны или данные не найдены.</p>
+                        <p>Чтобы управлять государством, вы должны быть правящим лидером.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Загружаем данные правительства для страны игрока
+            const governmentData = await getGovernmentData(playerCountry);
+            
+            // Загружаем регионы страны - используем данные из Map.html
+            let regions = [];
+            
+            // Пытаемся получить данные из window.regionsData (из Regions.js)
+            if (typeof window.regionsData !== 'undefined') {
+                regions = window.regionsData;
+            } 
+            // Если не получилось, пытаемся получить из localStorage
+            else if (localStorage.getItem('regionsData')) {
+                regions = JSON.parse(localStorage.getItem('regionsData'));
+            }
+            // Если все еще нет данных, используем дефолтные
+            else {
+                regions = defaultRegionsData;
+                // Сохраняем дефолтные данные для будущего использования
+                localStorage.setItem('regionsData', JSON.stringify(defaultRegionsData));
+            }
+            
+            const countryRegions = regions.filter(region => region.country === playerCountry);
+            
+            // Получаем список всех уникальных стран из регионов
+            const allCountries = getCountriesFromRegions(regions);
+            
+            // Получаем идеологии из данных правительства
+            const ideologies = governmentData.ideologies || {};
+            
+            // Находим доминирующую идеологию
+            let dominantIdeology = governmentData.rulingIdeology || 'Либерализм';
+            let dominantPercentage = 0;
+            
+            Object.values(ideologies).forEach(group => {
+                group.forEach(ideology => {
+                    if (ideology.percentage > dominantPercentage) {
+                        dominantPercentage = ideology.percentage;
+                        dominantIdeology = ideology.name;
+                    }
+                });
+            });
+            
+            // Получаем цвет для доминирующей идеологии
+            const dominantColor = getIdeologyColor(dominantIdeology);
+            
+            document.getElementById('container').innerHTML = `
+                <!-- Левая колонка -->
+                <div class="left-column">
+                    <!-- Верхняя левая часть - Политика государства -->
+                    <div class="politics-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Политика государства</h3>
+                        </div>
+                        
+                        <div class="dominant-ideology" style="background-color: ${dominantColor}20; border-left-color: ${dominantColor};">
+                            <strong>Доминирующая идеология:</strong>
+                            <div style="margin-top: 5px; font-weight: bold; color: ${dominantColor};">${dominantIdeology}</div>
+                            <div style="font-size: 0.9rem; color: #999;">Влияние: ${dominantPercentage}%</div>
+                        </div>
+                        
+                        <!-- Круговая диаграмма -->
+                        <div class="pie-chart-container">
+                            <div class="pie-chart" id="player-pie-chart"></div>
+                        </div>
+                        
+                        <!-- Легенда идеологий -->
+                        <div class="ideology-legend">
+                            ${generateIdeologyLegend(ideologies)}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Центральная часть - Обзорная -->
+                <div class="center-column">
+                    <div class="overview-card" id="overview-content">
+                        <div class="empty-center">
+                            Центральная панель управления<br>
+                            <span style="font-size: 0.9rem; color: #999;">Выберите страну для просмотра информации</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Правая колонка - Государства и регионы -->
+                <div class="right-column">
+                    <div class="countries-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Государства</h3>
+                        </div>
+                        
+                        <div id="countries-list">
+                            ${generateCountriesList(allCountries, regions)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Обновляем круговую диаграмму после загрузки DOM
+            setTimeout(() => {
+                updatePieChart(governmentData, 'player-pie-chart');
+            }, 100);
+        }
+        
+        // Функция для получения списка стран из данных регионов
+        function getCountriesFromRegions(regions) {
+            const countryMap = new Map();
+            
+            regions.forEach(region => {
+                if (!countryMap.has(region.country)) {
+                    countryMap.set(region.country, {
+                        name: region.country,
+                        regions: []
+                    });
+                }
+                countryMap.get(region.country).regions.push(region);
+            });
+            
+            return Array.from(countryMap.values());
+        }
+        
+        function generateCountriesList(countries, regions) {
+            if (!countries.length) {
+                return '<div style="color: #999; font-style: italic; text-align: center; padding: 20px;">Нет данных о странах</div>';
+            }
+            
+            let html = '';
+            countries.forEach(country => {
+                const countryRegions = regions.filter(region => region.country === country.name);
+                
+                html += `
+                    <div class="country-row" onclick="toggleRegions(this, ${JSON.stringify(country).replace(/"/g, '&quot;')})">
+                        <div>
+                            <div class="country-name">${country.name}</div>
+                            <div class="country-regions-count">Регионов: ${countryRegions.length}</div>
+                        </div>
+                        <div style="color: #999; font-size: 0.8rem;">▼</div>
+                    </div>
+                    <div class="regions-list">
+                        ${generateRegionsList(countryRegions)}
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        function generateRegionsList(regions) {
+            if (!regions.length) {
+                return '<div class="region-item" style="color: #999; font-style: italic;">Нет регионов</div>';
+            }
+            
+            let html = '';
+            regions.forEach(region => {
+                html += `
+                    <div class="region-item">
+                        <div>${region.name}</div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        async function showCountryInfo(country) {
+            selectedCountry = country;
+            
+            const playerCountry = localStorage.getItem('playerRulingCountry');
+            const isPlayerCountry = country.name === playerCountry;
+            
+            // Загружаем данные правительства для выбранной страны
+            const governmentData = await getGovernmentData(country.name);
+            
+            // Получаем идеологии
+            const ideologies = governmentData.ideologies || {};
+            
+            // Получаем цвет для доминирующей идеологии
+            const dominantColor = getIdeologyColor(governmentData.rulingIdeology || 'Либерализм');
+            
+            // Проверяем, есть ли война с этой страной
+            const isAtWar = wars[playerCountry] && wars[playerCountry].includes(country.name);
+            
+            const overviewContent = document.getElementById('overview-content');
+            
+            if (isPlayerCountry) {
+                // Отображаем внутреннюю политику для страны игрока
+                const bills = await getCountryBills(country.name);
+                
+                overviewContent.innerHTML = `
+                    <h3 class="card-title">${country.name} (Ваша страна)</h3>
+                    
+                    <!-- Верхняя часть - основная информация о стране -->
+                    <div class="country-header">
+                        <div class="country-header-item">
+                            <div class="header-label">Форма правления</div>
+                            <div class="header-value">${governmentData.government || 'Демократия'}</div>
+                        </div>
+                        <div class="country-header-item">
+                            <div class="header-label">Правящая идеология</div>
+                            <div class="header-value" style="color: ${dominantColor};">${governmentData.rulingIdeology || 'Либерализм'}</div>
+                        </div>
+                        <div class="country-header-item">
+                            <div class="header-label">Стабильность</div>
+                            <div class="header-value">${governmentData.stability || 50}%</div>
+                        </div>
+                        <div class="country-header-item">
+                            <div class="header-label">Поддержка населения</div>
+                            <div class="header-value">${governmentData.support || 50}%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Нижняя часть - две колонки -->
+                    <div class="country-content">
+                        <!-- Левая колонка - законопроекты -->
+                        <div class="ideologies-column">
+                            <h4 class="card-title">Законопроекты в правительстве</h4>
+                            <div id="bills-container">
+                                ${generateBillsList(bills)}
+                            </div>
+                        </div>
+                        
+                        <!-- Правая колонка - внутренняя политика -->
+                        <div class="diplomacy-column">
+                            <h4 class="card-title">Внутренняя политика</h4>
+                            <div class="internal-policy-buttons">
+                                ${generateInternalPolicyButtons()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Отображаем внешнюю политику для других стран
+                overviewContent.innerHTML = `
+                    <h3 class="card-title">${country.name}</h3>
+                    
+                    <!-- Верхняя часть - основная информация о стране -->
+                    <div class="country-header">
+                        <div class="country-header-item">
+                            <div class="header-label">Форма правления</div>
+                            <div class="header-value">${governmentData.government || 'Демократия'}</div>
+                        </div>
+                        <div class="country-header-item">
+                            <div class="header-label">Правящая идеология</div>
+                            <div class="header-value" style="color: ${dominantColor};">${governmentData.rulingIdeology || 'Либерализм'}</div>
+                        </div>
+                        <div class="country-header-item">
+                            <div class="header-label">Стабильность</div>
+                            <div class="header-value">${governmentData.stability || 50}%</div>
+                        </div>
+                        <div class="country-header-item">
+                            <div class="header-label">Поддержка населения</div>
+                            <div class="header-value">${governmentData.support || 50}%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Нижняя часть - две колонки -->
+                    <div class="country-content">
+                        <!-- Левая колонка - идеологии -->
+                        <div class="ideologies-column">
+                            <h4 class="card-title">Идеологии в правительстве</h4>
+                            <div class="pie-chart-container">
+                                <div class="pie-chart" id="country-pie-chart"></div>
+                            </div>
+                            <div class="ideology-legend">
+                                ${generateIdeologyLegend(ideologies)}
+                            </div>
+                        </div>
+                        
+                        <!-- Правая колонка - внешняя политика -->
+                        <div class="diplomacy-column">
+                            <h4 class="card-title">Внешняя политика</h4>
+                            <div class="diplomacy-buttons">
+                                <button class="diplomacy-button ${isAtWar ? 'peace' : 'war'}" onclick="${isAtWar ? 'offerPeace()' : 'declareWar()'}">
+                                    ${isAtWar ? 'Предложить мир' : 'Объявить войну'}
+                                </button>
+                                <button class="diplomacy-button beta">Отправить ультиматум</button>
+                                <button class="diplomacy-button beta">Отправить делегацию</button>
+                                <button class="diplomacy-button beta">Пригласить в коалицию</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Обновляем круговую диаграмму после загрузки DOM (только для чужих стран)
+                setTimeout(() => {
+                    updatePieChart(governmentData, 'country-pie-chart');
+                }, 100);
+            }
+        }
+        
+        function clearCountryInfo() {
+            selectedCountry = null;
+            const overviewContent = document.getElementById('overview-content');
+            overviewContent.innerHTML = `
+                <div class="empty-center">
+                    Центральная панель управления<br>
+                    <span style="font-size: 0.9rem; color: #999;">Выберите страну для просмотра информации</span>
+                </div>
+            `;
+        }
+        
+        // Функции внешней политики
+        function declareWar() {
+            if (!selectedCountry) return;
+            
+            const playerCountry = localStorage.getItem('playerRulingCountry');
+            
+            if (!wars[playerCountry]) {
+                wars[playerCountry] = [];
+            }
+            
+            if (!wars[playerCountry].includes(selectedCountry.name)) {
+                wars[playerCountry].push(selectedCountry.name);
+                localStorage.setItem('wars', JSON.stringify(wars));
+                
+                alert(`Война объявлена ${selectedCountry.name}!`);
+                // Обновляем отображение
+                showCountryInfo(selectedCountry);
+            }
+        }
+        
+        function offerPeace() {
+            if (!selectedCountry) return;
+            
+            const playerCountry = localStorage.getItem('playerRulingCountry');
+            
+            if (wars[playerCountry] && wars[playerCountry].includes(selectedCountry.name)) {
+                const index = wars[playerCountry].indexOf(selectedCountry.name);
+                wars[playerCountry].splice(index, 1);
+                localStorage.setItem('wars', JSON.stringify(wars));
+                
+                alert(`Мир предложен ${selectedCountry.name}!`);
+                // Обновляем отображение
+                showCountryInfo(selectedCountry);
+            }
+        }
+        
+        // Загрузка при открытии страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Пытаемся загрузить данные регионов из внешнего файла
+            if (typeof window.regionsData === 'undefined') {
+                // Если Regions.js не загружен, используем данные из localStorage или дефолтные
+                console.log('Regions.js не загружен, используем данные из localStorage или дефолтные');
+            }
+            
+            loadPoliticalState();
+        });
+
+        // Запрет масштабирования
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.key === '='))) {
+                e.preventDefault();
+            }
+        });
+        
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+    
+    <!-- Подключаем скрипт с данными регионов -->
+    <script src="../../Scripts/Regions.js"></script>
+    <!-- Подключаем скрипт с данными правительств -->
+    <script src="../../UI/Government.js"></script>
+</body>
+</html>

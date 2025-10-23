@@ -717,14 +717,9 @@
         
         // Функция для сброса всех данных игры
         function resetGame() {
-            // Удаляем все данные из localStorage
-            localStorage.removeItem('playerData');
-            localStorage.removeItem('playerWorkData');
-            localStorage.removeItem('lastLogin');
-            localStorage.removeItem('regDate');
-            localStorage.removeItem('playerReputation');
-            localStorage.removeItem('lastRallyTime');
-            localStorage.removeItem('activeLaws');
+    localStorage.clear(); // Очищаем ВСЕ данные
+    setTimeout(() => window.location.reload(), 500); // Перезагружаем страницу через 500мс
+    alert('Весь прогресс сброшен! Игра перезагружается...'); // Показываем сообщение
             
             // Устанавливаем значения по умолчанию
             const defaultData = {
