@@ -170,42 +170,8 @@ const countryGovernments = {
         }
     },
     
-    // Азовская Зона Оккупации
-    "Азовская Зона Оккупации": {
-        government: "Диктатура",
-        rulingIdeology: "Милитаризм",
-        stability: "45%",
-        support: "38%",
-        ideologies: {
-            "Правые идеологии": [
-                { name: "Национал-социализм", percentage: 30 },
-                { name: "Реваншизм", percentage: 15 },
-                { name: "Милитаризм", percentage: 50 },
-                { name: "Фалангизм", percentage: 5 }
-            ],
-            "Левые идеологии": [
-                { name: "Сталинизм", percentage: 0 },
-                { name: "Троцкизм", percentage: 0 },
-                { name: "Ленинизм", percentage: 0 },
-                { name: "Марксизм", percentage: 0 }
-            ],
-            "Либеральные идеологии": [
-                { name: "Либерализм", percentage: 0 },
-                { name: "Консерватизм", percentage: 0 },
-                { name: "Прямая Демократия", percentage: 0 },
-                { name: "Социал-Демократия", percentage: 0 }
-            ],
-            "Авторитарные идеологии": [
-                { name: "Монархизм", percentage: 0 },
-                { name: "Авторитаризм", percentage: 0 },
-                { name: "Патернализм", percentage: 0 },
-                { name: "Нейтралитет", percentage: 0 }
-            ]
-        }
-    },
-    
-    // Вольная Галиция
-    "Вольная Галиция": {
+    // Республика Галиция
+    "Республика Галиция": {
         government: "Демократия",
         rulingIdeology: "Социал-Демократия",
         stability: "75%",

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kriegspolitik - Правительство</title>
     <link rel="icon" href="../Icons.jpg" type="image/jpeg">
-    <!-- Подключаем внешние файлы -->
     <script src="Government.js"></script>
     <script src="../Scripts/AddLaws.js"></script>
     <style>
@@ -55,7 +54,13 @@
             font-weight: 600;
         }
         
-        .back-button {
+        .header-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .back-button, .politics-button {
             background-color: #1a1a1a;
             color: #fff;
             border: 1px solid #2a2a2a;
@@ -64,10 +69,20 @@
             cursor: pointer;
             font-size: 0.85rem;
             transition: background-color 0.2s;
+            white-space: nowrap;
         }
         
-        .back-button:hover {
+        .back-button:hover, .politics-button:hover {
             background-color: #2a2a2a;
+        }
+        
+        .politics-button {
+            background-color: #1a3a5a;
+            border-color: #2a5a8a;
+        }
+        
+        .politics-button:hover {
+            background-color: #2a4a6a;
         }
         
         .container {
@@ -635,6 +650,11 @@
             .legislation-section {
                 max-height: 300px;
             }
+            
+            .header-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
         
         /* Улучшение скролла */
@@ -676,7 +696,10 @@
 <body>
     <div class="header">
         <h1 id="header-title">Правительство</h1>
-        <button class="back-button" onclick="goBack()">Назад</button>
+        <div class="header-buttons">
+            <button class="politics-button" id="politics-button" style="display: none;">Политика</button>
+            <button class="back-button" onclick="goBack()">Назад</button>
+        </div>
     </div>
     
     <div class="container" id="government-container">
@@ -1341,6 +1364,75 @@
             window.history.back();
         }
         
+        function goToPolitics() {
+            window.location.href = '../UI/Politicals/PoliticalState.html';
+        }
+        
+        // Функция для проверки, является ли игрок лидером (в доминирующей партии)
+        function checkIfPlayerIsRuler() {
+            try {
+                const savedData = localStorage.getItem('playerData');
+                if (!savedData) return false;
+                
+                const playerData = JSON.parse(savedData);
+                const playerCountry = playerData.country || "Российская Республика";
+                
+                // Загружаем данные правительства для определения доминирующей идеологии
+                const governmentData = JSON.parse(localStorage.getItem(`governmentData_${playerCountry}`) || '{}');
+                const rulingIdeology = governmentData.rulingIdeology || "Либерализм";
+                
+                // Сопоставляем идеологии с партиями
+                const ideologyToParty = {
+                    "Национал-социализм": "Народный Фронт",
+                    "Реваншизм": "Союз Возрождения",
+                    "Милитаризм": "Военная Лига",
+                    "Фалангизм": "Национальный Синдикат",
+                    "Сталинизм": "Сталинский Блок",
+                    "Троцкизм": "Революционный Авангард",
+                    "Ленинизм": "Большевистская Партия",
+                    "Марксизм": "Рабочий Союз",
+                    "Либерализм": "Демократический Альянс",
+                    "Консерватизм": "Консервативная Коалиция",
+                    "Прямая Демократия": "Народное Собрание",
+                    "Социал-Демократия": "Социал-Реформаторы",
+                    "Монархизм": "Монархическое Движение",
+                    "Авторитаризм": "Сильная Власть",
+                    "Патернализм": "Отечество",
+                    "Нейтралитет": "Центристский Союз"
+                };
+                
+                const rulingParty = ideologyToParty[rulingIdeology];
+                const isRuler = playerData.party === rulingParty;
+                
+                // Сохраняем информацию о статусе правителя
+                if (isRuler) {
+                    localStorage.setItem('playerIsRuler', 'true');
+                    localStorage.setItem('playerRulingCountry', playerCountry);
+                } else {
+                    localStorage.setItem('playerIsRuler', 'false');
+                    localStorage.removeItem('playerRulingCountry');
+                }
+                
+                return isRuler;
+                
+            } catch (error) {
+                console.error('Ошибка проверки статуса правителя:', error);
+                return false;
+            }
+        }
+        
+        // Функция для отображения/скрытия кнопки "Политика"
+        function updatePoliticsButton() {
+            const politicsButton = document.getElementById('politics-button');
+            const isRuler = checkIfPlayerIsRuler();
+            
+            if (isRuler) {
+                politicsButton.style.display = 'block';
+            } else {
+                politicsButton.style.display = 'none';
+            }
+        }
+        
         function getIdeologyColor(ideology) {
             const colors = {
                 "Национал-социализм": "#8b0000",
@@ -1403,8 +1495,12 @@
                 const playerData = JSON.parse(savedData);
                 const playerCountry = playerData.country || "Российская Республика";
                 
+                // Обновляем кнопку добавления законов
+                const addLawButton = document.getElementById('add-law-button');
                 if (playerData.party && playerData.party !== 'Не состоит') {
-                    document.getElementById('add-law-button').style.display = 'flex';
+                    addLawButton.style.display = 'block';
+                } else {
+                    addLawButton.style.display = 'none';
                 }
                 
                 const governmentData = await GovernmentAPI.loadGovernmentData(playerCountry);
@@ -1803,12 +1899,16 @@
             document.getElementById('add-law-button').addEventListener('click', showLawModal);
             document.getElementById('cancel-law').addEventListener('click', hideLawModal);
             document.getElementById('submit-law').addEventListener('click', submitLaw);
+            document.getElementById('politics-button').addEventListener('click', goToPolitics);
             
             document.getElementById('law-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     hideLawModal();
                 }
             });
+            
+            // Обновляем кнопку "Политика" при загрузке
+            updatePoliticsButton();
             
             if (checkDataLoaded()) {
                 loadGovernmentData();
@@ -1819,6 +1919,8 @@
                     if (updated) {
                         displayPlayerLaws();
                         loadGovernmentData();
+                        // Обновляем статус правителя при изменении данных
+                        updatePoliticsButton();
                     }
                 }, 5000);
             }
@@ -1835,6 +1937,7 @@
                     if (checkDataLoaded()) {
                         loadGovernmentData();
                         displayPlayerLaws();
+                        updatePoliticsButton();
                     }
                 }, 100);
             }
